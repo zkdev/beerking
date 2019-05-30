@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+
+<head>
+    <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/main_page.css">
+    <script type="text/javascript" src="./js/main.js"></script>
+    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+    <title>BeerKing</title>
+</head>
+
+<body onload="openTab(null, 'leaderboard');">
+    <div class="app">
+        <!-- Tab links -->
+        <div class="tab">
+            <button id="tab0" class="tablinks" onclick="openTab(event, 'leaderboard')">Leaderboard</button>
+            <button id="tab1" class="tablinks" onclick="openTab(event, 'game')">Spiel</button>
+            <button id="tab2" class="tablinks" onclick="openTab(event, 'profile')">Profil</button>
+        </div>
+
+        <!-- Tab content -->
+        <div id="leaderboard" class="tabcontent">
+            <table class="leaderboard">
+                <tr>
+                    <th>Nichname</th>
+                    <th>Score</th>
+                </tr>
+                <tr>
+                    <td class="name">Ich</td>
+                    <td class="score">100</td>
+                </tr>
+                <tr>
+                    <td class="name">Du</td>
+                    <td class="score">0</td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="game" class="tabcontent">
+            <div id="start_game" >
+                <button class="new_game" type="button" onclick="new_game(event, 1)">1 vs. 1</button>
+                <button class="new_game" type="button" onclick="new_game(event, 2)">2 vs. 2</button>
+            </div>
+            <div id="team">
+            </div>
+            <div id="active_game">
+                <input id="b1" class="Becher" type="number" placeholder="Deine Becher" onchange="check_winner()"/>
+                <br/>
+                <input id="b2" class="Becher" type="number" placeholder="Andere Becher" onchange="check_winner()"/>
+                <p id="winner"></p>
+            </div>
+        </div>
+
+        <div id="profile" class="tabcontent">
+            <h3>Profile</h3>
+            <img id="QRimage"/>
+            <p id="username_profile" class="info"></p>
+            <div id="email_entry"></div>
+            <!--<input type="email" placeholder="hinterlege deine Email"/>-->
+            <!--<p id="email_profile" class="info"></p>-->
+            <div id="match_hist">
+                    <h4 class="hist_header">Vergangene Spiele</h4>
+                    <div id="history">
+                        <p class="win">Du</p>
+                        <p class="loss">Du</p>
+                    </divul>
+            </div>
+        </div>
+
+        
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+</body>
+
+</html>
