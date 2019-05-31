@@ -1,10 +1,11 @@
 # Frontend
 ## General
 Developed with the _apache cordova_ framework for different platforms.  
-Plugins in use:
+External libraries:
  - _[cordova-plugin-qrscanner](https://github.com/bitpay/cordova-plugin-qrscanner)_
  - _[cordova-plugin-qrcodejs](https://github.com/MenelicSoftware/cordova-plugin-qrcodejs.git)_
- - _[cordova-plugin-password-crypto](https://github.com/blackberry/WebWorks-Community-APIs/tree/master/BB10-Cordova/PasswordCrypto)_
+ - _jquery_
+ - _[md5](https://github.com/blueimp/JavaScript-MD5)_
 ## Usage
 ### Installation
 First install required node packages:

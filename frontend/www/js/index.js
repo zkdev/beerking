@@ -62,3 +62,8 @@ var app = {
 };
 
 app.initialize();
+
+function hash(text){
+    return md5(text);
+
+}

@@ -15,7 +15,6 @@
   "dependencies": {
     "cordova-android": "^8.0.0",
     "cordova-browser": "^6.0.0",
-    "cordova-plugin-password-crypto": "^1.0.0",
     "cordova-plugin-qrcodejs": "git+https://github.com/MenelicSoftware/cordova-plugin-qrcodejs.git",
     "cordova-plugin-qrscanner": "^3.0.1"
   },
@@ -26,7 +25,6 @@
     "plugins": {
       "cordova-plugin-whitelist": {},
       "cordova-plugin-qrscanner": {},
-      "cordova-plugin-password-crypto": {},
       "cordova-plugin-qrcodejs": {}
     },
     "platforms": [

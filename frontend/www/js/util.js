@@ -27,16 +27,6 @@ function summit_login() {
     })
 }
 
-function hash(text){
-    var passwdParam = {
-        "password": text,
-        "salt": "MySalt",
-        "iterations": 30000,
-        "keyLength": "16" //  is bytes, not bits!
-    };
-    return community.PasswordCrypto.pbkdf2_Sync(passwdParam);
-}
-
 function create_Account() {
     var account_setting = {};
     account_setting.password = document.getElementById("pswd").value;
