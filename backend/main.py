@@ -1,23 +1,35 @@
 from flask import Flask
 from flask import request
-import sqlite3
-import uuid as uuid_helper
-import hashlib
+from generator.generate_uuid import main as uuid4
+from connection.create import main as create_conn
+from connection.kill import main as kill_conn
+from create_user.main import main as create_user
+from login.main import main as login
+
 app = Flask(__name__)
+
 
 @app.route('/users/creation')
 def user_creation():
-    try:
-        uuid = str(uuid_helper.uuid4())
-        username = request.args.get('username')
-        mail = request.args.get('email')
-        passwd = hashlib.sha512(str(request.args.get('passwd')).encode()).hexdigest()
-        conn = sqlite3.connect('/root/beerpong/beerpong.db')
-        c = conn.cursor()
-        c.execute("""INSERT INTO users(uuid, username, email, passwd) 
-            VALUES (?,?,?,?);""", (str(uuid), str(username), str(mail), str(passwd)))
-        conn.commit()
-        conn.close()
-    except:
-        pass
-    return 'user created.<br>uuid: ' + str(uuid) + '<br>username: ' + str(username) + '<br>email: ' + str(mail)
+    conn = create_conn('/root/beerpong/beerpong.db')
+    uuid = uuid4(conn)
+    username = request.args.get('username')
+    mail = request.args.get('mail')
+    passwd = str(request.args.get('passwd')).lower()
+    r = create_user(conn, uuid, username, mail, passwd)
+    kill_conn(conn)
+    return r
+
+
+@app.route('/users/login')
+def user_login():
+    conn = create_conn('/root/beerpong/beerpong.db')
+    username = request.args.get('username')
+    passwd = str(request.args.get('passwd')).lower()
+    r = login(conn, username, passwd)
+    kill_conn(conn)
+    return r
+
+
+
+
