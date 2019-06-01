@@ -1,11 +1,11 @@
 function summit_login() {
     //Summit login values
     var login_values = {};
-    login_values.password = document.getElementById("pswd").value;
+    login_values.passwd = document.getElementById("pswd").value;
     login_values.user = document.getElementById("user").value;
 
-    if (login_values.user === "test" && login_values.password === "test") {
-        var hashedValue = hash(login_values.password);
+    if (login_values.user === "test" && login_values.passwd === "test") {
+        var hashedValue = hash(login_values.passwd);
         window.localStorage.setItem("password", hashedValue);
         window.localStorage.setItem("user", login_values.user);
         window.location = './main.html';
@@ -14,14 +14,18 @@ function summit_login() {
 
     //ajax call
     $.ajax({
-        type: "POST",
-        url: base_url + "login",
+        type: "GET",
+        url: base_url + "/users/login",
         data: login_values,
-        success: function () {
-            var hashedValue = hash(login_values.password);
-            window.localStorage.setItem("password", hashedValue);
-            window.localStorage.setItem("user", login_values.user);
-            window.location = './main.html';
+        complete: function (response) {
+            if (response.responseText === 'login sucessfully') {
+                var hashedValue = hash(login_values.passwd);
+                window.localStorage.setItem("password", hashedValue);
+                window.localStorage.setItem("user", login_values.user);
+                window.location = './main.html';
+            } else {
+                // wrong email / wrong username
+            }
         },
         dataType: "text/json"
     })
@@ -29,21 +33,23 @@ function summit_login() {
 
 function create_Account() {
     var account_setting = {};
-    account_setting.password = document.getElementById("pswd").value;
+    account_setting.passwd = hash(document.getElementById("pswd").value);
     account_setting.user = document.getElementById("user").value;
     account_setting.email = document.getElementById("email").value;
     //TEST
     //
     $.ajax({
-        type: "POST",
-        url: base_url + "create",
+        type: "GET",
+        url: base_url + "/users/creation",
         data: account_setting,
-        success: function () {
-            var hashedValue = hash(account_setting.password)
-
-            window.localStorage.setItem("password", hashedValue);
-            window.localStorage.setItem("user", account_setting.user);
-            window.location = './main.html';
+        complete: function (response) {
+            if(response.responseText.startsWith('user created.')){
+                window.localStorage.setItem("password", account_setting.passwd);
+                window.localStorage.setItem("user", account_setting.user);
+                window.location = './main.html';
+            }else{
+                //Create error message
+            }
         },
         dataType: "text/json"
     });

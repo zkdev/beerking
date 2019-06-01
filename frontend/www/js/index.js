@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var base_url = "base/url/to/server/"
+var base_url = "http://localhost:5000"
 
 var app = {
     // Application Constructor
@@ -32,13 +32,17 @@ var app = {
         var user = {};
         try {
             user.username = window.localStorage.getItem("user");
-            user.password = window.localStorage.getItem("password");
+            user.passwd = window.localStorage.getItem("password");
             $.ajax({
-                type: "POST",
-                url: base_url + "login",
+                type: "GET",
+                url: base_url + "/users/login",
                 data: user,
-                success: function () {
-                    window.location = './main.html';
+                complete: function (response) {
+                    if(response.responseText === 'login sucessfully'){
+                        window.location = './main.html';
+                    }else{
+                        // wrong email / wrong username
+                    }
                 },
                 dataType: "text/json"
             })

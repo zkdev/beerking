@@ -29,7 +29,7 @@ function openTab(evt, tabname) {
 function workOn(tabname, param) {
     if (tabname === "leaderboard") {
         var request = {};
-        request.password = window.localStorage.getItem("password");
+        request.passwd = window.localStorage.getItem("password");
         request.user = window.localStorage.getItem("user");
         $.ajax({
             type: "GET",
