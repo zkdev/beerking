@@ -20,50 +20,48 @@ var base_url = "base/url/to/server/"
 
 var app = {
     // Application Constructor
-    initialize: function() {
-        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+    initialize: function (env) {
+        console.log(env);
+        if (env === 'index') {
+            document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+        } else if (env === 'main') {
+            document.addEventListener('backbutton', onBackPressed, false);
+        }
     },
-
-    // deviceready Event Handler
-    //
-    // Bind any cordova events here. Common events are:
-    // 'pause', 'resume', etc.
-    onDeviceReady: function() {
-        this.receivedEvent('deviceready');
+    onDeviceReady: function () {
         var user = {};
-        try{
+        try {
             user.username = window.localStorage.getItem("user");
             user.password = window.localStorage.getItem("password");
             $.ajax({
                 type: "POST",
                 url: base_url + "login",
                 data: user,
-                success: function(){
+                success: function () {
                     window.location = './main.html';
                 },
                 dataType: "text/json"
             })
-        }catch(e){
+        } catch (e) {
             console.log(e);
         }
-    },
-
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
     }
 };
 
-app.initialize();
-
-function hash(text){
+function hash(text) {
     return md5(text);
 
+}
+
+function onBackPressed() {
+    //if scanner active -> close
+    window.QRScanner.getStatus((status) => {
+        if (status.scanning === true) {
+            window.QRScanner.cancelScan();
+            document.getElementById("start_game").style.visibility = "visible";
+            document.getElementsByTagName("body")[0].style.opacity = 1.0;
+            document.getElementsByTagName("body")[0].style.background = "url('./../www/img/wood.png')";
+            document.getElementsByTagName("body")[0].style.backgroundColor = "white";
+        }
+    })
 }

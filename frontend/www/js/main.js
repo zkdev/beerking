@@ -186,3 +186,31 @@ function save() {
     //ajax call for saving
     workOn("profile", profile);
 }
+
+function onLeftSwipe(){
+    var tablinks = document.getElementsByClassName("tablinks");
+    for(var i = 0; i < tablinks.length; i++){
+        if(tablinks[i].className.includes("active")){
+            if(i == 0){
+                openTab({currentTarget: tablinks[1]}, "game");
+            }else if(i == 1){
+                openTab({currentTarget: tablinks[2]}, "profile");
+            }
+            return;
+        }
+    }
+}
+
+function onRightSwipe(){
+    var tablinks = document.getElementsByClassName("tablinks");
+    for(var i = 0; i < tablinks.length; i++){
+        if(tablinks[i].className.includes("active")){
+            if(i == 1){
+                openTab({currentTarget: tablinks[0]}, "leaderboard");
+            }else if(i == 2){
+                openTab({currentTarget: tablinks[1]}, "game");
+            }
+            return;
+        }
+    }
+}

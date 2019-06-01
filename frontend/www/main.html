@@ -36,9 +36,10 @@
     <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/main_page.css">
-    <script type="text/javascript" src="./js/main.js"></script>
-    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery-2.x.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile.custom.min.js"></script>
     <script src="js/md5.min.js"></script>
+    <script type="text/javascript" src="./js/main.js"></script>
     <title>BeerKing</title>
 </head>
 
@@ -70,40 +71,48 @@
         </div>
 
         <div id="game" class="tabcontent">
-            <div id="start_game" >
+            <div id="start_game">
                 <button class="new_game" type="button" onclick="new_game(event, 1)">1 vs. 1</button>
                 <button class="new_game" type="button" onclick="new_game(event, 2)">2 vs. 2</button>
             </div>
             <div id="team">
             </div>
             <div id="active_game">
-                <input id="b1" class="Becher" type="number" placeholder="Deine Becher" onchange="check_winner()"/>
-                <br/>
-                <input id="b2" class="Becher" type="number" placeholder="Andere Becher" onchange="check_winner()"/>
+                <input id="b1" class="Becher" type="number" placeholder="Deine Becher" onchange="check_winner()" />
+                <br />
+                <input id="b2" class="Becher" type="number" placeholder="Andere Becher" onchange="check_winner()" />
                 <p id="winner"></p>
             </div>
         </div>
 
         <div id="profile" class="tabcontent">
             <h3>Profile</h3>
-            <img id="QRimage"/>
+            <img id="QRimage" />
             <p id="username_profile" class="info"></p>
             <div id="email_entry"></div>
             <!--<input type="email" placeholder="hinterlege deine Email"/>-->
             <!--<p id="email_profile" class="info"></p>-->
             <div id="match_hist">
-                    <h4 class="hist_header">Vergangene Spiele</h4>
-                    <div id="history">
-                        <p class="win">Du</p>
-                        <p class="loss">Du</p>
+                <h4 class="hist_header">Vergangene Spiele</h4>
+                <div id="history">
+                    <p class="win">Du</p>
+                    <p class="loss">Du</p>
                     </divul>
+                </div>
             </div>
-        </div>
 
-        
-    </div>
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
+
+        </div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript">
+            app.initialize('main');
+            $(function () {
+                // Bind the swipeleftHandler callback function to the swipe event on div.box
+                $("html").on("swipeleft", onLeftSwipe);
+                $("html").on("swiperight", onRightSwipe);
+            });
+        </script>
 </body>
 
 </html>
