@@ -1,6 +1,6 @@
-from validate.check_username import main as check_username
-from enums.enums import Username
-from connection.sql.login import main as login
+from ...validate.check_username import main as check_username
+from ...enums.enums import Username
+from ...connection.sql.login import main as login
 
 
 def main(conn, username, passwd):

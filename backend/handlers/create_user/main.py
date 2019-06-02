@@ -1,7 +1,7 @@
-from validate.check_username import main as check_username
-from validate.check_mail import main as check_mail
-from enums.enums import Username, Mail
-from connection.sql.create_user import main as create_user
+from ...validate.check_username import main as check_username
+from ...validate.check_mail import main as check_mail
+from ...enums.enums import Username, Mail
+from ...connection.sql.create_user import main as create_user
 
 
 def main(conn, uuid, username, mail, passwd):

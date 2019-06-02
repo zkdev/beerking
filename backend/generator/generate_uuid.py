@@ -1,6 +1,6 @@
 import uuid as uuid4
 
-from validate.is_unique import main as is_unique
+from ..validate.is_unique import main as is_unique
 
 
 def main(conn):
