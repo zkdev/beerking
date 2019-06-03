@@ -103,6 +103,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# PyCharm
+.idea/
+
 #Created by https://www.gitignore.io/api/cordova,apachecordova,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=cordova,apachecordova,visualstudiocode
 
