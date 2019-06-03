@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+from flask_cors import CORS
 from .generator.generate_uuid import main as uuid4
 from .connection.create import main as create_conn
 from .connection.kill import main as kill_conn
@@ -9,24 +10,23 @@ from .handlers.respones.main import main as response
 
 
 app = Flask(__name__)
+CORS(app)
 
 
-@app.route('/users/creation')
+@app.route('/users/creation', methods=['POST'])
 def user_creation():
-    # methods=['POST']
     conn = create_conn('/root/beerpong/beerpong.db')
     uuid = uuid4(conn)
-    username = request.args.get('username')
-    mail = request.args.get('mail')
-    passwd = str(request.args.get('passwd')).lower()
+    username = request.form.get('username')
+    mail = request.form.get('mail')
+    passwd = str(request.form.get('passwd')).lower()
     r = create_user(conn, uuid, username, mail, passwd)
     kill_conn(conn)
     return response(r)
 
 
-@app.route('/users/login')
+@app.route('/users/login', methods=['GET'])
 def user_login():
-    # methods=['POST']
     conn = create_conn('/root/beerpong/beerpong.db')
     username = request.args.get('username')
     passwd = str(request.args.get('passwd')).lower()
