@@ -25,6 +25,11 @@ function summit_login() {
                 window.location = './main.html';
             } else {
                 // wrong email / wrong username
+                navigator.notification.alert("Dieser Nutzer existiert nicht, oder das Passwort war falsch", 
+                null, "Login fehlgeschlagen", "Ok");
+                document.getElementById("pswd").value = "";
+                document.getElementById("user").value = "";
+
             }
         },
         dataType: "text/json"
@@ -34,10 +39,23 @@ function summit_login() {
 function create_Account() {
     var account_setting = {};
     account_setting.passwd = hash(document.getElementById("pswd").value);
+    if(document.getElementById("pswd").value === "" || document.getElementById("user").value === ""){
+        //No user or password
+        navigator.notification.alert("Nutzer und Passwort muessen ausgefuellt werden", null, "Falsche Eingabe", "Ok");
+        window.location = './creating.html';
+        return;
+    }
+    if(hash(document.getElementById("pswd2").value) !== account_setting.passwd){
+        //Different passwords
+        document.getElementById("pswd2").className += " error";
+        document.getElementById("pswd").className += " error";
+        document.getElementById("pswd").value = "";
+        document.getElementById("pswd2").value = "";
+        navigator.notification.alert("Passwoerter mussen identisch sein!", null, "Falsche Eingabe", "Ok");
+        return;
+    }
     account_setting.user = document.getElementById("user").value;
     account_setting.email = document.getElementById("email").value;
-    //TEST
-    //
     $.ajax({
         type: "GET",
         url: base_url + "/users/creation",

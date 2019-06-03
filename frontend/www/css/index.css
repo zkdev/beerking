@@ -19,6 +19,18 @@
     padding: 4px;
 }
 
+.input_field.error{
+    border-color: rgb(240, 106, 106);
+    border-style: dotted;
+}
+
+.input_field.error:focus{
+    border-style: solid;
+    outline: rgb(240, 106, 106);
+    outline-width: thick;
+    outline-style: solid;
+}
+
 .input_field:focus {
     border-color: lightblue;
     outline: lightblue;

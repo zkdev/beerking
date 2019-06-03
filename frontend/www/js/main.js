@@ -33,12 +33,18 @@ function workOn(tabname, param) {
         request.user = window.localStorage.getItem("user");
         $.ajax({
             type: "GET",
-            url: base_url + "leaderboard",
+            url: base_url + "/leaderboard",
             data: request,
             success: function (response) {
+                var leaderboard = document.getElementById("leaderboard_table");
                 for (var i = 0; i < response.length; i++) {
-                    // TODO
-                    //append elements response[i]
+                    var row = leaderboard.insertRow(-1);
+                    var user = row.insertCell(0);
+                    var score = row.insertCell(1);
+                    user.innerHTML = response[i].user;
+                    score.innerHTML = response[i].score;
+                    user.className = "name";
+                    score.className = "score";
                 }
             },
             dataType: "text/json"
@@ -50,22 +56,19 @@ function workOn(tabname, param) {
         if (param !== undefined) {
             generateProfile(param)
         } else {
-            /**var request = {};
+            var request = {};
             request.password = window.localStorage.getItem("password");
             request.user = window.localStorage.getItem("user");
             $.ajax({
                 type: "GET",
-                url: base_url + "profile",
+                url: base_url + "/profile",
                 data: request,
                 success: function (response) {
-                    // TODO 
+                    //profile.user, profile.email, profile.uuid
+                    generateProfile(response);
                 },
                 dataType: "text/json"
-            })*/
-            var profile = {}
-            profile.user = "ICH";
-            profile.email = "ICH";
-            generateProfile(profile);
+            })
         }
     }
 }
@@ -116,7 +119,6 @@ function new_game(event, team_size) {
         }
         window.QRScanner.scan(callback);
         window.QRScanner.show();
-
     } catch (e) {
         document.getElementById("start_game").style.visibility = "visible";
         document.getElementsByTagName("body")[0].style.opacity = 1.0;
@@ -127,9 +129,9 @@ function new_game(event, team_size) {
 }
 
 function display_team(ids, team_size) {
-    try{
+    try {
         window.QRScanner.destroy();
-    }catch(e){}
+    } catch (e) { }
     document.getElementsByTagName("body")[0].style.opacity = 1.0;
     document.getElementsByTagName("body")[0].style.background = "url('./../www/img/wood.png')";
     document.getElementsByTagName("body")[0].style.backgroundColor = "white";
@@ -187,28 +189,28 @@ function save() {
     workOn("profile", profile);
 }
 
-function onLeftSwipe(){
+function onLeftSwipe() {
     var tablinks = document.getElementsByClassName("tablinks");
-    for(var i = 0; i < tablinks.length; i++){
-        if(tablinks[i].className.includes("active")){
-            if(i == 0){
-                openTab({currentTarget: tablinks[1]}, "game");
-            }else if(i == 1){
-                openTab({currentTarget: tablinks[2]}, "profile");
+    for (var i = 0; i < tablinks.length; i++) {
+        if (tablinks[i].className.includes("active")) {
+            if (i == 0) {
+                openTab({ currentTarget: tablinks[1] }, "game");
+            } else if (i == 1) {
+                openTab({ currentTarget: tablinks[2] }, "profile");
             }
             return;
         }
     }
 }
 
-function onRightSwipe(){
+function onRightSwipe() {
     var tablinks = document.getElementsByClassName("tablinks");
-    for(var i = 0; i < tablinks.length; i++){
-        if(tablinks[i].className.includes("active")){
-            if(i == 1){
-                openTab({currentTarget: tablinks[0]}, "leaderboard");
-            }else if(i == 2){
-                openTab({currentTarget: tablinks[1]}, "game");
+    for (var i = 0; i < tablinks.length; i++) {
+        if (tablinks[i].className.includes("active")) {
+            if (i == 1) {
+                openTab({ currentTarget: tablinks[0] }, "leaderboard");
+            } else if (i == 2) {
+                openTab({ currentTarget: tablinks[1] }, "game");
             }
             return;
         }

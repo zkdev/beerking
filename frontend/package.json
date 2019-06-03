@@ -15,6 +15,7 @@
   "dependencies": {
     "cordova-android": "^8.0.0",
     "cordova-browser": "^6.0.0",
+    "cordova-plugin-dialogs": "^2.0.1",
     "cordova-plugin-qrcodejs": "git+https://github.com/MenelicSoftware/cordova-plugin-qrcodejs.git",
     "cordova-plugin-qrscanner": "^3.0.1"
   },
@@ -25,7 +26,8 @@
     "plugins": {
       "cordova-plugin-whitelist": {},
       "cordova-plugin-qrscanner": {},
-      "cordova-plugin-qrcodejs": {}
+      "cordova-plugin-qrcodejs": {},
+      "cordova-plugin-dialogs": {}
     },
     "platforms": [
       "browser",
