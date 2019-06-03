@@ -5,13 +5,15 @@ from .connection.create import main as create_conn
 from .connection.kill import main as kill_conn
 from .handlers.create_user.main import main as create_user
 from .handlers.login.main import main as login
+from .handlers.respones.main import main as response
 
 
 app = Flask(__name__)
 
 
-@app.route('/users/creation', methods=['POST'])
+@app.route('/users/creation')
 def user_creation():
+    # methods=['POST']
     conn = create_conn('/root/beerpong/beerpong.db')
     uuid = uuid4(conn)
     username = request.args.get('username')
@@ -19,17 +21,18 @@ def user_creation():
     passwd = str(request.args.get('passwd')).lower()
     r = create_user(conn, uuid, username, mail, passwd)
     kill_conn(conn)
-    return r
+    return response(r)
 
 
-@app.route('/users/login', methods=['GET'])
+@app.route('/users/login')
 def user_login():
+    # methods=['POST']
     conn = create_conn('/root/beerpong/beerpong.db')
     username = request.args.get('username')
     passwd = str(request.args.get('passwd')).lower()
     r = login(conn, username, passwd)
     kill_conn(conn)
-    return r
+    return response(r)
 
 
 
