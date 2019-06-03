@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var base_url = "http://localhost:5000"
+var base_url = "http://zeggiedieziege.de:5000"
 
 var app = {
     // Application Constructor
@@ -38,7 +38,7 @@ var app = {
                 url: base_url + "/users/login",
                 data: user,
                 complete: function (response) {
-                    if(response.responseText === 'login sucessfully'){
+                    if(JSON.parse(response.responseText).status === 'login successful'){
                         window.location = './main.html';
                     }else{
                         // wrong email / wrong username

@@ -2,26 +2,27 @@ function summit_login() {
     //Summit login values
     var login_values = {};
     login_values.passwd = document.getElementById("pswd").value;
-    login_values.user = document.getElementById("user").value;
+    login_values.username = document.getElementById("user").value;
 
-    if (login_values.user === "test" && login_values.passwd === "test") {
+    if (login_values.username === "test" && login_values.passwd === "test") {
         var hashedValue = hash(login_values.passwd);
         window.localStorage.setItem("password", hashedValue);
-        window.localStorage.setItem("user", login_values.user);
+        window.localStorage.setItem("user", login_values.username);
         window.location = './main.html';
         return;
     }
 
+    login_values.passwd = hash(login_values.passwd);
     //ajax call
     $.ajax({
         type: "GET",
         url: base_url + "/users/login",
         data: login_values,
         complete: function (response) {
-            if (response.responseText === 'login sucessfully') {
-                var hashedValue = hash(login_values.passwd);
-                window.localStorage.setItem("password", hashedValue);
-                window.localStorage.setItem("user", login_values.user);
+            var resp = JSON.parse(response.responseText);
+            if (resp.status === 'login successful') {
+                window.localStorage.setItem("password", login_values.passwd);
+                window.localStorage.setItem("user", login_values.username);
                 window.location = './main.html';
             } else {
                 // wrong email / wrong username
@@ -54,19 +55,21 @@ function create_Account() {
         navigator.notification.alert("Passwoerter mussen identisch sein!", null, "Falsche Eingabe", "Ok");
         return;
     }
-    account_setting.user = document.getElementById("user").value;
-    account_setting.email = document.getElementById("email").value;
+    account_setting.username = document.getElementById("user").value;
+    account_setting.mail = document.getElementById("email").value;
     $.ajax({
         type: "GET",
         url: base_url + "/users/creation",
         data: account_setting,
         complete: function (response) {
-            if(response.responseText.startsWith('user created.')){
+            var resp = JSON.parse(response.responseText);
+            if(resp.status === "user creation successful"){
                 window.localStorage.setItem("password", account_setting.passwd);
                 window.localStorage.setItem("user", account_setting.user);
                 window.location = './main.html';
             }else{
                 //Create error message
+                navigator.notification.alert(resp.status, null, "Fehler", "Ok");
             }
         },
         dataType: "text/json"
