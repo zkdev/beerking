@@ -105,3 +105,29 @@ venv.bak/
 
 # PyCharm
 .idea/
+
+#Created by https://www.gitignore.io/api/cordova,apachecordova,visualstudiocode
+# Edit at https://www.gitignore.io/?templates=cordova,apachecordova,visualstudiocode
+
+### ApacheCordova ###
+# Apache Cordova generated files and directories
+bin/*
+!/plugins
+!/plugins/android.json
+!/plugins/fetch.json
+plugins/*
+platforms/*
+node_modules/*
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+
+# End of https://www.gitignore.io/api/apachecordova,visualstudiocode
