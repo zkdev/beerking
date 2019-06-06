@@ -25,6 +25,7 @@ var app = {
         if (env === 'index') {
             document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         } else if (env === 'main') {
+            createConfirmPopup();
             document.addEventListener('backbutton', onBackPressed, false);
         }
     },
@@ -63,9 +64,12 @@ function onBackPressed() {
         if (status.scanning === true) {
             window.QRScanner.cancelScan();
             document.getElementById("start_game").style.visibility = "visible";
+            /*
             document.getElementsByTagName("body")[0].style.opacity = 1.0;
             document.getElementsByTagName("body")[0].style.background = "url('./../www/img/wood.png')";
             document.getElementsByTagName("body")[0].style.backgroundColor = "white";
+            */
+           document.getElementsByTagName("body")[0].className = "body_bg";
         }
     })
 }

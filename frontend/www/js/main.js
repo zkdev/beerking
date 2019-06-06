@@ -41,8 +41,8 @@ function workOn(tabname, param) {
                     var row = leaderboard.insertRow(-1);
                     var user = row.insertCell(0);
                     var score = row.insertCell(1);
-                    user.innerHTML = response[i].user;
-                    score.innerHTML = response[i].score;
+                    user.innerText = response[i].user;
+                    score.innerText = response[i].score;
                     user.className = "name";
                     score.className = "score";
                 }
@@ -64,8 +64,12 @@ function workOn(tabname, param) {
                 url: base_url + "/profile",
                 data: request,
                 success: function (response) {
-                    //profile.user, profile.email, profile.uuid
-                    generateProfile(response);
+                    var resp = JSON.parse(response.responseText);
+                    if (resp.status === 'profile successful') {
+                        //profile.user, profile.email, profile.uuid
+                        window.localStorage.setItem("uuid", resp.uuid);
+                        generateProfile(resp);
+                    }
                 },
                 dataType: "text/json"
             })
@@ -74,7 +78,7 @@ function workOn(tabname, param) {
 }
 
 function generateProfile(profile) {
-    cordova.plugins.qrcodejs.encode('TEXT_TYPE', profile.user, (base64EncodedQRImage) => {
+    cordova.plugins.qrcodejs.encode('TEXT_TYPE', profile.uuid + "[&!?]" + profile.user, (base64EncodedQRImage) => {
         document.getElementById("QRimage").src = base64EncodedQRImage;
         document.getElementById("username_profile").innerText = profile.user;
 
@@ -98,8 +102,7 @@ function generateProfile(profile) {
 }
 
 function new_game(event, team_size) {
-    document.getElementsByTagName("body")[0].style.opacity = 0.0;
-    document.getElementsByTagName("body")[0].style.background = "transparent";
+    document.getElementsByTagName("body")[0].className = "body_bg_invisible";
     document.getElementById("start_game").style.visibility = "hidden";
     team_size = team_size * 2 - 1;
     var ids = [];
@@ -108,8 +111,11 @@ function new_game(event, team_size) {
             if (err) {
                 throw "Scan error";
             } else {
-                alert(text);
-                ids.push(text);
+                var name = text.split("[&!?]")[1];
+                var uuid = text.split("[&!?]")[0];
+                alert(name);
+                //check wether id exists:
+                ids.push({ name: name, uuid: uuid });
                 if (ids.length === team_size) {
                     display_team(ids, team_size);
                 } else {
@@ -121,20 +127,17 @@ function new_game(event, team_size) {
         window.QRScanner.show();
     } catch (e) {
         document.getElementById("start_game").style.visibility = "visible";
-        document.getElementsByTagName("body")[0].style.opacity = 1.0;
-        document.getElementsByTagName("body")[0].style.background = "url('./../www/img/wood.png')";
-        document.getElementsByTagName("body")[0].style.backgroundColor = "white";
-        return;
+        document.getElementsByTagName("body")[0].className = "body_bg";
     }
 }
 
 function display_team(ids, team_size) {
     try {
         window.QRScanner.destroy();
-    } catch (e) { }
-    document.getElementsByTagName("body")[0].style.opacity = 1.0;
-    document.getElementsByTagName("body")[0].style.background = "url('./../www/img/wood.png')";
-    document.getElementsByTagName("body")[0].style.backgroundColor = "white";
+    } catch (e) {
+        console.log("QR Reader error: " + e);
+    }
+    document.getElementsByTagName("body")[0].classList = "body_bg";
     if ((ids.length === team_size) && (team_size === 3)) {
         var teams = document.getElementById("team");
         var div = document.createElement("DIV");
@@ -144,26 +147,65 @@ function display_team(ids, team_size) {
 
         for (var i = 0; i < ids.length; i++) {
             var div = document.createElement("DIV");
-            div.innerText = ids[i];
+            div.innerText = ids[i].name;
             div.className = "teammember";
             div.onclick = team_choser;
             teams.appendChild(div);
         }
     } else if (ids.length === team_size && team_size === 1) {
-        document.getElementById("active_game").style.visibility = "visible";
+        //start game ajax
+        start_game_ajax(ids, function () {
+            document.getElementById("active_game").style.visibility = "visible";
+            document.getElementById("b1").placeholder = window.localStorage.getItem("user");
+            document.getElementById("b2").placeholder = ids[0].name;
+        });
+    }
+    return;
+}
+
+function start_game_ajax(ids, callback) {
+    var game = {};
+    game.host = window.localStorage.getItem("uuid");
+    if (ids.length === 3) {
+        //id[0] -> teammate
+        //id[1,2] -> opponents
+        game.team = ids[0].uuid;
+        game.opponents = [ids[1].uuid, ids[2].uuid];
+    } else {
+        game.enemy = ids[0].uuid;
+        $.ajax({
+            type: "POST",
+            url: base_url + "/match/start/1v1",
+            data: request,
+            complete: function (response) {
+                var resp = JSON.parse(response.responseText);
+                if (resp.status === 'match start successful') {
+                    callback();
+                }
+            },
+            dataType: "text/json"
+        })
     }
     return;
 }
 
 function team_choser(evt) {
-    var teammate = evt.currentTarget.innerText;
+    var teammate = [evt.currentTarget.innerText];
     var e = document.getElementById("team");
     var child = e.lastElementChild;
     while (child) {
+        if (child.innerText !== teammate[0]) {
+            teammate.push(child.innerText);
+        }
         e.removeChild(child);
         child = e.lastElementChild;
     }
-    document.getElementById("active_game").style.visibility = "visible";
+    //start game ajax
+    start_game_ajax(teammate, function () {
+        document.getElementById("active_game").style.visibility = "visible";
+        document.getElementById("b1").placeholder = window.localStorage.getItem("user") + ", " + ids[0];
+        document.getElementById("b2").placeholder = ids[1] + ", " + ids[2];
+    });
 }
 
 function check_winner() {
@@ -174,10 +216,17 @@ function check_winner() {
     } else if (v1 == 0) {
         document.getElementById("winner").innerText = "DU HAST GEWONNEN";
         document.getElementById("winner").style.color = "green";
+        document.getElementById("send_winner").disabled = false;
     } else if (v2 == 0) {
         document.getElementById("winner").innerText = "DU HAST VERLOREN";
         document.getElementById("winner").style.color = "red";
+        document.getElementById("send_winner").disabled = false;
     }
+}
+
+function send_winner() {
+    console.log("Sending winner");
+    window.location = "./main.html";
 }
 
 function save() {
@@ -215,4 +264,29 @@ function onRightSwipe() {
             return;
         }
     }
+}
+
+function confirmResults() {
+    console.log("Confirmed");
+    document.getElementById("confirmPopup").style.visibility = "hidden";
+    document.getElementById("tab0").disabled = false;
+    document.getElementById("tab1").disabled = false;
+    document.getElementById("tab2").disabled = false;
+}
+
+function createConfirmPopup() {
+    document.getElementById("confirmPopup").style.visibility = "visible";
+    document.getElementById("tab0").disabled = true;
+    document.getElementById("tab1").disabled = true;
+    document.getElementById("tab2").disabled = true;
+    var table = document.getElementById("confirms");
+    var confirms = [];
+    for (var i = 0; i < confirms.length; i++) {
+        var row = table.insertRow(-1);
+        var checker = row.insertCell(0);
+        checker.innerHTML = "<input class='checkResult' type='checkbox' checked='true'/>";
+        var text = row.insertCell(1);
+        text.innerHTML = "<span class='checkResultText'>" + confirms[i].opponent + "</span>"
+    }
+
 }

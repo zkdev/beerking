@@ -58,14 +58,14 @@ function create_Account() {
     account_setting.username = document.getElementById("user").value;
     account_setting.mail = document.getElementById("email").value;
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: base_url + "/users/creation",
         data: account_setting,
         complete: function (response) {
             var resp = JSON.parse(response.responseText);
             if(resp.status === "user creation successful"){
                 window.localStorage.setItem("password", account_setting.passwd);
-                window.localStorage.setItem("user", account_setting.user);
+                window.localStorage.setItem("user", account_setting.username);
                 window.location = './main.html';
             }else{
                 //Create error message

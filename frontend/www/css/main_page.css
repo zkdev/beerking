@@ -1,17 +1,6 @@
-/* Style the tab */
-
-.tab {
-  overflow: hidden;
-  border-radius: 5px;
-  background-color: #f1f1f1;
-  display: inline-block;
-  width: 100%;
-  text-align: center;
-  align-content: center;
-  margin-top: 5%;
-}
-
-
+/*
+  leaderboard table
+*/
 .leaderboard {
   margin-top: 5%;
   width: 100%;
@@ -34,7 +23,17 @@ th {
   text-align: center;
 }
 
-/* Style the buttons that are used to open the tab content */
+/* Tabs style */
+.tab {
+  overflow: hidden;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  align-content: center;
+  margin-top: 8%;
+}
 
 .tab button {
   background-color: inherit;
@@ -69,6 +68,7 @@ th {
   border-top: none;
 }
 
+/* New game buttons design */
 .new_game {
   padding: 5px;
   margin: auto;
@@ -79,6 +79,7 @@ th {
   margin-top: 5px;
 }
 
+/* Game result */
 #active_game {
   color: #ccc;
   visibility: hidden;
@@ -101,6 +102,7 @@ th {
   border-radius: 4px;
   padding: 5px;
 }
+
 
 #profile {
   text-align: center;
@@ -175,5 +177,32 @@ th {
   border: solid black 0.5px;
   padding: 2px;
   margin: 2px;
+}
 
+.app{
+  position: relative;
+}
+.checkResultText{
+  text-align: center;
+  font-size: medium;
+}
+
+#confirmPopup{
+  visibility: hidden;
+  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: absolute;
+  left: 3.5%;
+  width: 90%;
+  top: 15%;
+  z-index: 10;
+  border: none;
+  border-radius: 10px;
+  background-color: rgba(100,100,100,0.9);
+  padding: 2%;
 }

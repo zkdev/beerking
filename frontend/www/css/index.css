@@ -43,9 +43,15 @@
     text-align: center;
 }
 
-body {
+.body_bg {
     background: url("./../img/wood.png");
     background-color: white;
+    opacity: 1.0;
+}
+
+.body_bg_invisible {
+    opacity: 0.0;
+    background: transparent;
 }
 
 #new_account {

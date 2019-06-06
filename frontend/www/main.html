@@ -43,7 +43,20 @@
     <title>BeerKing</title>
 </head>
 
-<body onload="openTab(null, 'leaderboard');">
+<body onload="openTab(null, 'leaderboard');" class="body_bg">
+    <div id="confirmPopup">
+        <table id="confirms">
+            <tr>
+                <td>
+                    <input class="checkResult" type="checkbox" checked="true" />
+                </td>
+                <td>
+                    <span class="checkResultText">Ich habe gegen "Du" 0:3 verloren</span>
+                </td>
+            </tr>
+        </table>
+        <button id="popup" class="new_game" onclick="confirmResults(event)">Bestaetigen</button>
+    </div>
     <div class="app">
         <!-- Tab links -->
         <div class="tab">
@@ -56,7 +69,7 @@
         <div id="leaderboard" class="tabcontent">
             <table id="leaderboard_table" class="leaderboard">
                 <tr>
-                    <th>Nichname</th>
+                    <th>Nickname</th>
                     <th>Score</th>
                 </tr>
                 <tr>
@@ -79,9 +92,9 @@
             </div>
             <div id="active_game">
                 <input id="b1" class="Becher" type="number" placeholder="Deine Becher" onchange="check_winner()" />
-                <br />
                 <input id="b2" class="Becher" type="number" placeholder="Andere Becher" onchange="check_winner()" />
                 <p id="winner"></p>
+                <button id="send_winner" class="new_game" type="button" onclick="send_winner()" disabled>Fertig</button>
             </div>
         </div>
 
