@@ -23,3 +23,13 @@ class Create(Enum):
     USERNAME_NOT_UNIQUE = 1
     USERNAME_DOESNT_MATCH_REQUIREMENTS = 2
     MAIL_NOT_EXISTING = 3
+
+
+class Match(Enum):
+    PENDING = 0
+    ACCEPTED = 1
+    ABANDONED = 2
+
+class Profile(Enum):
+    SUCCESSFUL = 0
+    REJECTED = 1

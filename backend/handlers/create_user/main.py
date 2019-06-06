@@ -4,13 +4,13 @@ from ...enums.enums import Username, Mail, Create
 from ...connection.sql.create_user import main as create_user
 
 
-def main(conn, uuid, username, mail, passwd):
+def main(conn, userid, username, mail, passwd):
     c = conn.cursor()
     username_status = check_username(conn, username)
     mail_status = check_mail(mail)
 
     if username_status is Username.FINE and mail_status is Mail.FINE:
-        create_user(c, uuid, username, mail, passwd)
+        create_user(c, userid, username, mail, passwd)
         return Create.SUCCESSFUL
     else:
         if username_status is Username.TOO_SHORT:
