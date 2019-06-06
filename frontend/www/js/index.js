@@ -39,10 +39,11 @@ var app = {
                 url: base_url + "/users/login",
                 data: user,
                 complete: function (response) {
-                    if(JSON.parse(response.responseText).status === 'login successful'){
+                    var resp = JSON.parse(response.responseText);
+                    if (resp.status === 'login successful') {
+                        window.localStorage.setItem("uuid", resp.userid);
+                        window.localStorage.setItem("email", resp.mail);
                         window.location = './main.html';
-                    }else{
-                        // wrong email / wrong username
                     }
                 },
                 dataType: "text/json"
@@ -64,12 +65,7 @@ function onBackPressed() {
         if (status.scanning === true) {
             window.QRScanner.cancelScan();
             document.getElementById("start_game").style.visibility = "visible";
-            /*
-            document.getElementsByTagName("body")[0].style.opacity = 1.0;
-            document.getElementsByTagName("body")[0].style.background = "url('./../www/img/wood.png')";
-            document.getElementsByTagName("body")[0].style.backgroundColor = "white";
-            */
-           document.getElementsByTagName("body")[0].className = "body_bg";
+            document.getElementsByTagName("body")[0].className = "body_bg";
         }
     })
 }

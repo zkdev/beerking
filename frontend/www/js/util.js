@@ -19,10 +19,17 @@ function summit_login() {
         url: base_url + "/users/login",
         data: login_values,
         complete: function (response) {
-            var resp = JSON.parse(response.responseText);
+            var resp = "";
+            try{
+                resp = JSON.parse(response.responseText);
+            }catch(e){
+                console.log(e);
+            }
             if (resp.status === 'login successful') {
                 window.localStorage.setItem("password", login_values.passwd);
                 window.localStorage.setItem("user", login_values.username);
+                window.localStorage.setItem("uuid", resp.userid);
+                window.localStorage.setItem("email", resp.mail);
                 window.location = './main.html';
             } else {
                 // wrong email / wrong username
@@ -66,7 +73,7 @@ function create_Account() {
             if(resp.status === "user creation successful"){
                 window.localStorage.setItem("password", account_setting.passwd);
                 window.localStorage.setItem("user", account_setting.username);
-                window.location = './main.html';
+                window.location = './index.html';
             }else{
                 //Create error message
                 navigator.notification.alert(resp.status, null, "Fehler", "Ok");

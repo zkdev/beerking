@@ -56,23 +56,11 @@ function workOn(tabname, param) {
         if (param !== undefined) {
             generateProfile(param)
         } else {
-            var request = {};
-            request.password = window.localStorage.getItem("password");
-            request.user = window.localStorage.getItem("user");
-            $.ajax({
-                type: "GET",
-                url: base_url + "/profile",
-                data: request,
-                success: function (response) {
-                    var resp = JSON.parse(response.responseText);
-                    if (resp.status === 'profile successful') {
-                        //profile.user, profile.email, profile.uuid
-                        window.localStorage.setItem("uuid", resp.uuid);
-                        generateProfile(resp);
-                    }
-                },
-                dataType: "text/json"
-            })
+            var profile = {};
+            profile.email = window.localStorage.getItem("email");
+            profile.user = window.localStorage.getItem("user");
+            profile.uuid = window.localStorage.getItem("uuid");
+            generateProfile(profile);
         }
     }
 }
@@ -85,7 +73,7 @@ function generateProfile(profile) {
         if (document.getElementById("email_entry").lastChild !== null) {
             document.getElementById("email_entry").removeChild(document.getElementById("email_entry").lastChild);
         }
-        if (profile.email === undefined) {
+        if (profile.email === undefined || profile.email === "undefined" || profile.email === null) {
             var div = document.createElement('div');
             div.innerHTML = "<input id='input_email' type='email' placeholder='Hinterlege deine Email' class='info'/><br\><input type='button' value='Speichern' id='save_btn' onclick='save()'/>";
             document.getElementById("email_entry").appendChild(div);
@@ -95,7 +83,6 @@ function generateProfile(profile) {
             div.firstChild.innerText = profile.email;
             document.getElementById("email_entry").appendChild(div);
         }
-
     }, (err) => {
         console.error('QRCodeJS error is ' + JSON.stringify(err));
     });
@@ -239,6 +226,8 @@ function save() {
 }
 
 function onLeftSwipe() {
+    if(deactivated)
+    return
     var tablinks = document.getElementsByClassName("tablinks");
     for (var i = 0; i < tablinks.length; i++) {
         if (tablinks[i].className.includes("active")) {
@@ -253,6 +242,8 @@ function onLeftSwipe() {
 }
 
 function onRightSwipe() {
+    if(deactivated)
+    return
     var tablinks = document.getElementsByClassName("tablinks");
     for (var i = 0; i < tablinks.length; i++) {
         if (tablinks[i].className.includes("active")) {
@@ -266,15 +257,19 @@ function onRightSwipe() {
     }
 }
 
+var deactivated = false;
+
 function confirmResults() {
     console.log("Confirmed");
     document.getElementById("confirmPopup").style.visibility = "hidden";
     document.getElementById("tab0").disabled = false;
     document.getElementById("tab1").disabled = false;
     document.getElementById("tab2").disabled = false;
+    deactivated = false;
 }
 
 function createConfirmPopup() {
+    deactivated = true;
     document.getElementById("confirmPopup").style.visibility = "visible";
     document.getElementById("tab0").disabled = true;
     document.getElementById("tab1").disabled = true;
