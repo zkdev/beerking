@@ -26,10 +26,15 @@ class Create(Enum):
 
 
 class Match(Enum):
-    PENDING = 0
-    ACCEPTED = 1
-    ABANDONED = 2
+    FINE = 0
+    RECEIVED = 1
+    CONFIRMED = 2
+
 
 class Profile(Enum):
     SUCCESSFUL = 0
     REJECTED = 1
+
+
+class Leaderboard(Enum):
+    FINE = 0

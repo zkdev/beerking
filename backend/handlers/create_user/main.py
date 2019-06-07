@@ -2,15 +2,20 @@ from ...validate.check_username import main as check_username
 from ...validate.check_mail import main as check_mail
 from ...enums.enums import Username, Mail, Create
 from ...connection.sql.create_user import main as create_user
+from ...elo import inital_elo
 
 
 def main(conn, userid, username, mail, passwd):
     c = conn.cursor()
     username_status = check_username(conn, username)
-    mail_status = check_mail(mail)
+    if mail is None or mail == "":
+        mail = ""
+        mail_status = Mail.FINE
+    else:
+        mail_status = check_mail(mail)
 
     if username_status is Username.FINE and mail_status is Mail.FINE:
-        create_user(c, userid, username, mail, passwd)
+        create_user(c, userid, username, mail, passwd, inital_elo())
         return Create.SUCCESSFUL
     else:
         if username_status is Username.TOO_SHORT:

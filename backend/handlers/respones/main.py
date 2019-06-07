@@ -1,10 +1,10 @@
 import json
 
 from flask import Response
-from ...enums.enums import Login, Create, Match
+from ...enums.enums import Login, Create, Match, Leaderboard
 
 
-def main(enum, p=None):
+def main(enum, rs=None):
     resp = Response(mimetype='application/json')
     resp.headers.add('Access-Control-Allow-Origin', '*')
 
@@ -31,7 +31,7 @@ def main(enum, p=None):
     elif enum is Login.SUCCESSFUL:
         # GET
         # 200 = OK
-        userid, mail = p[0]
+        userid, mail = rs[0]
         resp.status_code = 200
         json_obj = {"status": "login successful", "userid": userid, "mail": mail}
     elif enum is Login.USERNAME_NOT_FOUND:
@@ -44,11 +44,25 @@ def main(enum, p=None):
         # 403 = Forbidden
         resp.status_code = 403
         json_obj = {"status": "login failed, passwd rejected"}
-    elif enum is Match.PENDING:
+    elif enum is Match.FINE:
         # POST
         # 201 = Created
         resp.status_code = 201
-        json_obj = {"status": "match start successful"}
+        json_obj = {"status": "match created successful"}
+    elif enum is Match.RECEIVED:
+        # GET
+        # 200 = OK
+        return json.dumps({"matches": rs})
+    elif enum is Match.CONFIRMED:
+        # POST
+        # 201 = Created
+        resp.status_code = 201
+        json_obj = {"status": "match confirmed"}
+    elif enum is Leaderboard.FINE:
+        # GET
+        # 200 = OK
+        resp.status_code = 200
+        return json.dumps({"leaderboard": rs})
     else:
         # DEFAULT
         # 500 = Internal Server Error
