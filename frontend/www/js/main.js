@@ -73,7 +73,7 @@ function generateProfile(profile) {
         if (document.getElementById("email_entry").lastChild !== null) {
             document.getElementById("email_entry").removeChild(document.getElementById("email_entry").lastChild);
         }
-        if (profile.email === undefined || profile.email === "undefined" || profile.email === null) {
+        if (profile.email === undefined || profile.email === "undefined" || profile.email === null || profile.email === "") {
             var div = document.createElement('div');
             div.innerHTML = "<input id='input_email' type='email' placeholder='Hinterlege deine Email' class='info'/><br\><input type='button' value='Speichern' id='save_btn' onclick='save()'/>";
             document.getElementById("email_entry").appendChild(div);
@@ -87,7 +87,7 @@ function generateProfile(profile) {
         console.error('QRCodeJS error is ' + JSON.stringify(err));
     });
 }
-
+var players;
 function new_game(event, team_size) {
     document.getElementsByTagName("body")[0].className = "body_bg_invisible";
     document.getElementById("start_game").style.visibility = "hidden";
@@ -141,34 +141,53 @@ function display_team(ids, team_size) {
         }
     } else if (ids.length === team_size && team_size === 1) {
         //start game ajax
-        start_game_ajax(ids, function () {
-            document.getElementById("active_game").style.visibility = "visible";
-            document.getElementById("b1").placeholder = window.localStorage.getItem("user");
-            document.getElementById("b2").placeholder = ids[0].name;
-        });
+        players = ids;
+        document.getElementById("active_game").style.visibility = "visible";
+        document.getElementById("b1").placeholder = window.localStorage.getItem("user");
+        document.getElementById("b2").placeholder = ids[0].name;
+
     }
     return;
 }
 
-function start_game_ajax(ids, callback) {
+function send_winner() {
     var game = {};
+    ids = players;
+    players = undefined;
     game.host = window.localStorage.getItem("uuid");
     if (ids.length === 3) {
-        //id[0] -> teammate
-        //id[1,2] -> opponents
-        game.team = ids[0].uuid;
-        game.opponents = [ids[1].uuid, ids[2].uuid];
-    } else {
-        game.enemy = ids[0].uuid;
+        game.friend = ids[0].uuid;
+        game.enemy1 = ids[1].uuid;
+        game.enemy2 = ids[2].uuid;
+        if(document.getElementById("winner").style.color === "green"){
+            game.winner = 0;
+        }else{
+            game.winner = 1;
+        }
         $.ajax({
             type: "POST",
-            url: base_url + "/match/start/1v1",
-            data: request,
+            url: base_url + "/match/2v2",
+            data: game,
             complete: function (response) {
-                var resp = JSON.parse(response.responseText);
-                if (resp.status === 'match start successful') {
-                    callback();
-                }
+                console.log(response);
+                window.location = "./main.html";
+            },
+            dataType: "text/json"
+        })
+    } else {
+        game.enemy = ids[0].uuid;
+        if(document.getElementById("winner").style.color === "green"){
+            game.winner = 0;
+        }else{
+            game.winner = 1;
+        }
+        $.ajax({
+            type: "POST",
+            url: base_url + "/match/1v1",
+            data: game,
+            complete: function (response) {
+                console.log(response);
+                window.location = "./main.html";
             },
             dataType: "text/json"
         })
@@ -188,11 +207,10 @@ function team_choser(evt) {
         child = e.lastElementChild;
     }
     //start game ajax
-    start_game_ajax(teammate, function () {
-        document.getElementById("active_game").style.visibility = "visible";
-        document.getElementById("b1").placeholder = window.localStorage.getItem("user") + ", " + ids[0];
-        document.getElementById("b2").placeholder = ids[1] + ", " + ids[2];
-    });
+    players = teammate;
+    document.getElementById("active_game").style.visibility = "visible";
+    document.getElementById("b1").placeholder = window.localStorage.getItem("user") + ", " + ids[0];
+    document.getElementById("b2").placeholder = ids[1] + ", " + ids[2];
 }
 
 function check_winner() {
@@ -211,11 +229,6 @@ function check_winner() {
     }
 }
 
-function send_winner() {
-    console.log("Sending winner");
-    window.location = "./main.html";
-}
-
 function save() {
     var profile = {};
     profile.user = document.getElementById("username_profile").innerText;
@@ -226,8 +239,8 @@ function save() {
 }
 
 function onLeftSwipe() {
-    if(deactivated)
-    return
+    if (deactivated)
+        return
     var tablinks = document.getElementsByClassName("tablinks");
     for (var i = 0; i < tablinks.length; i++) {
         if (tablinks[i].className.includes("active")) {
@@ -242,8 +255,8 @@ function onLeftSwipe() {
 }
 
 function onRightSwipe() {
-    if(deactivated)
-    return
+    if (deactivated)
+        return
     var tablinks = document.getElementsByClassName("tablinks");
     for (var i = 0; i < tablinks.length; i++) {
         if (tablinks[i].className.includes("active")) {
@@ -258,30 +271,63 @@ function onRightSwipe() {
 }
 
 var deactivated = false;
+var confirms;
 
 function confirmResults() {
-    console.log("Confirmed");
-    document.getElementById("confirmPopup").style.visibility = "hidden";
-    document.getElementById("tab0").disabled = false;
-    document.getElementById("tab1").disabled = false;
-    document.getElementById("tab2").disabled = false;
-    deactivated = false;
+    var request = {}
+    request.userid = window.localStorage.getItem("uuid");
+    request.passwd = window.localStorage.getItem("password");
+    $.ajax({
+        type: "POST",
+        url: base_url + "/matches/confirm",
+        data: request,
+        complete: function (response) {
+            for (var i = 0; i < confirms.length; i++) {
+                confirms[i].confirmed = document.getElementById("check" + i).checked;
+            }
+            console.log("Confirmed");
+            document.getElementById("confirmPopup").style.visibility = "hidden";
+            document.getElementById("tab0").disabled = false;
+            document.getElementById("tab1").disabled = false;
+            document.getElementById("tab2").disabled = false;
+            deactivated = false;
+        }
+    });
 }
 
 function createConfirmPopup() {
-    deactivated = true;
-    document.getElementById("confirmPopup").style.visibility = "visible";
-    document.getElementById("tab0").disabled = true;
-    document.getElementById("tab1").disabled = true;
-    document.getElementById("tab2").disabled = true;
-    var table = document.getElementById("confirms");
-    var confirms = [];
-    for (var i = 0; i < confirms.length; i++) {
-        var row = table.insertRow(-1);
-        var checker = row.insertCell(0);
-        checker.innerHTML = "<input class='checkResult' type='checkbox' checked='true'/>";
-        var text = row.insertCell(1);
-        text.innerHTML = "<span class='checkResultText'>" + confirms[i].opponent + "</span>"
-    }
+    var request = {};
+    request.userid = window.localStorage.getItem("uuid");
+    $.ajax({
+        type: "GET",
+        url: base_url + "/match/pending",
+        data: request,
+        complete: function (response) {
+            confirms = JSON.parse(response.responseText).matches;
+            if (confirms.length === 0) {
+                deactivated = true;
+                document.getElementById("confirmPopup").style.visibility = "visible";
+                document.getElementById("tab0").disabled = true;
+                document.getElementById("tab1").disabled = true;
+                document.getElementById("tab2").disabled = true;
+                var table = document.getElementById("confirms");
+                for (var i = 0; i < confirms.length; i++) {
+                    var row = table.insertRow(-1);
+                    var checker = row.insertCell(0);
+                    checker.innerHTML = "<input id='check" + i + "' class='checkResult' type='checkbox' checked='true'/>";
+                    var text = row.insertCell(1);
+                    text.innerHTML = "<span class='checkResultText'>Verloren gegen " + confirms[i].opponent + "</span>"
+                }
+            }
+        },
+        dataType: "text/json"
+    })
+}
 
+function logout(){
+    window.localStorage.setItem("user", "");
+    window.localStorage.setItem("password", "");
+    window.localStorage.setItem("uuid", "");
+    window.localStorage.setItem("email", "");
+    window.location = "./index.html";
 }
