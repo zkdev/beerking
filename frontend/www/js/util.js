@@ -2,7 +2,7 @@ function summit_login() {
     //Summit login values
     var login_values = {};
     login_values.passwd = document.getElementById("pswd").value;
-    login_values.username = document.getElementById("user").value;
+    login_values.username = document.getElementById("user").value.trim();
 
     if (login_values.username === "test" && login_values.passwd === "test") {
         var hashedValue = hash(login_values.passwd);
@@ -62,7 +62,7 @@ function create_Account() {
         navigator.notification.alert("Passwoerter mussen identisch sein!", null, "Falsche Eingabe", "Ok");
         return;
     }
-    account_setting.username = document.getElementById("user").value;
+    account_setting.username = document.getElementById("user").value.trim();
     account_setting.mail = document.getElementById("email").value;
     $.ajax({
         type: "POST",

@@ -29,20 +29,26 @@ function openTab(evt, tabname) {
 function workOn(tabname, param) {
     if (tabname === "leaderboard") {
         var request = {};
-        request.passwd = window.localStorage.getItem("password");
-        request.user = window.localStorage.getItem("user");
         $.ajax({
             type: "GET",
             url: base_url + "/leaderboard",
             data: request,
-            success: function (response) {
+            complete: function (response) {
+                var players_leaderboard = JSON.parse(response.responseText).leaderboard;
                 var leaderboard = document.getElementById("leaderboard_table");
-                for (var i = 0; i < response.length; i++) {
+                var child = leaderboard.lastElementChild;
+                while (child) {
+                    e.removeChild(child);
+                    child = e.lastElementChild;
+                }
+                var h = leaderboard.insertRow(-1);
+                h.innerHTML = "<th>Nickname</th><th>Score</th>";
+                for (var i = 0; i < players_leaderboard.length; i++) {
                     var row = leaderboard.insertRow(-1);
                     var user = row.insertCell(0);
                     var score = row.insertCell(1);
-                    user.innerText = response[i].user;
-                    score.innerText = response[i].score;
+                    user.innerText = players_leaderboard[i].username;
+                    score.innerText = players_leaderboard[i].elo;
                     user.className = "name";
                     score.className = "score";
                 }
@@ -159,9 +165,9 @@ function send_winner() {
         game.friend = ids[0].uuid;
         game.enemy1 = ids[1].uuid;
         game.enemy2 = ids[2].uuid;
-        if(document.getElementById("winner").style.color === "green"){
+        if (document.getElementById("winner").style.color === "green") {
             game.winner = 0;
-        }else{
+        } else {
             game.winner = 1;
         }
         $.ajax({
@@ -176,9 +182,9 @@ function send_winner() {
         })
     } else {
         game.enemy = ids[0].uuid;
-        if(document.getElementById("winner").style.color === "green"){
+        if (document.getElementById("winner").style.color === "green") {
             game.winner = 0;
-        }else{
+        } else {
             game.winner = 1;
         }
         $.ajax({
@@ -275,16 +281,17 @@ var confirms;
 
 function confirmResults() {
     var request = {}
-    request.userid = window.localStorage.getItem("uuid");
+    request.username = window.localStorage.getItem("user");
     request.passwd = window.localStorage.getItem("password");
+    for (var i = 0; i < confirms.length; i++) {
+        confirms[i].confirmed = document.getElementById("check" + i).checked;
+    }
+    request.matches = JSON.stringify(confirms);
     $.ajax({
         type: "POST",
-        url: base_url + "/matches/confirm",
+        url: base_url + "/match/confirm",
         data: request,
         complete: function (response) {
-            for (var i = 0; i < confirms.length; i++) {
-                confirms[i].confirmed = document.getElementById("check" + i).checked;
-            }
             console.log("Confirmed");
             document.getElementById("confirmPopup").style.visibility = "hidden";
             document.getElementById("tab0").disabled = false;
@@ -304,7 +311,7 @@ function createConfirmPopup() {
         data: request,
         complete: function (response) {
             confirms = JSON.parse(response.responseText).matches;
-            if (confirms.length === 0) {
+            if (confirms.length !== 0) {
                 deactivated = true;
                 document.getElementById("confirmPopup").style.visibility = "visible";
                 document.getElementById("tab0").disabled = true;
@@ -316,7 +323,11 @@ function createConfirmPopup() {
                     var checker = row.insertCell(0);
                     checker.innerHTML = "<input id='check" + i + "' class='checkResult' type='checkbox' checked='true'/>";
                     var text = row.insertCell(1);
-                    text.innerHTML = "<span class='checkResultText'>Verloren gegen " + confirms[i].opponent + "</span>"
+                    if (confirms[i].winner === 0) {
+                        text.innerHTML = "<span class='checkResultText' style='font-color:red'>Verloren gegen " + confirms[i].hostname + "</span>";
+                    } else {
+                        text.innerHTML = "<span class='checkResultText' style='font-color:green'>Gewonnen gegen " + confirms[i].hostname + "</span>";
+                    }
                 }
             }
         },
@@ -324,7 +335,7 @@ function createConfirmPopup() {
     })
 }
 
-function logout(){
+function logout() {
     window.localStorage.setItem("user", "");
     window.localStorage.setItem("password", "");
     window.localStorage.setItem("uuid", "");

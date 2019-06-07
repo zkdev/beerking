@@ -45,16 +45,7 @@
 
 <body onload="openTab(null, 'leaderboard');" class="body_bg">
     <div id="confirmPopup">
-        <table id="confirms">
-            <tr>
-                <td>
-                    <input class="checkResult" type="checkbox" checked="true" />
-                </td>
-                <td>
-                    <span class="checkResultText">Ich habe gegen "Du" 0:3 verloren</span>
-                </td>
-            </tr>
-        </table>
+        <table id="confirms"></table>
         <button id="popup" class="new_game" onclick="confirmResults(event)">Bestaetigen</button>
     </div>
     <div class="app">
@@ -68,18 +59,6 @@
         <!-- Tab content -->
         <div id="leaderboard" class="tabcontent">
             <table id="leaderboard_table" class="leaderboard">
-                <tr>
-                    <th>Nickname</th>
-                    <th>Score</th>
-                </tr>
-                <tr>
-                    <td class="name">Ich</td>
-                    <td class="score">100</td>
-                </tr>
-                <tr>
-                    <td class="name">Du</td>
-                    <td class="score">0</td>
-                </tr>
             </table>
         </div>
 
