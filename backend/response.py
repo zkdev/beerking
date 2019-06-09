@@ -1,10 +1,10 @@
 import json
 
 from flask import Response
-from ...enums.enums import Login, Create, Match, Leaderboard
+from .enums import Login, Create, Match, Leaderboard
 
 
-def main(enum, rs=None):
+def build(enum, rs=None):
     resp = Response(mimetype='application/json')
     resp.headers.add('Access-Control-Allow-Origin', '*')
 

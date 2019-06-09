@@ -1,23 +1,37 @@
-from .connection.sql.start_1v1 import main as sql_1v1
-from .connection.sql.start_2v2 import main as sql_2v2
-from .connection.sql.get_pending_matches import main as sql_pending_matches
-from .connection.sql.get_match import main as sql_get_match
-from .connection.sql.confirm_match import main as sql_confirm_match
-from .enums.enums import Match
+from . import sql, log, generator
+from .enums import Match
 
 
-def match_1v1(conn, host, enemy, winner):
-    sql_1v1(conn, host, enemy, winner)
+def start_1v1(conn, host, enemy, winner):
+    matchid = generator.create_uuid(conn)
+    sql.start_1v1(conn, matchid, host, enemy, winner)
+    host = sql.get_username(conn, host).fetchone()[0]
+    enemy = sql.get_username(conn, enemy).fetchone()[0]
+    if int(winner) == 0:
+        winner = host
+    elif int(winner) == 1:
+        winner = enemy
+    log.info('starting 1v1 match (' + host + ' vs. ' + enemy + ' ; ' + winner + ' wins)')
     return Match.FINE
 
 
-def match_2v2(conn, host, friend, enemy1, enemy2, winner):
-    sql_2v2(conn, host, friend, enemy1, enemy2, winner)
+def start_2v2(conn, host, friend, enemy1, enemy2, winner):
+    matchid = generator.create_uuid(conn)
+    sql.start_2v2(conn, matchid, host, friend, enemy1, enemy2, winner)
+    host = sql.get_username(conn, host).fetchone()[0]
+    friend = sql.get_username(conn, friend).fetchone()[0]
+    enemy1 = sql.get_username(conn, enemy1).fetchone()[0]
+    enemy2 = sql.get_username(conn, enemy2).fetchone()[0]
+    if int(winner) == 0:
+        winner = host + ' and ' + friend
+    elif int(winner) == 1:
+        winner = enemy1 + ',' + enemy2
+    log.info('starting 2v2 match (' + host + ' and ' + friend + ' vs. ' + enemy1 + ' and ' + enemy2 + ' ; ' + winner + ' win)')
     return Match.FINE
 
 
 def get_pending_matches(conn, userid):
-    rs = sql_pending_matches(conn, userid).fetchall()
+    rs = sql.get_pending_matches(conn, userid).fetchall()
     arr = []
     for entry in rs:
         matchid = entry[0]
@@ -29,6 +43,6 @@ def get_pending_matches(conn, userid):
 
 
 def confirm_match(conn, matchid):
-    m = sql_get_match(conn, matchid).fetchall()
-    sql_confirm_match(conn, m[0][0], m[0][1], m[0][2], m[0][3], m[0][4], m[0][5], m[0][6])
+    m = sql.get_match(conn, matchid).fetchall()
+    sql.confirm_match(conn, m[0][0], m[0][1], m[0][2], m[0][3], m[0][4], m[0][5], m[0][6])
     return Match.CONFIRMED
