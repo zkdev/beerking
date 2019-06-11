@@ -1,7 +1,7 @@
 import json
 
 from flask import Response
-from .enums import Login, Create, Match, Leaderboard
+from .enums import Login, Create, Match, Leaderboard, Profile, History
 
 
 def build(enum, rs=None):
@@ -63,6 +63,16 @@ def build(enum, rs=None):
         # 200 = OK
         resp.status_code = 200
         return json.dumps({"leaderboard": rs})
+    elif enum is Profile.UPDATED:
+        # PUT
+        # 202 = Accepted
+        resp.status_code = 202
+        json_obj = {"status": "mail updated"}
+    elif enum is History.FINE:
+        # GET
+        # 200 = OK
+        resp.status_code = 200
+        return json.dumps({"matches": rs})
     else:
         # DEFAULT
         # 500 = Internal Server Error

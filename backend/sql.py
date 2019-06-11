@@ -1,6 +1,9 @@
 import datetime
 
 
+from .enums import Profile
+
+
 def get_match(conn, matchid):
     c = conn.cursor()
     return c.execute("""SELECT * FROM PendingMatches WHERE matchid = ?;""", (str(matchid),))
@@ -19,12 +22,11 @@ def is_unique(c, key, value):
 
 def leaderboard(conn):
     c = conn.cursor()
-    return c.execute("""SELECT username, elo FROM Users ORDER BY elo ASC;""")
+    return c.execute("""SELECT username, elo FROM Users ORDER BY elo DESC;""")
 
 
 def login(c, username, passwd):
-    return c.execute("""SELECT 1 FROM users WHERE username = ? and passwd = ?;"""
-                  , (str(username), str(passwd))).fetchone()
+    return c.execute("""SELECT 1 FROM users WHERE username = ? and passwd = ?;""", (str(username), str(passwd))).fetchone()
 
 
 def remove_pending_match(conn, matchid):
@@ -70,3 +72,34 @@ def confirm_match(conn, matchid, host, friend, enemy1, enemy2, winner, datetime)
     c = conn.cursor()
     c.execute("""INSERT INTO Matches(matchid, host, friend, enemy1, enemy2, winner, datetime) 
         VALUES (?,?,?,?,?,?,?);""", (str(matchid), str(host), str(friend), str(enemy1), str(enemy2), int(winner), str(datetime)))
+
+
+def update_elo(conn, userid, elo):
+    c = conn.cursor()
+    c.execute("""UPDATE Users SET elo = ? WHERE userid = ?;""", (int(elo), str(userid),))
+
+
+def get_match_participants(conn, matchid):
+    c = conn.cursor()
+    return c.execute("""SELECT host, friend, enemy1, enemy2 FROM PendingMatches WHERE matchid = ?;""", (str(matchid),))
+
+
+def get_elo(conn, userid):
+    c = conn.cursor()
+    return c.execute("""SELECT elo FROM Users WHERE userid = ?;""", (str(userid),))
+
+
+def get_userid(conn, username):
+    c = conn.cursor()
+    return c.execute("""SELECT userid FROM Users WHERE username = ?;""", (str(username),))
+
+
+def update_user_mail(conn, userid, mail):
+    c = conn.cursor()
+    c.execute("""UPDATE Users SET mail = ? WHERE userid = ?;""", (str(mail), str(userid)))
+    return Profile.UPDATED
+
+
+def get_user_history(conn, userid):
+    c = conn.cursor()
+    return c.execute("""SELECT * FROM Matches WHERE host = ? OR friend = ? OR enemy1 = ? OR enemy2 = ?;""", (str(userid), str(userid), str(userid), str(userid)))

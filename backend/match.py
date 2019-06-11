@@ -1,5 +1,5 @@
-from . import sql, log, generator
-from .enums import Match
+from . import sql, log, generator, elo
+from .enums import Match, Mode
 
 
 def start_1v1(conn, host, enemy, winner):
@@ -45,4 +45,43 @@ def get_pending_matches(conn, userid):
 def confirm_match(conn, matchid):
     m = sql.get_match(conn, matchid).fetchall()
     sql.confirm_match(conn, m[0][0], m[0][1], m[0][2], m[0][3], m[0][4], m[0][5], m[0][6])
+    if m[0][2] is None:
+        update_elo(conn, matchid, Mode.SOLO)
+    else:
+        update_elo(conn, matchid, Mode.DUO)
     return Match.CONFIRMED
+
+
+def update_elo(conn, matchid, mode):
+    if mode is Mode.SOLO:
+        participants = sql.get_match_participants(conn, matchid).fetchall()
+        host = participants[0][0]
+        enemy1 = participants[0][2]
+        host_elo = sql.get_elo(conn, host).fetchone()[0]
+        enemy1_elo = sql.get_elo(conn, enemy1).fetchone()[0]
+        elo_new = elo.rate_1v1(host_elo, enemy1_elo)
+        host_new = elo_new[0]
+        enemy1_new = elo_new[1]
+        sql.update_elo(conn, host, host_new)
+        sql.update_elo(conn, enemy1, enemy1_new)
+    elif mode is Mode.DUO:
+        participants = sql.get_match_participants(conn, matchid).fetchall()
+        host = participants[0][0]
+        friend = participants[0][1]
+        enemy1 = participants[0][2]
+        enemy2 = participants[0][3]
+        host_elo = sql.get_elo(conn, host).fetchone()[0]
+        friend_elo = sql.get_elo(conn, friend).fetchone()[0]
+        enemy1_elo = sql.get_elo(conn, enemy1).fetchone()[0]
+        enemy2_elo = sql.get_elo(conn, enemy2).fetchone()[0]
+        elo_new = elo.rate_2v2(host_elo, friend_elo, enemy1_elo, enemy2_elo)
+        host_new = elo_new[0]
+        friend_new = elo_new[1]
+        enemy1_new = elo_new[2]
+        enemy2_new = elo_new[3]
+        sql.update_elo(conn, host, host_new)
+        sql.update_elo(conn, friend, friend_new)
+        sql.update_elo(conn, enemy1, enemy1_new)
+        sql.update_elo(conn, enemy2, enemy2_new)
+    else:
+        log.error('match mode not found')

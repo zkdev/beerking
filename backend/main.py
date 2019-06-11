@@ -4,7 +4,7 @@ from flask import Flask
 from flask import request
 from flask_cors import CORS
 from . import generator, connection, handlers, match, sql, response, log
-from .enums import Match, Login, Leaderboard
+from .enums import Match, Login, Leaderboard, History
 
 
 app = Flask(__name__)
@@ -24,11 +24,27 @@ def router_create_user():
     return response.build(r)
 
 
+@app.route('/users/mail/update', methods=['PUT'])
+def router_update_mail():
+    conn = connection.create(path)
+    username = request.form.get('username')
+    passwd = request.form.get('passwd')
+    mail = request.form.get('mail')
+    r = handlers.login(conn, username, passwd)
+    userid = handlers.get_profile(r, conn, username, passwd).fetchone()[0]
+    if r is Login.SUCCESSFUL:
+        r = sql.update_user_mail(conn, userid, mail)
+    else:
+        r = Login.PASSWD_WRONG
+    connection.kill(conn)
+    return response.build(r)
+
+
 @app.route('/users/login', methods=['GET'])
 def router_login():
     conn = connection.create(path)
     username = request.args.get('username')
-    passwd = str(request.args.get('passwd')).lower()
+    passwd = request.args.get('passwd')
     r = handlers.login(conn, username, passwd)
     p = handlers.get_profile(r, conn, username, passwd).fetchall()
     connection.kill(conn)
@@ -63,7 +79,7 @@ def router_start_2v2():
 def router_pending_matches():
     conn = connection.create(path)
     userid = request.args.get('userid')
-    ja = sql.get_pending_matches(conn, userid)
+    ja = match.get_pending_matches(conn, userid)
     connection.kill(conn)
     return response.build(Match.RECEIVED, ja)
 
@@ -74,11 +90,11 @@ def router_confirm_match():
     username = request.form.get('username')
     passwd = request.form.get('passwd')
     if handlers.login(conn, username, passwd) is Login.SUCCESSFUL:
-        for match in json.loads(request.form.get('matches')):
-            print(match.get('matchid'))
-            if match.get('confirmed') is True:
-                matchid = match.get('matchid')
-                r = sql.confirm_match(conn, matchid)
+        for single_match in json.loads(request.form.get('matches')):
+            print(single_match.get('matchid'))
+            if single_match.get('confirmed') is True:
+                matchid = single_match.get('matchid')
+                r = match.confirm_match(conn, matchid)
                 sql.remove_pending_match(conn, matchid)
         connection.kill(conn)
         return response.build(r)
@@ -97,3 +113,28 @@ def router_leaderboard():
         arr.append({"username": username, "elo": elo})
     connection.kill(conn)
     return response.build(Leaderboard.FINE, arr)
+
+
+@app.route('/users/history', methods=['GET'])
+def router_get_user_history():
+    conn = connection.create(path)
+    userid = request.args.get('userid')
+    username = request.args.get('username')
+    passwd = request.args.get('passwd')
+    r = handlers.login(conn, username, passwd)
+    if r is Login.SUCCESSFUL:
+        h = sql.get_user_history(conn, userid).fetchall()
+        arr = []
+        for entry in h:
+            host = entry[1]
+            friend = entry[2]
+            enemy1 = entry[3]
+            enemy2 = entry[4]
+            winner = entry[5]
+            datetime = entry[6]
+            arr.append({"host": host, "friend": friend, "enemy1": enemy1, "enemy2": enemy2, "winner": winner,
+                        "datetime": datetime})
+        connection.kill(conn)
+        return response.build(History.FINE, arr)
+    else:
+        log.error('login failed at retrieving user history')

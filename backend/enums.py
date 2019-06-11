@@ -34,7 +34,18 @@ class Match(Enum):
 class Profile(Enum):
     SUCCESSFUL = 0
     REJECTED = 1
+    UPDATED = 3
 
 
 class Leaderboard(Enum):
     FINE = 0
+
+
+class Mode(Enum):
+    SOLO = 0
+    DUO = 1
+
+
+class History(Enum):
+    FINE = 0
+    ERROR = 1
