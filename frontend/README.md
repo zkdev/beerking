@@ -30,9 +30,4 @@ cordova run android --device
 ```
 USB-Debugging must be enabled on mobile device.
 
-### __only for developing__: 
-``` 
-user:       test  
-password:   test
-```
 

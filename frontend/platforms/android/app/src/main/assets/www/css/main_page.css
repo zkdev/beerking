@@ -1,0 +1,221 @@
+/*
+  leaderboard table
+*/
+
+.leaderboard {
+  margin-top: 5%;
+  width: 100%;
+  margin-bottom: 5%;
+  border-collapse: collapse;
+}
+
+th {
+  width: 50%;
+  border-bottom: solid black 2px;
+}
+
+.score {
+  text-align: center;
+  border-bottom: 1px black solid;
+}
+
+.name {
+  border-bottom: 1px black solid;
+  text-align: center;
+}
+
+/* Tabs style */
+
+.tab {
+  overflow: hidden;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  align-content: center;
+  margin-top: 8%;
+}
+
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 14px 16px;
+  transition: 0.3s;
+  margin: 3px;
+  width: 31.5%;
+}
+
+/* Change background color of buttons on hover */
+
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border-top: none;
+}
+
+/* New game buttons design */
+
+.new_game {
+  padding: 5px;
+  margin: auto;
+  border: outset rgb(35, 169, 247) 2px;
+  border-radius: 4px;
+  background-color: rgb(35, 169, 247);
+  width: 50%;
+  margin-top: 5px;
+}
+
+/* Game result */
+
+#active_game {
+  color: #ccc;
+  visibility: hidden;
+  font-size: large;
+  font-style: bold;
+  color: blue;
+  text-align: center;
+  padding: 5px;
+}
+
+#game {
+  text-align: center;
+  margin: 5px;
+  height: 100%;
+}
+
+.Becher {
+  margin: 5px;
+  border: solid black 1px;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+#profile {
+  text-align: center;
+}
+
+.info {
+  width: 100%;
+  border: black solid 1px;
+  background-color: lightgray;
+  padding: 2px;
+  margin: 3px;
+  font-size: large;
+}
+
+#QRimage {
+  width: 50%;
+  height: 50%;
+  margin: 5px;
+}
+
+#save_btn {
+  width: 50%;
+  font-size: large;
+  padding: 2px;
+  margin: 4px;
+}
+
+#match_hist {
+  margin-top: 5px;
+}
+
+.hist_header {
+  border-bottom: solid black 1px;
+  font-size: large;
+  padding: 3px;
+}
+
+#history {
+  list-style-type: none;
+  text-align: center;
+  height: 15vh;
+  overflow-y: scroll;
+}
+
+.win {
+  margin-top: 3px;
+  margin-bottom: 3px;
+  background-color: green;
+  text-align: center;
+  width: 100%;
+}
+
+.loss {
+  margin-top: 3px;
+  margin-bottom: 3px;
+  background-color: red;
+  text-align: center;
+  width: 100%;
+}
+
+#team {
+  text-align: center;
+  font-size: large;
+}
+
+.team_ch {
+  text-align: center;
+  font-size: large;
+}
+
+.teammember {
+  text-align: center;
+  font-size: large;
+  border: solid black 0.5px;
+  padding: 2px;
+  margin: 2px;
+}
+
+.app {
+  position: relative;
+}
+
+.checkResultText {
+  text-align: center;
+  font-size: medium;
+}
+
+#confirmPopup {
+  visibility: hidden;
+  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: absolute;
+  left: 3.5%;
+  width: 90%;
+  top: 15%;
+  z-index: 10;
+  border: none;
+  border-radius: 10px;
+  background-color: rgba(100, 100, 100, 0.9);
+  padding: 2%;
+}
+
+#datenschutz {
+  margin: 2%;
+  padding: 1%;
+  font-size: large;
+  display: inline-block;
+}
