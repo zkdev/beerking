@@ -11,7 +11,7 @@ def check_mail(mail):
 
 
 def check_username(conn, username):
-    if not str(username).__len__() > 5:
+    if not str(username).__len__() > 2:
         return Username.TOO_SHORT
     if not is_unique(conn, 'username', username):
         return Username.EXISTS

@@ -95,7 +95,7 @@ def router_confirm_match():
             if single_match.get('confirmed') is True:
                 matchid = single_match.get('matchid')
                 r = match.confirm_match(conn, matchid)
-                sql.remove_pending_match(conn, matchid)
+            sql.remove_pending_match(conn, matchid)
         connection.kill(conn)
         return response.build(r)
     else:
@@ -118,11 +118,11 @@ def router_leaderboard():
 @app.route('/users/history', methods=['GET'])
 def router_get_user_history():
     conn = connection.create(path)
-    userid = request.args.get('userid')
     username = request.args.get('username')
     passwd = request.args.get('passwd')
     r = handlers.login(conn, username, passwd)
     if r is Login.SUCCESSFUL:
+        userid = sql.get_userid(conn, username).fetchone()[0]
         h = sql.get_user_history(conn, userid).fetchall()
         connection.kill(conn)
         return response.build(History.FINE, h)
