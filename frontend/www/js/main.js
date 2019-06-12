@@ -108,14 +108,32 @@ function new_game(event, team_size) {
             } else {
                 var name = text.split("[&!?]")[1];
                 var uuid = text.split("[&!?]")[0];
-                alert(name);
-                //check wether id exists:
-                ids.push({ name: name, uuid: uuid });
-                if (ids.length === team_size) {
-                    display_team(ids, team_size);
-                } else {
-                    window.QRScanner.scan(callback);
+                navigator.notification.alert(name, null, "Spieler gescannt");
+                for (var i = 0; i < ids.length; i++) {
+                    if (ids[i].uuid === uuid) {
+                        throw "Double uuid scanned";
+                    }
                 }
+                var request = {};
+                request.userid = uuid;
+                $.ajax({
+                    type: "GET",
+                    url: base_url + "/userid",
+                    data: request,
+                    complete: function (response) {
+                        if (JSON.parse(response.responseText).status === "userid exists") {
+                            //check wether id exists:
+                            ids.push({ name: name, uuid: uuid });
+                            if (ids.length === team_size) {
+                                display_team(ids, team_size);
+                            } else {
+                                window.QRScanner.scan(callback);
+                            }
+                        } else {
+                            throw "Not existing userid"
+                        }
+                    }
+                });
             }
         }
         window.QRScanner.scan(callback);
@@ -380,18 +398,38 @@ function generate_personal_history() {
             for (var i = 0; i < games.length; i++) {
                 var game = document.createElement("DIV");
                 var text = "";
-                if(games[i].enemy2 === "None"){
-                    var text = games[i].enemy1;
-                }else{
-                    var text = games[i].enemy1  + " & " + games[i].enemy2;
-                }
-                if(games[i].winner = 0){
-                    game.innerHTML = "<p class='win'>" + text + "</p>";
-                }else{
-                    game.innerHTML = "<p class='loss'>" + text + "</p>";
+                var user = window.localStorage.getItem("user");
+                if (games[i].friend === user || games[i].host === user) {
+                    var text = formatString(new Date(games[i].datetime)) + " : ";
+                    if (games[i].enemy2 === null) {
+                        text += games[i].enemy1;
+                    } else {
+                        text += games[i].enemy1 + " & " + games[i].enemy2;
+                    }
+                    if (games[i].winner === 0) {
+                        game.innerHTML = "<p class='win'>" + text + "</p>";
+                    } else {
+                        game.innerHTML = "<p class='loss'>" + text + "</p>";
+                    }
+                } else {
+                    var text = formatString(new Date(games[i].datetime)) + " : ";
+                    if (games[i].friend === null) {
+                        text += games[i].host;
+                    } else {
+                        text += games[i].host + " & " + games[i].friend;
+                    }
+                    if (games[i].winner === 1) {
+                        game.innerHTML = "<p class='win'>" + text + "</p>";
+                    } else {
+                        game.innerHTML = "<p class='loss'>" + text + "</p>";
+                    }
                 }
                 table.appendChild(game.firstChild);
             }
         }
     });
+}
+
+function formatString(date){
+    return "" + date.getDate() + "." + (date.getMonth()+1) + " " + date.getHours() + ":" + date.getMinutes();
 }

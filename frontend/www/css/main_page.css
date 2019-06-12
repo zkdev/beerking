@@ -1,6 +1,7 @@
 /*
   leaderboard table
 */
+
 .leaderboard {
   margin-top: 5%;
   width: 100%;
@@ -13,7 +14,6 @@ th {
   border-bottom: solid black 2px;
 }
 
-
 .score {
   text-align: center;
   border-bottom: 1px black solid;
@@ -25,6 +25,7 @@ th {
 }
 
 /* Tabs style */
+
 .tab {
   overflow: hidden;
   border-radius: 5px;
@@ -70,6 +71,7 @@ th {
 }
 
 /* New game buttons design */
+
 .new_game {
   padding: 5px;
   margin: auto;
@@ -81,6 +83,7 @@ th {
 }
 
 /* Game result */
+
 #active_game {
   color: #ccc;
   visibility: hidden;
@@ -103,7 +106,6 @@ th {
   border-radius: 4px;
   padding: 5px;
 }
-
 
 #profile {
   text-align: center;
@@ -144,7 +146,7 @@ th {
 #history {
   list-style-type: none;
   text-align: center;
-  height: 20vh;
+  height: 15vh;
   overflow-y: scroll;
 }
 
@@ -164,17 +166,17 @@ th {
   width: 100%;
 }
 
-#team{
+#team {
   text-align: center;
   font-size: large;
 }
 
-.team_ch{
+.team_ch {
   text-align: center;
   font-size: large;
 }
 
-.teammember{
+.teammember {
   text-align: center;
   font-size: large;
   border: solid black 0.5px;
@@ -182,15 +184,16 @@ th {
   margin: 2px;
 }
 
-.app{
+.app {
   position: relative;
 }
-.checkResultText{
+
+.checkResultText {
   text-align: center;
   font-size: medium;
 }
 
-#confirmPopup{
+#confirmPopup {
   visibility: hidden;
   text-align: center;
   display: inline-block;
@@ -206,6 +209,13 @@ th {
   z-index: 10;
   border: none;
   border-radius: 10px;
-  background-color: rgba(100,100,100,0.9);
+  background-color: rgba(100, 100, 100, 0.9);
   padding: 2%;
+}
+
+#datenschutz {
+  margin: 2%;
+  padding: 1%;
+  font-size: large;
+  display: inline-block;
 }

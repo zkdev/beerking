@@ -126,5 +126,6 @@ node_modules/*
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
+*.jks
 
 # End of https://www.gitignore.io/api/apachecordova,visualstudiocode

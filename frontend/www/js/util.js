@@ -4,14 +4,6 @@ function summit_login() {
     login_values.passwd = document.getElementById("pswd").value;
     login_values.username = document.getElementById("user").value.trim();
 
-    if (login_values.username === "test" && login_values.passwd === "test") {
-        var hashedValue = hash(login_values.passwd);
-        window.localStorage.setItem("password", hashedValue);
-        window.localStorage.setItem("user", login_values.username);
-        window.location = './main.html';
-        return;
-    }
-
     login_values.passwd = hash(login_values.passwd);
     //ajax call
     $.ajax({
