@@ -28,6 +28,7 @@ function openTab(evt, tabname) {
 
 function workOn(tabname, param) {
     if (tabname === "leaderboard") {
+        createConfirmPopup();
         var request = {};
         $.ajax({
             type: "GET",
@@ -38,8 +39,8 @@ function workOn(tabname, param) {
                 var leaderboard = document.getElementById("leaderboard_table");
                 var child = leaderboard.lastElementChild;
                 while (child) {
-                    e.removeChild(child);
-                    child = e.lastElementChild;
+                    leaderboard.removeChild(child);
+                    child = leaderboard.lastElementChild;
                 }
                 var h = leaderboard.insertRow(-1);
                 h.innerHTML = "<th>Nickname</th><th>Score</th>";
@@ -89,6 +90,7 @@ function generateProfile(profile) {
             div.firstChild.innerText = profile.email;
             document.getElementById("email_entry").appendChild(div);
         }
+        generate_personal_history();
     }, (err) => {
         console.error('QRCodeJS error is ' + JSON.stringify(err));
     });
@@ -237,11 +239,20 @@ function check_winner() {
 
 function save() {
     var profile = {};
-    profile.user = document.getElementById("username_profile").innerText;
-    profile.email = document.getElementById("input_email").value;
-    profile.qrcode = document.getElementById("QRimage").src;
-    //ajax call for saving
-    workOn("profile", profile);
+    profile.username = window.localStorage.getItem("user");
+    profile.mail = document.getElementById("input_email").value;
+    profile.passwd = window.localStorage.getItem("password");
+    $.ajax({
+        type: "PUT",
+        url: base_url + "/users/mail/update",
+        data: profile,
+        complete: function (response) {
+            if (JSON.parse(response.responseText).status === "mail updated") {
+                window.localStorage.setItem("email", profile.mail);
+                workOn("profile", undefined);
+            }
+        }
+    });
 }
 
 function onLeftSwipe() {
@@ -287,6 +298,7 @@ function confirmResults() {
         confirms[i].confirmed = document.getElementById("check" + i).checked;
     }
     request.matches = JSON.stringify(confirms);
+    confirms = [];
     $.ajax({
         type: "POST",
         url: base_url + "/match/confirm",
@@ -298,6 +310,7 @@ function confirmResults() {
             document.getElementById("tab1").disabled = false;
             document.getElementById("tab2").disabled = false;
             deactivated = false;
+            workOn("leaderboard", undefined);
         }
     });
 }
@@ -318,6 +331,11 @@ function createConfirmPopup() {
                 document.getElementById("tab1").disabled = true;
                 document.getElementById("tab2").disabled = true;
                 var table = document.getElementById("confirms");
+                var child = table.lastElementChild;
+                while (child) {
+                    table.removeChild(child);
+                    child = table.lastElementChild;
+                }
                 for (var i = 0; i < confirms.length; i++) {
                     var row = table.insertRow(-1);
                     var checker = row.insertCell(0);
@@ -341,4 +359,39 @@ function logout() {
     window.localStorage.setItem("uuid", "");
     window.localStorage.setItem("email", "");
     window.location = "./index.html";
+}
+
+function generate_personal_history() {
+    var request = {};
+    request.username = window.localStorage.getItem("user");
+    request.passwd = window.localStorage.getItem("password");
+    $.ajax({
+        type: "GET",
+        url: base_url + "/users/history",
+        data: request,
+        complete: function (response) {
+            var games = JSON.parse(response.responseText).matches;
+            var table = document.getElementById("history");
+            var child = table.lastElementChild;
+            while (child) {
+                table.removeChild(child);
+                child = table.lastElementChild;
+            }
+            for (var i = 0; i < games.length; i++) {
+                var game = document.createElement("DIV");
+                var text = "";
+                if(games[i].enemy2 === "None"){
+                    var text = games[i].enemy1;
+                }else{
+                    var text = games[i].enemy1  + " & " + games[i].enemy2;
+                }
+                if(games[i].winner = 0){
+                    game.innerHTML = "<p class='win'>" + text + "</p>";
+                }else{
+                    game.innerHTML = "<p class='loss'>" + text + "</p>";
+                }
+                table.appendChild(game.firstChild);
+            }
+        }
+    });
 }

@@ -144,6 +144,8 @@ th {
 #history {
   list-style-type: none;
   text-align: center;
+  height: 20vh;
+  overflow-y: scroll;
 }
 
 .win {

@@ -25,7 +25,6 @@ var app = {
         if (env === 'index') {
             document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         } else if (env === 'main') {
-            createConfirmPopup();
             document.addEventListener('backbutton', onBackPressed, false);
         }
     },
