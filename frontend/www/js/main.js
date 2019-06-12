@@ -103,7 +103,9 @@ function new_game(event, team_size) {
     var ids = [];
     try {
         var callback = function (err, text) {
+            window.QRScanner.destroy();
             if (err) {
+                window.location = "./main.html";
                 throw "Scan error";
             } else {
                 var name = text.split("[&!?]")[1];
@@ -111,7 +113,7 @@ function new_game(event, team_size) {
                 navigator.notification.alert(name, null, "Spieler gescannt");
                 for (var i = 0; i < ids.length; i++) {
                     if (ids[i].uuid === uuid) {
-                        throw "Double uuid scanned";
+                        window.location = "./main.html";
                     }
                 }
                 var request = {};
@@ -130,7 +132,7 @@ function new_game(event, team_size) {
                                 window.QRScanner.scan(callback);
                             }
                         } else {
-                            throw "Not existing userid"
+                            window.location = "./main.html";
                         }
                     }
                 });
@@ -152,6 +154,7 @@ function display_team(ids, team_size) {
     }
     document.getElementsByTagName("body")[0].classList = "body_bg";
     if ((ids.length === team_size) && (team_size === 3)) {
+        players = ids;
         var teams = document.getElementById("team");
         var div = document.createElement("DIV");
         div.innerText = "Waehle deinen Partner:";
@@ -222,21 +225,35 @@ function send_winner() {
 }
 
 function team_choser(evt) {
-    var teammate = [evt.currentTarget.innerText];
-    var e = document.getElementById("team");
-    var child = e.lastElementChild;
-    while (child) {
-        if (child.innerText !== teammate[0]) {
-            teammate.push(child.innerText);
+    var players_akt = [];
+    var index = 0;
+    for (var i = 0; i < players.length; i++) {
+        if (players[i].name === evt.currentTarget.innerText) {
+            players_akt.push(players[i]);
+            index = 0;
         }
-        e.removeChild(child);
-        child = e.lastElementChild;
     }
+    if (index === 0) {
+        players_akt.push(players[1]);
+        players_akt.push(players[2]);
+    } else if (index === 1) {
+        players_akt.push(players[0]);
+        players_akt.push(players[2]);
+
+    } else {
+        players_akt.push(players[0]);
+        players_akt.push(players[1]);
+    }
+    var table = document.getElementById("team");
+    var child = table.lastElementChild;
+    while (child) {
+        table.removeChild(child);
+        child = table.lastElementChild;
+    }
+
     //start game ajax
-    players = teammate;
+    players = players_akt;
     document.getElementById("active_game").style.visibility = "visible";
-    document.getElementById("b1").placeholder = window.localStorage.getItem("user") + ", " + ids[0];
-    document.getElementById("b2").placeholder = ids[1] + ", " + ids[2];
 }
 
 function check_winner() {
@@ -430,6 +447,6 @@ function generate_personal_history() {
     });
 }
 
-function formatString(date){
-    return "" + date.getDate() + "." + (date.getMonth()+1) + " " + date.getHours() + ":" + date.getMinutes();
+function formatString(date) {
+    return "" + date.getDate() + "." + (date.getMonth() + 1) + " " + date.getHours() + ":" + date.getMinutes();
 }
