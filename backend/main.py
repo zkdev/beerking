@@ -3,8 +3,8 @@ import json
 from flask import Flask
 from flask import request
 from flask_cors import CORS
-from . import generator, connection, handlers, match, sql, response, log
-from .enums import Match, Login, Leaderboard, History
+from . import generator, connection, handlers, match, sql, response, log, validate
+from .enums import Match, Login, Leaderboard, History, Id, Error
 
 
 app = Flask(__name__)
@@ -89,9 +89,9 @@ def router_confirm_match():
     conn = connection.create(path)
     username = request.form.get('username')
     passwd = request.form.get('passwd')
+    r = Error.ERROR
     if handlers.login(conn, username, passwd) is Login.SUCCESSFUL:
         for single_match in json.loads(request.form.get('matches')):
-            print(single_match.get('matchid'))
             if single_match.get('confirmed') is True:
                 matchid = single_match.get('matchid')
                 r = match.confirm_match(conn, matchid)
@@ -105,9 +105,9 @@ def router_confirm_match():
 @app.route('/leaderboard', methods=['GET'])
 def router_leaderboard():
     conn = connection.create(path)
-    l = sql.leaderboard(conn).fetchall()
+    leaderboard = sql.leaderboard(conn).fetchall()
     arr = []
-    for entry in l:
+    for entry in leaderboard:
         username = entry[0]
         elo = entry[1]
         arr.append({"username": username, "elo": elo})
@@ -124,17 +124,19 @@ def router_get_user_history():
     r = handlers.login(conn, username, passwd)
     if r is Login.SUCCESSFUL:
         h = sql.get_user_history(conn, userid).fetchall()
-        arr = []
-        for entry in h:
-            host = entry[1]
-            friend = entry[2]
-            enemy1 = entry[3]
-            enemy2 = entry[4]
-            winner = entry[5]
-            datetime = entry[6]
-            arr.append({"host": host, "friend": friend, "enemy1": enemy1, "enemy2": enemy2, "winner": winner,
-                        "datetime": datetime})
         connection.kill(conn)
-        return response.build(History.FINE, arr)
+        return response.build(History.FINE, h)
     else:
         log.error('login failed at retrieving user history')
+
+
+@app.route('/userid', methods=['GET'])
+def router_userid_exists():
+    conn = connection.create(path)
+    userid = request.args.get('userid')
+    if not validate.is_unique(conn, 'userid', userid):
+        connection.kill(conn)
+        return response.build(Id.EXISTS)
+    else:
+        connection.kill(conn)
+        return response.build(Id.DOESNT_EXIST)

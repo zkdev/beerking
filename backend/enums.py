@@ -19,10 +19,13 @@ class Login(Enum):
 
 
 class Create(Enum):
-    SUCCESSFUL = 0
-    USERNAME_NOT_UNIQUE = 1
-    USERNAME_DOESNT_MATCH_REQUIREMENTS = 2
-    MAIL_NOT_EXISTING = 3
+
+    # not translated in the frontend so it has to match with the german language
+
+    ERFOLGREICH = 0
+    NUTZERNAME_EXISTIERT_BEREITS = 1
+    NUTZERNAME_ERFUELLT_BEDINGUNGEN_NICHT = 2
+    MAIL_EXISTIERT_NICHT = 3
 
 
 class Match(Enum):
@@ -49,3 +52,12 @@ class Mode(Enum):
 class History(Enum):
     FINE = 0
     ERROR = 1
+
+
+class Id(Enum):
+    EXISTS = 0
+    DOESNT_EXIST = 1
+
+
+class Error(Enum):
+    ERROR = 0

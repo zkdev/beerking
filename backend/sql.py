@@ -9,7 +9,9 @@ def get_match(conn, matchid):
     return c.execute("""SELECT * FROM PendingMatches WHERE matchid = ?;""", (str(matchid),))
 
 
-def is_unique(c, key, value):
+def is_unique(conn, key, value):
+
+    c = conn.cursor()
 
     # somehow I'm not able to provide the key as a binding as well
     # so I use this ugly if statement to prepare the sql statement
@@ -68,10 +70,10 @@ def create_user(c, userid, username, mail, passwd, elo):
         VALUES (?,?,?,?,?);""", (str(userid), str(username), str(mail), str(passwd), int(elo)))
 
 
-def confirm_match(conn, matchid, host, friend, enemy1, enemy2, winner, datetime):
+def confirm_match(conn, matchid, host, friend, enemy1, enemy2, winner, date_data):
     c = conn.cursor()
     c.execute("""INSERT INTO Matches(matchid, host, friend, enemy1, enemy2, winner, datetime) 
-        VALUES (?,?,?,?,?,?,?);""", (str(matchid), str(host), str(friend), str(enemy1), str(enemy2), int(winner), str(datetime)))
+        VALUES (?,?,?,?,?,?,?);""", (str(matchid), str(host), str(friend), str(enemy1), str(enemy2), int(winner), str(date_data)))
 
 
 def update_elo(conn, userid, elo):
@@ -100,6 +102,19 @@ def update_user_mail(conn, userid, mail):
     return Profile.UPDATED
 
 
+def get_user_history_v2(conn, userid):
+    c = conn.cursor()
+    return c.execute("""SELECT *
+    FROM Matches
+    WHERE Matches.host = ? OR Matches.friend = ? OR Matches.enemy1 = ? OR Matches.enemy2 = ?;""", (str(userid), str(userid), str(userid), str(userid)))
+
+
 def get_user_history(conn, userid):
     c = conn.cursor()
-    return c.execute("""SELECT * FROM Matches WHERE host = ? OR friend = ? OR enemy1 = ? OR enemy2 = ?;""", (str(userid), str(userid), str(userid), str(userid)))
+    return c.execute("""SELECT m1.username, m2.username, m3.username, m4.username, winner, datetime
+    FROM Matches
+    LEFT OUTER JOIN Users as m1 on m1.userid = Matches.host
+    LEFT OUTER JOIN Users as m2 on m2.userid = Matches.friend
+    LEFT OUTER JOIN Users as m3 on m3.userid = Matches.enemy1
+    LEFT OUTER JOIN Users as m4 on m4.userid = Matches.enemy2
+    WHERE host = ? OR friend = ? OR enemy1 = ? OR enemy2 = ?;""", (str(userid), str(userid), str(userid), str(userid)))

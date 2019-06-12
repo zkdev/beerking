@@ -14,14 +14,14 @@ def create_user(conn, userid, username, mail, passwd):
     if username_status is Username.FINE and mail_status is Mail.FINE:
         log.info('creating user \"' + str(username) + '\"')
         sql.create_user(c, userid, username, mail, passwd, elo.initial_elo())
-        return Create.SUCCESSFUL
+        return Create.ERFOLGREICH
     else:
         if username_status is Username.TOO_SHORT:
-            return Create.USERNAME_DOESNT_MATCH_REQUIREMENTS
+            return Create.NUTZERNAME_ERFUELLT_BEDINGUNGEN_NICHT
         elif username_status is Username.EXISTS:
-            return Create.USERNAME_NOT_UNIQUE
+            return Create.NUTZERNAME_EXISTIERT_BEREITS
         else:
-            return Create.MAIL_NOT_EXISTING
+            return Create.MAIL_EXISTIERT_NICHT
 
 
 def login(conn, username, passwd):

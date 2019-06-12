@@ -19,8 +19,7 @@ def check_username(conn, username):
 
 
 def is_unique(conn, key, value):
-    c = conn.cursor()
-    r = sql.is_unique(c, key, value).fetchone()
+    r = sql.is_unique(conn, key, value).fetchone()
     if r is None:
         return True
     else:

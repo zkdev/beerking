@@ -1,29 +1,29 @@
 import json
 
 from flask import Response
-from .enums import Login, Create, Match, Leaderboard, Profile, History
+from .enums import Login, Create, Match, Leaderboard, Profile, History, Id
 
 
 def build(enum, rs=None):
     resp = Response(mimetype='application/json')
     resp.headers.add('Access-Control-Allow-Origin', '*')
 
-    if enum is Create.SUCCESSFUL:
+    if enum is Create.ERFOLGREICH:
         # POST
         # 201 = Created
         resp.status_code = 201
         json_obj = {"status": "user creation successful"}
-    elif enum is Create.USERNAME_NOT_UNIQUE:
+    elif enum is Create.NUTZERNAME_EXISTIERT_BEREITS:
         # POST
         # 400 = Bad Request
         resp.status_code = 400
         json_obj = {"status": "user creation failed, username is not unique"}
-    elif enum is Create.USERNAME_DOESNT_MATCH_REQUIREMENTS:
+    elif enum is Create.NUTZERNAME_ERFUELLT_BEDINGUNGEN_NICHT:
         # POST
         # 400 = Bad Request
         resp.status_code = 400
         json_obj = {"status": "user creation failed, username doesn't match requirements"}
-    elif enum is Create.MAIL_NOT_EXISTING:
+    elif enum is Create.MAIL_EXISTIERT_NICHT:
         # POST
         # 400 = Bad Request
         resp.status_code = 400
@@ -71,8 +71,26 @@ def build(enum, rs=None):
     elif enum is History.FINE:
         # GET
         # 200 = OK
+        arr = []
+        for entry in rs:
+            host = entry[0]
+            friend = entry[1]
+            enemy1 = entry[2]
+            enemy2 = entry[3]
+            winner = entry[4]
+            date_data = entry[5]
+            arr.append({"host": host, "friend": friend, "enemy1": enemy1, "enemy2": enemy2, "winner": winner, "datetime": date_data})
+        return json.dumps({"matches": arr})
+    elif enum is Id.EXISTS:
+        # GET
+        # 200 = OK
         resp.status_code = 200
-        return json.dumps({"matches": rs})
+        json_obj = {"status": "userid exists"}
+    elif enum is Id.DOESNT_EXIST:
+        # GET
+        # 403 = Forbidden
+        resp.status_code = 403
+        json_obj = {"status": "userid doesnt exists"}
     else:
         # DEFAULT
         # 500 = Internal Server Error
