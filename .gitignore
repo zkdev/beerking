@@ -103,9 +103,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# PyCharm
-.idea/
-
 #Created by https://www.gitignore.io/api/cordova,apachecordova,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=cordova,apachecordova,visualstudiocode
 
@@ -115,9 +112,10 @@ bin/*
 !/plugins
 !/plugins/android.json
 !/plugins/fetch.json
-plugins/*
-platforms/*
-node_modules/*
+frontend/plugins/*
+frontend/platforms/browser
+frontend/node_modules/*
+frontend/.vscode/*
 
 ### VisualStudioCode ###
 .vscode/*
@@ -129,5 +127,5 @@ node_modules/*
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
 .history
-
+*.jks
 # End of https://www.gitignore.io/api/apachecordova,visualstudiocode

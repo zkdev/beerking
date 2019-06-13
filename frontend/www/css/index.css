@@ -1,0 +1,61 @@
+#login_btn {
+    border: solid black 1px;
+    margin-top: 5%;
+    font-size: large;
+}
+
+#create_btn {
+    border: solid black 1px;
+    margin-top: 5%;
+    font-size: large;
+}
+
+.input_field {
+    margin: 1%;
+    border-style: solid;
+    border-color: darkblue;
+    border-radius: 2px;
+    font-size: large;
+    padding: 4px;
+}
+
+.input_field.error{
+    border-color: rgb(240, 106, 106);
+    border-style: dotted;
+}
+
+.input_field.error:focus{
+    border-style: solid;
+    outline: rgb(240, 106, 106);
+    outline-width: thick;
+    outline-style: solid;
+}
+
+.input_field:focus {
+    border-color: lightblue;
+    outline: lightblue;
+    outline-width: thick;
+    outline-style: dashed;
+}
+
+#login {
+    margin-top: 10%;
+    text-align: center;
+}
+
+.body_bg {
+    background: url("./../img/wood.png");
+    background-color: white;
+    opacity: 1.0;
+}
+
+.body_bg_invisible {
+    opacity: 0.0;
+    background: transparent;
+}
+
+#new_account {
+    margin: 5%;
+    font-size: large;
+    display: inline-block;
+}
