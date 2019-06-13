@@ -1,0 +1,45 @@
+.leaderboard {
+    width: 100%;
+    margin-bottom: 5%;
+    border-collapse: collapse;
+}
+
+#leaderboard {
+    margin-top: 7%;
+    text-align: center;
+    height: 73vh;
+    overflow-y: scroll;
+}
+
+th {
+    width: 50%;
+    border-bottom: solid black 2px;
+}
+
+.score {
+    text-align: center;
+    border-bottom: 1px black solid;
+}
+
+.name {
+    border-bottom: 1px black solid;
+    text-align: center;
+}
+
+/*row highlighting*/
+
+.first {
+    background-color: rgba(255, 232, 103, 0.5);
+}
+
+.second {
+    background-color: rgba(192, 192, 192, 0.5);
+}
+
+.third {
+    background-color: rgba(205, 127, 50, 0.5);
+}
+
+.ich {
+    border: 2px solid rebeccapurple;
+}

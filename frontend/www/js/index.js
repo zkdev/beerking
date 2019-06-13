@@ -18,6 +18,7 @@
  */
 var base_url = "http://zeggiedieziege.de:5000"
 var options = { dimBackground: true };
+
 var app = {
     // Application Constructor
     initialize: function (env) {

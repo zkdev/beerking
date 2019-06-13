@@ -18,6 +18,7 @@
  */
 var base_url = "http://zeggiedieziege.de:5000"
 var options = { dimBackground: true };
+
 var app = {
     // Application Constructor
     initialize: function (env) {
@@ -33,22 +34,24 @@ var app = {
         try {
             user.username = window.localStorage.getItem("user");
             user.passwd = window.localStorage.getItem("password");
-            SpinnerPlugin.activityStart("Logging in...", options);
-            $.ajax({
-                type: "GET",
-                url: base_url + "/users/login",
-                data: user,
-                complete: function (response) {
-                    SpinnerPlugin.activityStop();
-                    var resp = JSON.parse(response.responseText);
-                    if (resp.status === 'login successful') {
-                        window.localStorage.setItem("uuid", resp.userid);
-                        window.localStorage.setItem("email", resp.mail);
-                        window.location = './main.html';
-                    }
-                },
-                dataType: "text/json"
-            })
+            if (user.passwd !== undefined || user.passwd === "") {
+                SpinnerPlugin.activityStart("Logging in...", options);
+                $.ajax({
+                    type: "GET",
+                    url: base_url + "/users/login",
+                    data: user,
+                    complete: function (response) {
+                        SpinnerPlugin.activityStop();
+                        var resp = JSON.parse(response.responseText);
+                        if (resp.status === 'login successful') {
+                            window.localStorage.setItem("uuid", resp.userid);
+                            window.localStorage.setItem("email", resp.mail);
+                            window.location = './main.html';
+                        }
+                    },
+                    dataType: "text/json"
+                });
+            }
         } catch (e) {
             console.log(e);
         }
