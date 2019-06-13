@@ -61,3 +61,8 @@ class Id(Enum):
 
 class Error(Enum):
     ERROR = 0
+
+
+class Friends(Enum):
+    FINE = 0
+    ADDED = 1

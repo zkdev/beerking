@@ -4,7 +4,7 @@ from flask import Flask
 from flask import request
 from flask_cors import CORS
 from . import generator, connection, handlers, match, sql, response, log, validate
-from .enums import Match, Login, Leaderboard, History, Id, Error
+from .enums import Match, Login, Leaderboard, History, Id, Error, Mail, Friends
 
 
 app = Flask(__name__)
@@ -33,7 +33,10 @@ def router_update_mail():
     r = handlers.login(conn, username, passwd)
     userid = handlers.get_profile(r, conn, username, passwd).fetchone()[0]
     if r is Login.SUCCESSFUL:
-        r = sql.update_user_mail(conn, userid, mail)
+        if validate.check_mail(mail) is Mail.FINE:
+            r = sql.update_user_mail(conn, userid, mail)
+        else:
+            r = Mail.NOT_EXISTING
     else:
         r = Login.PASSWD_WRONG
     connection.kill(conn)
@@ -45,10 +48,17 @@ def router_login():
     conn = connection.create(path)
     username = request.args.get('username')
     passwd = request.args.get('passwd')
+    if str(username) is "" and str(passwd) is "":
+        connection.kill(conn)
+        return response.build(Login.USERNAME_NOT_FOUND)
     r = handlers.login(conn, username, passwd)
-    p = handlers.get_profile(r, conn, username, passwd).fetchall()
-    connection.kill(conn)
-    return response.build(r, p)
+    if r is Login.SUCCESSFUL:
+        p = handlers.get_profile(r, conn, username, passwd).fetchall()
+        connection.kill(conn)
+        return response.build(r, p)
+    else:
+        connection.kill(conn)
+        return response.build(r)
 
 
 @app.route('/match/1v1', methods=['POST'])
@@ -92,8 +102,8 @@ def router_confirm_match():
     r = Error.ERROR
     if handlers.login(conn, username, passwd) is Login.SUCCESSFUL:
         for single_match in json.loads(request.form.get('matches')):
+            matchid = single_match.get('matchid')
             if single_match.get('confirmed') is True:
-                matchid = single_match.get('matchid')
                 r = match.confirm_match(conn, matchid)
             sql.remove_pending_match(conn, matchid)
         connection.kill(conn)
@@ -140,3 +150,25 @@ def router_userid_exists():
     else:
         connection.kill(conn)
         return response.build(Id.DOESNT_EXIST)
+
+
+@app.route('/friends', methods=['GET'])
+def router_get_friends():
+    conn = connection.create(path)
+    userid = request.args.get('userid')
+    fl = sql.get_friends(conn, userid).fetchall()
+    arr = []
+    for friend in fl:
+        arr.append({"friend": friend})
+    connection.kill(conn)
+    return response.build(Friends.FINE, arr)
+
+
+@app.route('/friends/add', methods=['POST'])
+def router_add_friend():
+    conn = connection.create(path)
+    userid = request.form.get('userid')
+    friendid = request.form.get('friendid')
+    sql.add_friend(conn, userid, friendid)
+    connection.kill(conn)
+    return response.build(Friends.ADDED)

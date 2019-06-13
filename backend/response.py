@@ -1,7 +1,7 @@
 import json
 
 from flask import Response
-from .enums import Login, Create, Match, Leaderboard, Profile, History, Id
+from .enums import Login, Create, Match, Leaderboard, Profile, History, Id, Mail, Friends
 
 
 def build(enum, rs=None):
@@ -91,6 +91,20 @@ def build(enum, rs=None):
         # 403 = Forbidden
         resp.status_code = 403
         json_obj = {"status": "userid doesnt exists"}
+    elif enum is Mail.NOT_EXISTING:
+        # PUT
+        # 403 = Forbidden
+        resp.status_code = 403
+        json_obj = {"status": "mail update failed, mail not exisiting"}
+    elif enum is Friends.FINE:
+        # GET
+        # 200 = OK
+        return json.dumps({"friends": rs})
+    elif enum is Friends.ADDED:
+        # POST
+        # 201 = Created
+        resp.status_code = 201
+        json_obj = {"status": "friend added"}
     else:
         # DEFAULT
         # 500 = Internal Server Error

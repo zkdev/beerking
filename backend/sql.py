@@ -117,4 +117,15 @@ def get_user_history(conn, userid):
     LEFT OUTER JOIN Users as m2 on m2.userid = Matches.friend
     LEFT OUTER JOIN Users as m3 on m3.userid = Matches.enemy1
     LEFT OUTER JOIN Users as m4 on m4.userid = Matches.enemy2
-    WHERE host = ? OR friend = ? OR enemy1 = ? OR enemy2 = ?;""", (str(userid), str(userid), str(userid), str(userid)))
+    WHERE host = ? OR friend = ? OR enemy1 = ? OR enemy2 = ?
+    ORDER BY datetime DESC;""", (str(userid), str(userid), str(userid), str(userid)))
+
+
+def get_friends(conn, userid):
+    c = conn.cursor()
+    return c.execute("""SELECT friendid FROM Friends WHERE userid = ?;""", (str(userid),))
+
+
+def add_friend(conn, userid, friendid):
+    c = conn.cursor()
+    c.execute("""INSERT INTO Friends (userid, friendid) VALUES (?, ?);""", (str(userid), str(friendid)))
