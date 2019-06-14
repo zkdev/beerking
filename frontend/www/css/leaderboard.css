@@ -25,38 +25,44 @@
 th {
     width: 33vw;
     border-bottom: solid black 2px;
+    color: black;
+    font-size: 18px;
 }
 
 .score {
     text-align: center;
-    border-bottom: 1px black solid;
+    font-weight: bold;
     width: 33%;
 }
 
 .name {
-    border-bottom: 1px black solid;
     text-align: center;
     width: 33%;
 }
 
 .platz{
-    border-bottom: 1px black solid;
     text-align: center;
     width: 33%;
 }
 
 /*row highlighting*/
+.other {
+    background-color: #0977B3;
+}
 
 .first {
-    background-color: rgba(255, 232, 103, 0.5);
+    color: #C9B037;
+    font-weight: bold;
 }
 
 .second {
-    background-color: rgba(192, 192, 192, 0.5);
+    color: #D7D7D7;
+    font-weight: bold;
 }
 
 .third {
-    background-color: rgba(205, 127, 50, 0.5);
+    color: #c49c47  ;
+    font-weight: bold;
 }
 
 .ich {
