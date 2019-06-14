@@ -68,8 +68,7 @@ function onBackPressed() {
     window.QRScanner.getStatus((status) => {
         if (status.scanning === true) {
             window.QRScanner.cancelScan();
-            document.getElementById("start_game").style.visibility = "visible";
-            document.getElementsByTagName("body")[0].className = "body_bg";
+            window.location = "./main.html";
         }
     })
 }

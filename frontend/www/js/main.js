@@ -155,13 +155,27 @@ function createLeaderboard() {
             document.getElementById("loader_leaderboard").style.display = "none";
             var players_leaderboard = JSON.parse(response.responseText).leaderboard;
             var leaderboard = document.getElementById("leaderboard_table");
+            var leaderboard_top = document.getElementById("leaderboard_header");
+            var child = leaderboard_top.lastElementChild;
+            while (child) {
+                leaderboard_top.removeChild(child);
+                child = leaderboard_top.lastElementChild;
+            }
+            var head = leaderboard_top.insertRow(-1);
+            head.innerHTML = "<th>Nickname</th><th>Score</th>";
+            head.className = ".stinkingHeader";
             var child = leaderboard.lastElementChild;
             while (child) {
                 leaderboard.removeChild(child);
                 child = leaderboard.lastElementChild;
             }
             for (var i = 0; i < players_leaderboard.length; i++) {
-                var row = leaderboard.insertRow(-1);
+                var row;
+                if(i < 3){
+                    row = leaderboard_top.insertRow(-1);
+                }else{
+                    row = leaderboard.insertRow(-1);
+                }
                 if (i == 0) {
                     row.className = "first";
                 }
@@ -172,7 +186,7 @@ function createLeaderboard() {
                     row.className = "third";
                 }
                 if (players_leaderboard[i].username === window.localStorage.getItem("user")) {
-                    row.className += "ich";
+                    row.className += " ich";
                 }
                 var user = row.insertCell(0);
                 var score = row.insertCell(1);

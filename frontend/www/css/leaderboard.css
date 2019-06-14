@@ -43,3 +43,7 @@ th {
 .ich {
     border: 2px solid rebeccapurple;
 }
+
+.stinkingHeader{
+    position: relative; 
+}
