@@ -187,11 +187,14 @@ function createLeaderboard() {
                 if (i == 0) {
                     row.className = "first";
                 }
-                if (i == 1) {
+                else if (i == 1) {
                     row.className = "second";
                 }
-                if (i == 2) {
+                else if (i == 2) {
                     row.className = "third";
+                }
+                if((i + 1)% 2 == 0) {
+                    row.className += " other";
                 }
                 if (players_leaderboard[i].username === window.localStorage.getItem("user")) {
                     row.className += " ich";
