@@ -46,6 +46,7 @@
     <script type="text/javascript" src="./js/main.js"></script>
     <script type="text/javascript" src="./js/game.js"></script>
     <script type="text/javascript" src="./js/profile.js"></script>
+    <script type="text/javascript" src="./js/friends.js"></script>
     <title>BeerKing</title>
 </head>
 
@@ -66,11 +67,11 @@
         <!-- Tab content -->
         <div id="friends" class="tabcontent">
             <div id="friend_list">
-                <div>
-                    <P>Name</P>
-                </div>
             </div>
-            <button id="addfriend" class="btn_style" onclick="addFriend()">Neue Freunde</button>
+            <div>
+                <input type="text" id="username"/>
+                <button id="addfriend" class="btn_style" onclick="addFriend()">Neue Freunde</button>
+            </div>
         </div>
 
         <!-- Tab content -->
@@ -93,10 +94,11 @@
             </div>
             <div id="active_game">
                 <span style="color:black;font-size: larger">Gewinner: </span>
-                <select style="font-size: larger" id="select_winner" onchange="if (this.selectedIndex) onWinnerSelected();">
-                        <option disabled selected value> -- Wähle den Sieger -- </option>
-                        <option value="0">Mein Team</option>
-                        <option value="1">Gegner Team</option>
+                <select style="font-size: larger" id="select_winner"
+                    onchange="if (this.selectedIndex) onWinnerSelected();">
+                    <option disabled selected value> -- Wähle den Sieger -- </option>
+                    <option value="0">Mein Team</option>
+                    <option value="1">Gegner Team</option>
                 </select>
                 <p id="winner"></p>
                 <button id="send_winner" class="btn_style" type="button" onclick="sendWinner()" disabled>Fertig</button>

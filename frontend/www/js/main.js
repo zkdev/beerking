@@ -43,6 +43,9 @@ function workOn(tabname, param) {
             generateProfile(profile);
         }
     }
+    if(tabname === "friends"){
+        createFriendsList();
+    }
 }
 
 function onLeftSwipe() {
