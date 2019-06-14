@@ -13,7 +13,7 @@
 }
 
 .tab button {
-  background-color: inherit;
+  background: rgb(7, 75, 112);
   float: left;
   border: none;
   outline: none;
@@ -24,10 +24,35 @@
   width: 25%;
 }
 
+
+#tab0 {
+  background-image: url("../img/leaderboard.png");
+  background-repeat: no-repeat;
+  background-position: center; 
+}
+
+#tab1 {
+  background-image: url("../img/play-button.png");
+  background-repeat: no-repeat;
+  background-position: center; 
+}
+
+#tab2 {
+  background-image: url("../img/human.png");
+  background-repeat: no-repeat;
+  background-position: center; 
+}
+
+#tab3 {
+  background-image: url("../img/firends.png");
+  background-repeat: no-repeat;
+  background-position: center; 
+}
+
 /* Create an active/current tablink class */
 
 .tab button.active {
-  background-color: #fff;
+  background-color: transparent;
 }
 
 /* Style the tab content */
@@ -40,14 +65,23 @@
 
 /* New game buttons design */
 
+#start_game {
+  margin-top: 20%;
+}
+
 .btn_style {
-  padding: 5px;
+  color: white;
+  font-family: "Segoe UI";
+  font-size: 20px;
+  padding: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
   margin: auto;
-  border: outset rgb(35, 169, 247) 2px;
+  border: 0px;
   border-radius: 4px;
-  background-color: rgb(35, 169, 247);
+  background-color: #B3121D;
   width: 50%;
-  margin-top: 5px;
+  margin-top: 10%;
 }
 
 .app {
