@@ -1,42 +1,78 @@
-from . import validate, sql, elo, log
-from .enums import Username, Mail, Create, Login
+import json
+from flask import request
+
+
+from . import validate, sql, elo, catch, match
+from .enums import User, Match
 
 
 def create_user(conn, userid, username, mail, passwd):
-    c = conn.cursor()
-    username_status = validate.check_username(conn, username)
-    if mail is None or mail == "":
-        mail = ""
-        mail_status = Mail.FINE
+    if validate.check_mail(mail):
+        m = User.WILL_CREATE
     else:
-        mail_status = validate.check_mail(mail)
+        m = User.WONT_CREATE
 
-    if username_status is Username.FINE and mail_status is Mail.FINE:
-        log.info('creating user \"' + str(username) + '\"')
-        sql.create_user(c, userid, username, mail, passwd, elo.initial_elo())
-        return Create.ERFOLGREICH
+    if catch.empty_mail(mail):
+        mail = ""
+        m = User.WILL_CREATE
+
+    if validate.username_is_fine(conn, username):
+        u = User.WILL_CREATE
     else:
-        if username_status is Username.TOO_SHORT:
-            return Create.NUTZERNAME_ERFUELLT_BEDINGUNGEN_NICHT
-        elif username_status is Username.EXISTS:
-            return Create.NUTZERNAME_EXISTIERT_BEREITS
-        else:
-            return Create.MAIL_EXISTIERT_NICHT
+        u = User.WONT_CREATE
+
+    if m is User.WILL_CREATE and u is User.WILL_CREATE:
+        sql.create_user(conn, userid, username, mail, passwd, elo.initial_elo())
+        return User.CREATED
+    else:
+        return User.NOT_CREATED
 
 
 def login(conn, username, passwd):
     c = conn.cursor()
-    username_status = validate.check_username(conn, username)
-    if username_status is Username.EXISTS:
-        r = sql.login(c, username, passwd)
-        if r is None:
-            return Login.PASSWD_WRONG
-        else:
-            return Login.SUCCESSFUL
+    r = sql.login(c, username, passwd)
+    if r is None:
+        return False
     else:
-        return Login.USERNAME_NOT_FOUND
+        return True
 
 
-def get_profile(r, conn, username, passwd):
-    if r is Login.SUCCESSFUL:
-        return sql.get_profile(conn, username, passwd)
+def update_mail(conn, username, passwd, mail):
+    r = User.MAIL_UPDATE_FAILED
+    if login(conn, username, passwd):
+        userid = sql.get_userid(conn, username).fetchone()[0]
+        if validate.check_mail(mail):
+            sql.update_user_mail(conn, userid, mail)
+            r = User.MAIL_UPDATED
+    return r
+
+
+def confirm_match(conn):
+    for single_match in json.loads(request.form.get('matches')):
+        matchid = single_match.get('matchid')
+        if single_match.get('confirmed') is True:
+            match.confirm_match(conn, matchid)
+        sql.remove_pending_match(conn, matchid)
+    return Match.CONFIRMED
+
+
+def leaderboard(conn, userid):
+    arr = []
+    lb = sql.leaderboard(conn).fetchall()
+    fl = sql.get_friends(conn, userid).fetchall()
+    for entry in lb:
+        username = entry[1]
+        elo = entry[2]
+        friendids = [elem[1] for elem in fl]
+        if entry[0] in friendids:
+            isfriend = "1"
+        else:
+            isfriend = "0"
+        arr.append({"username": username, "elo": elo, "isfriend": isfriend})
+    return arr
+
+
+def user_history(conn, username):
+    userid = sql.get_userid(conn, username).fetchone()[0]
+    h = sql.get_user_history(conn, userid).fetchall()
+    return h

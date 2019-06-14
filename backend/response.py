@@ -1,76 +1,51 @@
 import json
 
 from flask import Response
-from .enums import Login, Create, Match, Leaderboard, Profile, History, Id, Mail, Friends
+from .enums import Login, User, Match, Version, Leaderboard, History
 
 
 def build(enum, rs=None):
     resp = Response(mimetype='application/json')
     resp.headers.add('Access-Control-Allow-Origin', '*')
 
-    if enum is Create.ERFOLGREICH:
-        # POST
-        # 201 = Created
-        resp.status_code = 201
-        json_obj = {"status": "user creation successful"}
-    elif enum is Create.NUTZERNAME_EXISTIERT_BEREITS:
-        # POST
-        # 400 = Bad Request
-        resp.status_code = 400
-        json_obj = {"status": "user creation failed, username is not unique"}
-    elif enum is Create.NUTZERNAME_ERFUELLT_BEDINGUNGEN_NICHT:
-        # POST
-        # 400 = Bad Request
-        resp.status_code = 400
-        json_obj = {"status": "user creation failed, username doesn't match requirements"}
-    elif enum is Create.MAIL_EXISTIERT_NICHT:
-        # POST
-        # 400 = Bad Request
-        resp.status_code = 400
-        json_obj = {"status": "user creation failed, mail doesn't exist"}
-    elif enum is Login.SUCCESSFUL:
-        # GET
-        # 200 = OK
+    if enum is Login.SUCCESSFUL:
         userid, mail = rs[0]
         resp.status_code = 200
-        json_obj = {"status": "login successful", "userid": userid, "mail": mail}
-    elif enum is Login.USERNAME_NOT_FOUND:
-        # GET
-        # 403 = Forbidden
+        json_obj = {"auth": True, "userid": userid, "mail": mail}
+    elif enum is Login.FAILED:
+        resp.status_code = 401
+        json_obj = {"auth": False}
+    elif enum is User.MAIL_UPDATED:
+        resp.status_code = 202
+        json_obj = {"mail_updated": True}
+    elif enum is User.MAIL_UPDATE_FAILED:
         resp.status_code = 403
-        json_obj = {"status": "login failed, username not found"}
-    elif enum is Login.PASSWD_WRONG:
-        # GET
-        # 403 = Forbidden
-        resp.status_code = 403
-        json_obj = {"status": "login failed, passwd rejected"}
-    elif enum is Match.FINE:
-        # POST
-        # 201 = Created
+        json_obj = {"mail_updated": False}
+    elif enum is User.CREATED:
         resp.status_code = 201
-        json_obj = {"status": "match created successful"}
-    elif enum is Match.RECEIVED:
-        # GET
-        # 200 = OK
-        return json.dumps({"matches": rs})
+        json_obj = {"user_created": True}
+    elif enum is User.NOT_CREATED:
+        resp.status_code = 400
+        json_obj = {"user_created": False}
+    elif enum is Match.STARTED:
+        resp.status_code = 201
+        json_obj = {"match_started": True}
+    elif enum is Match.NOT_STARTED:
+        resp.status_code = 400
+        json_obj = {"match_started": False}
+    elif enum is Version.OUTDATED:
+        resp.status_code = 403
+        json_obj = {"outdated_app_version": True}
     elif enum is Match.CONFIRMED:
-        # POST
-        # 201 = Created
         resp.status_code = 201
-        json_obj = {"status": "match confirmed"}
-    elif enum is Leaderboard.FINE:
-        # GET
-        # 200 = OK
+        json_obj = {"match_confirmed": True}
+    elif enum is Match.RECEIVED:
+        resp.status_code = 200
+        json_obj = {"match_received": True, "matches": rs}
+    elif enum is Leaderboard.RETRIEVED:
         resp.status_code = 200
         return json.dumps({"leaderboard": rs})
-    elif enum is Profile.UPDATED:
-        # PUT
-        # 202 = Accepted
-        resp.status_code = 202
-        json_obj = {"status": "mail updated"}
-    elif enum is History.FINE:
-        # GET
-        # 200 = OK
+    elif enum is History.RETRIEVED:
         arr = []
         for entry in rs:
             host = entry[0]
@@ -81,6 +56,13 @@ def build(enum, rs=None):
             date_data = entry[5]
             arr.append({"host": host, "friend": friend, "enemy1": enemy1, "enemy2": enemy2, "winner": winner, "datetime": date_data})
         return json.dumps({"matches": arr})
+
+    """
+    elif enum is Match.CONFIRMED:
+        # POST
+        # 201 = Created
+        resp.status_code = 201
+        json_obj = {"status": "match confirmed"}
     elif enum is Id.EXISTS:
         # GET
         # 200 = OK
@@ -91,11 +73,6 @@ def build(enum, rs=None):
         # 403 = Forbidden
         resp.status_code = 403
         json_obj = {"status": "userid doesnt exists"}
-    elif enum is Mail.NOT_EXISTING:
-        # PUT
-        # 403 = Forbidden
-        resp.status_code = 403
-        json_obj = {"status": "mail update failed, mail not exisiting"}
     elif enum is Friends.FINE:
         # GET
         # 200 = OK
@@ -118,7 +95,7 @@ def build(enum, rs=None):
     else:
         # DEFAULT
         # 500 = Internal Server Error
-        resp.status_code = 500
+        resp.status_code = 500"""
 
     resp = json.dumps(json_obj)
     return resp

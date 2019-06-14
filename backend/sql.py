@@ -1,21 +1,13 @@
 import datetime
 
 
-from .enums import Profile
-
-
 def get_match(conn, matchid):
     c = conn.cursor()
     return c.execute("""SELECT * FROM PendingMatches WHERE matchid = ?;""", (str(matchid),))
 
 
 def is_unique(conn, key, value):
-
     c = conn.cursor()
-
-    # somehow I'm not able to provide the key as a binding as well
-    # so I use this ugly if statement to prepare the sql statement
-
     sql = """SELECT 1 FROM users WHERE userid = ?;"""
     if key is 'username':
         sql = """SELECT 1 FROM users WHERE username = ?;"""
@@ -51,7 +43,8 @@ def start_2v2(conn, matchid, host, friend, enemy1, enemy2, winner):
                                      str(winner), str(date)))
 
 
-def get_profile(c, username, passwd):
+def get_profile(conn, username, passwd):
+    c = conn.cursor()
     return c.execute("""SELECT userid, mail FROM Users WHERE username = ? AND passwd = ?;""", (str(username), str(passwd)))
 
 
@@ -65,8 +58,9 @@ def get_pending_matches(conn, userid):
     return c.execute("""SELECT matchid, host, winner, datetime, username FROM PendingMatches, Users WHERE Users.userid = host AND (enemy1 = ? OR enemy2 = ?);""", (str(userid), str(userid)))
 
 
-def create_user(c, userid, username, mail, passwd, elo):
-    return c.execute("""INSERT INTO users(userid, username, mail, passwd, elo) 
+def create_user(conn, userid, username, mail, passwd, elo):
+    c = conn.cursor()
+    c.execute("""INSERT INTO users(userid, username, mail, passwd, elo) 
         VALUES (?,?,?,?,?);""", (str(userid), str(username), str(mail), str(passwd), int(elo)))
 
 
@@ -99,7 +93,6 @@ def get_userid(conn, username):
 def update_user_mail(conn, userid, mail):
     c = conn.cursor()
     c.execute("""UPDATE Users SET mail = ? WHERE userid = ?;""", (str(mail), str(userid)))
-    return Profile.UPDATED
 
 
 def get_user_history_v2(conn, userid):

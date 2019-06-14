@@ -3,31 +3,21 @@ from .enums import Match, Mode
 
 
 def start_1v1(conn, host, enemy, winner):
-    matchid = generator.create_uuid(conn)
-    sql.start_1v1(conn, matchid, host, enemy, winner)
-    host = sql.get_username(conn, host).fetchone()[0]
-    enemy = sql.get_username(conn, enemy).fetchone()[0]
-    if int(winner) == 0:
-        winner = host
-    elif int(winner) == 1:
-        winner = enemy
-    log.info('starting 1v1 match (' + host + ' vs. ' + enemy + ' ; ' + winner + ' wins)')
-    return Match.FINE
+    try:
+        matchid = generator.create_uuid(conn)
+        sql.start_1v1(conn, matchid, host, enemy, winner)
+        return Match.STARTED
+    except:
+        return Match.NOT_STARTED
 
 
 def start_2v2(conn, host, friend, enemy1, enemy2, winner):
-    matchid = generator.create_uuid(conn)
-    sql.start_2v2(conn, matchid, host, friend, enemy1, enemy2, winner)
-    host = sql.get_username(conn, host).fetchone()[0]
-    friend = sql.get_username(conn, friend).fetchone()[0]
-    enemy1 = sql.get_username(conn, enemy1).fetchone()[0]
-    enemy2 = sql.get_username(conn, enemy2).fetchone()[0]
-    if int(winner) == 0:
-        winner = host + ' and ' + friend
-    elif int(winner) == 1:
-        winner = enemy1 + ',' + enemy2
-    log.info('starting 2v2 match (' + host + ' and ' + friend + ' vs. ' + enemy1 + ' and ' + enemy2 + ' ; ' + winner + ' win)')
-    return Match.FINE
+    try:
+        matchid = generator.create_uuid(conn)
+        sql.start_2v2(conn, matchid, host, friend, enemy1, enemy2, winner)
+        return Match.STARTED
+    except:
+        return Match.NOT_STARTED
 
 
 def get_pending_matches(conn, userid):
@@ -49,7 +39,6 @@ def confirm_match(conn, matchid):
         update_elo(conn, matchid, Mode.SOLO, m[0][5])
     else:
         update_elo(conn, matchid, Mode.DUO, m[0][5])
-    return Match.CONFIRMED
 
 
 def update_elo(conn, matchid, mode, winner):

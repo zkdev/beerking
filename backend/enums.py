@@ -1,37 +1,32 @@
 from enum import Enum
 
 
-class Username(Enum):
-    FINE = 0
-    EXISTS = 1
-    TOO_SHORT = 2
+class User(Enum):
+    WILL_CREATE = 0
+    WONT_CREATE = 1
+    CREATED = 2
+    NOT_CREATED = 3
+    MAIL_UPDATED = 4
+    MAIL_UPDATE_FAILED = 5
 
 
 class Mail(Enum):
-    FINE = 0
-    NOT_EXISTING = 1
+    UPDATED = 0
+    UPDATE_FAILED = 1
 
 
 class Login(Enum):
     SUCCESSFUL = 0
     PASSWD_WRONG = 1
     USERNAME_NOT_FOUND = 2
-
-
-class Create(Enum):
-
-    # not translated in the frontend so it has to match with the german language
-
-    ERFOLGREICH = 0
-    NUTZERNAME_EXISTIERT_BEREITS = 1
-    NUTZERNAME_ERFUELLT_BEDINGUNGEN_NICHT = 2
-    MAIL_EXISTIERT_NICHT = 3
+    FAILED = 3
 
 
 class Match(Enum):
-    FINE = 0
-    RECEIVED = 1
-    CONFIRMED = 2
+    STARTED = 0
+    NOT_STARTED = 1
+    RECEIVED = 2
+    CONFIRMED = 3
 
 
 class Profile(Enum):
@@ -41,7 +36,8 @@ class Profile(Enum):
 
 
 class Leaderboard(Enum):
-    FINE = 0
+    RETRIEVED = 0
+    NOT_RETRIEVED = 1
 
 
 class Mode(Enum):
@@ -50,8 +46,7 @@ class Mode(Enum):
 
 
 class History(Enum):
-    FINE = 0
-    ERROR = 1
+    RETRIEVED = 0
 
 
 class Id(Enum):
@@ -67,3 +62,7 @@ class Friends(Enum):
     FINE = 0
     ADDED = 1
     REMOVED = 2
+
+
+class Version(Enum):
+    OUTDATED = 0
