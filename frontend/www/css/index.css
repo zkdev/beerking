@@ -1,22 +1,89 @@
+body {
+    font-family: 'Segoe UI';
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+
+input {
+    font-family: 'Segoe UI';
+    border-radius: 3px;
+    background-color: #B3121D;
+    color: white;
+}
+
+h1 {
+    color: white;
+    font-weight: normal;
+}
+
 #login_btn {
-    border: solid black 1px;
+    border: solid black 0px;
+    padding: 12px;
+    padding-left: 50px;
+    padding-right: 50px;
     margin-top: 5%;
     font-size: large;
 }
 
+#login_btn:active {
+    background-color: #FF0011;
+    border: 0px;
+}
+
 #create_btn {
-    border: solid black 1px;
+    border: solid black 0px;
+    padding: 12px;
+    padding-left: 50px;
+    padding-right: 50px;
     margin-top: 5%;
     font-size: large;
+}
+
+#create_btn:active {
+    background-color: #FF0011;
+    border: 0px;
+}
+
+#new_account {
+    border-radius: 3px;
+    padding: 12px;
+    padding-left: 11px;
+    padding-right: 11px;
+    margin-top: 5%;
+    font-size: large;
+    text-decoration: none;
+    color: white;
+}
+
+#login {
+    margin-top: 40%;
+    position: relative;
+    text-align: center;
 }
 
 .input_field {
     margin: 1%;
     border-style: solid;
-    border-color: darkblue;
-    border-radius: 2px;
+    border-color: #0977B3;
+    border-radius: 5px;
+    background-color: white;
     font-size: large;
     padding: 4px;
+}
+
+.heading {
+    background-image: linear-gradient(to top, transparent, #0977B3);
+    width: 100%;
+    position: fixed;
+    height: 30%;
+    top: 0;
+    left: 0;
+}
+
+.app {
+    width: 100%;
+    font-family: 'Segoe UI';
 }
 
 .input_field.error{
@@ -32,20 +99,15 @@
 }
 
 .input_field:focus {
-    border-color: lightblue;
-    outline: lightblue;
-    outline-width: thick;
-    outline-style: dashed;
+    border-color: #B3121D;
+    outline: #B3121D;
+    outline-width: thin;
+    outline-style: solid;
 }
 
-#login {
-    margin-top: 10%;
-    text-align: center;
-}
 
 .body_bg {
-    background: url("./../img/wood.png");
-    background-color: white;
+    background: #148CCC;
     opacity: 1.0;
 }
 
