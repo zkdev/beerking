@@ -16,7 +16,7 @@ function createFriendsList() {
             for (var i = 0; i < friends.length; i++) {
                 var fr = document.createElement("DIV");
                 fr.className = "friend";
-                fr.innerHTML = "<span class='friend_name'>" + friends[i].friendname + "</span><img onclick='deleteFriend(evt)' src='./img/del.png' height='20px' width='20px' class='del_item'/>";
+                fr.innerHTML = "<span class='friend_name'>" + friends[i].friendname + "</span><img onclick='deleteFriend()' src='./img/del.png' height='20px' width='20px' class='del_item'/>";
                 table.appendChild(fr);
             }
         }
