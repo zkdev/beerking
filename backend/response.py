@@ -99,12 +99,22 @@ def build(enum, rs=None):
     elif enum is Friends.FINE:
         # GET
         # 200 = OK
-        return json.dumps({"friends": rs})
+        resp.status_code = 200
+        arr = []
+        for entry in rs:
+            friendname, friendid = entry
+            arr.append({"friend": friendid, "friendname": friendname})
+        json_obj = {"friends": arr}
     elif enum is Friends.ADDED:
         # POST
         # 201 = Created
         resp.status_code = 201
         json_obj = {"status": "friend added"}
+    elif enum is Friends.REMOVED:
+        # DELETE
+        # 200 = OK
+        resp.status_code = 200
+        json_obj = {"status": "friend removed"}
     else:
         # DEFAULT
         # 500 = Internal Server Error

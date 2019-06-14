@@ -66,3 +66,4 @@ class Error(Enum):
 class Friends(Enum):
     FINE = 0
     ADDED = 1
+    REMOVED = 2

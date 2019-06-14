@@ -24,7 +24,7 @@ def is_unique(conn, key, value):
 
 def leaderboard(conn):
     c = conn.cursor()
-    return c.execute("""SELECT username, elo FROM Users ORDER BY elo DESC;""")
+    return c.execute("""SELECT userid, username, elo FROM Users ORDER BY elo DESC;""")
 
 
 def login(c, username, passwd):
@@ -123,9 +123,21 @@ def get_user_history(conn, userid):
 
 def get_friends(conn, userid):
     c = conn.cursor()
-    return c.execute("""SELECT friendid FROM Friends WHERE userid = ?;""", (str(userid),))
+    return c.execute("""SELECT m1.username, friendid FROM Friends
+    LEFT OUTER JOIN Users as m1 on m1.userid = Friends.friendid
+    WHERE Friends.userid = ?;""", (str(userid),))
 
 
 def add_friend(conn, userid, friendid):
     c = conn.cursor()
     c.execute("""INSERT INTO Friends (userid, friendid) VALUES (?, ?);""", (str(userid), str(friendid)))
+
+
+def remove_friend(conn, userid, friendid):
+    c = conn.cursor()
+    c.execute("""DELETE FROM Friends WHERE userid = ? AND friendid = ?;""", (str(userid), str(friendid)))
+
+
+def is_friend(conn, userid, friendid):
+    c = conn.cursor()
+    return c.execute("""SELECT 1 FROM Friends WHERE userid = ? AND friendid = ?;""", (str(userid), str(friendid)))

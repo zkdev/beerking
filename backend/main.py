@@ -115,14 +115,30 @@ def router_confirm_match():
 @app.route('/leaderboard', methods=['GET'])
 def router_leaderboard():
     conn = connection.create(path)
-    leaderboard = sql.leaderboard(conn).fetchall()
+    userid = request.args.get('userid')
     arr = []
-    for entry in leaderboard:
-        username = entry[0]
-        elo = entry[1]
-        arr.append({"username": username, "elo": elo})
-    connection.kill(conn)
-    return response.build(Leaderboard.FINE, arr)
+    if userid is None or str(userid) == "None":
+        leaderboard = sql.leaderboard(conn).fetchall()
+        for entry in leaderboard:
+            username = entry[1]
+            elo = entry[2]
+            arr.append({"username": username, "elo": elo})
+        connection.kill(conn)
+        return response.build(Leaderboard.FINE, arr)
+    else:
+        leaderboard = sql.leaderboard(conn).fetchall()
+        fl = sql.get_friends(conn, userid).fetchall()
+        for entry in leaderboard:
+            username = entry[1]
+            elo = entry[2]
+            friendids = [elem[1] for elem in fl]
+            if entry[0] in friendids:
+                isfriend = "1"
+            else:
+                isfriend = "0"
+            arr.append({"username": username, "elo": elo, "isfriend": isfriend})
+        connection.kill(conn)
+        return response.build(Leaderboard.FINE, arr)
 
 
 @app.route('/users/history', methods=['GET'])
@@ -157,11 +173,8 @@ def router_get_friends():
     conn = connection.create(path)
     userid = request.args.get('userid')
     fl = sql.get_friends(conn, userid).fetchall()
-    arr = []
-    for friend in fl:
-        arr.append({"friend": friend})
     connection.kill(conn)
-    return response.build(Friends.FINE, arr)
+    return response.build(Friends.FINE, fl)
 
 
 @app.route('/friends/add', methods=['POST'])
@@ -172,3 +185,13 @@ def router_add_friend():
     sql.add_friend(conn, userid, friendid)
     connection.kill(conn)
     return response.build(Friends.ADDED)
+
+
+@app.route('/friends/remove', methods=['DELETE'])
+def router_remove_friend():
+    conn = connection.create(path)
+    userid = request.form.get('userid')
+    friendid = request.form.get('friendid')
+    sql.remove_friend(conn, userid, friendid)
+    connection.kill(conn)
+    return response.build(Friends.REMOVED)
