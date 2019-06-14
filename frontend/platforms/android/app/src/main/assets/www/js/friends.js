@@ -27,11 +27,13 @@ function addFriend() {
     var request = {};
     request.userid = window.localStorage.getItem("uuid");
     request.friendname = document.getElementById("username").value;
+    SpinnerPlugin.activityStart("Neuer Freund ...", options);
     $.ajax({
         type: "POST",
         url: base_url + "/friends/add",
         data: request,
         complete: function () {
+            SpinnerPlugin.activityStop();
             createFriendsList();
         }
     });
@@ -41,11 +43,13 @@ function deleteFriend(evt){
     var request = {};
     request.userid = window.localStorage.getItem("uuid");
     request.friendid = evt.name;
+    SpinnerPlugin.activityStart("Freund entfernen...", options);
     $.ajax({
         type: "DELETE",
         url: base_url + "/friends/remove",
         data: request,
         complete: function () {
+            SpinnerPlugin.activityStop();
             createFriendsList();
         }
     });

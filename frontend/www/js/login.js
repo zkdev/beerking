@@ -3,6 +3,7 @@ function onLogin() {
     var login_values = {};
     login_values.passwd = document.getElementById("pswd").value;
     login_values.username = document.getElementById("user").value.trim();
+    login_values.version = version;
 
     login_values.passwd = hash(login_values.passwd);
     //ajax call
