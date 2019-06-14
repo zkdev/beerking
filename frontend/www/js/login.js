@@ -10,7 +10,7 @@ function onLogin() {
     SpinnerPlugin.activityStart("Einloggen...", options);
     $.ajax({
         type: "GET",
-        url: base_url + "/users/login",
+        url: base_url + "/user/profile",
         data: login_values,
         complete: function (response) {
             SpinnerPlugin.activityStop();
@@ -20,7 +20,7 @@ function onLogin() {
             }catch(e){
                 console.log(e);
             }
-            if (resp.status === 'login successful') {
+            if (resp.auth === true) {
                 window.localStorage.setItem("password", login_values.passwd);
                 window.localStorage.setItem("user", login_values.username);
                 window.localStorage.setItem("uuid", resp.userid);

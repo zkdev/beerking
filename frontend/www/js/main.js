@@ -94,6 +94,7 @@ function confirmResults() {
     for (var i = 0; i < confirms.length; i++) {
         confirms[i].confirmed = document.getElementById("check" + i).checked;
     }
+    request.version = version;
     request.matches = JSON.stringify(confirms);
     confirms = [];
     SpinnerPlugin.activityStart("Schicke Bestaetigungen...", options);
@@ -118,6 +119,7 @@ function confirmResults() {
 function createConfirmPopup() {
     var request = {};
     request.userid = window.localStorage.getItem("uuid");
+    request.version = version;
     $.ajax({
         type: "GET",
         url: base_url + "/match/pending",
@@ -157,6 +159,7 @@ function createConfirmPopup() {
 function createLeaderboard() {
     var request = {};
     request.userid = window.localStorage.getItem("uuid");
+    request.version = version;
     $.ajax({
         type: "GET",
         url: base_url + "/leaderboard",

@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var base_url = "http://zeggiedieziege.de:5000"
+var base_url = "http://zeggiedieziege.de:7000"
 var options = { dimBackground: true };
-var version = 120;
+var version = 104;
 
 var app = {
     // Application Constructor
@@ -39,7 +39,7 @@ var app = {
                 SpinnerPlugin.activityStart("Logging in...", options);
                 $.ajax({
                     type: "GET",
-                    url: base_url + "/users/login",
+                    url: base_url + "/user/profile",
                     data: user,
                     complete: function (response) {
                         SpinnerPlugin.activityStop();
