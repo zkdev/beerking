@@ -55,6 +55,8 @@ function onLeftSwipe() {
                 openTab({ currentTarget: tablinks[1] }, "game");
             } else if (i == 1) {
                 openTab({ currentTarget: tablinks[2] }, "profile");
+            } else if (i == 2){
+                openTab({ currentTarget: tablinks[3] }, "friends");
             }
             return;
         }
@@ -71,6 +73,8 @@ function onRightSwipe() {
                 openTab({ currentTarget: tablinks[0] }, "leaderboard");
             } else if (i == 2) {
                 openTab({ currentTarget: tablinks[1] }, "game");
+            } else if (i == 3){
+                openTab({ currentTarget: tablinks[2] }, "profile");
             }
             return;
         }
@@ -101,6 +105,7 @@ function confirmResults() {
             document.getElementById("tab0").disabled = false;
             document.getElementById("tab1").disabled = false;
             document.getElementById("tab2").disabled = false;
+            document.getElementById("tab3").disabled = false;
             deactivated = false;
             workOn("leaderboard", undefined);
         }
@@ -122,6 +127,7 @@ function createConfirmPopup() {
                 document.getElementById("tab0").disabled = true;
                 document.getElementById("tab1").disabled = true;
                 document.getElementById("tab2").disabled = true;
+                document.getElementById("tab3").disabled = false;
                 var table = document.getElementById("confirms");
                 var child = table.lastElementChild;
                 while (child) {
@@ -147,11 +153,14 @@ function createConfirmPopup() {
 
 function createLeaderboard() {
     var request = {};
+    request.userid = window.localStorage.getItem("uuid");
     $.ajax({
         type: "GET",
         url: base_url + "/leaderboard",
         data: request,
         complete: function (response) {
+            var name = window.localStorage.getItem("user");
+            var ind = 0;
             document.getElementById("loader_leaderboard").style.display = "none";
             var players_leaderboard = JSON.parse(response.responseText).leaderboard;
             var leaderboard = document.getElementById("leaderboard_table");
@@ -162,8 +171,7 @@ function createLeaderboard() {
                 child = leaderboard_top.lastElementChild;
             }
             var head = leaderboard_top.insertRow(-1);
-            head.innerHTML = "<th>Nickname</th><th>Score</th>";
-            head.className = ".stinkingHeader";
+            head.innerHTML = "<th>Platz</th><th>Nickname</th><th>Score</th>";
             var child = leaderboard.lastElementChild;
             while (child) {
                 leaderboard.removeChild(child);
@@ -171,9 +179,9 @@ function createLeaderboard() {
             }
             for (var i = 0; i < players_leaderboard.length; i++) {
                 var row;
-                if(i < 3){
+                if (i < 3) {
                     row = leaderboard_top.insertRow(-1);
-                }else{
+                } else {
                     row = leaderboard.insertRow(-1);
                 }
                 if (i == 0) {
@@ -188,13 +196,27 @@ function createLeaderboard() {
                 if (players_leaderboard[i].username === window.localStorage.getItem("user")) {
                     row.className += " ich";
                 }
-                var user = row.insertCell(0);
-                var score = row.insertCell(1);
+                if (players_leaderboard[i].isfriend === "1"){
+                    row.className += " friends";
+                }
+                var nr = row.insertCell(0);
+                nr.innerText = "" + (i + 1);
+                var user = row.insertCell(1);
+                var score = row.insertCell(2);
                 user.innerText = players_leaderboard[i].username;
                 score.innerText = players_leaderboard[i].elo;
                 user.className = "name";
                 score.className = "score";
+                nr.className = "platz";
+                if (i > 2 && name === players_leaderboard[i].username) {
+                    ind = i;
+                }
             }
+            var rows = leaderboard.querySelectorAll('tr');
+            rows[ind-3].scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
         },
         dataType: "text/json"
     });

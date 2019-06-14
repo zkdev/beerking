@@ -4,26 +4,45 @@
     border-collapse: collapse;
 }
 
+.leaderboard tbody{
+    overflow-y:scroll;
+    height:60vh;
+    width: 88vw;
+    display:block;
+}
+
+.leaderboard thead{
+    display: block;
+    width: 88vw;
+    overflow: auto;
+}
+
 #leaderboard {
     margin-top: 7%;
     text-align: center;
-    height: 73vh;
-    overflow-y: scroll;
 }
 
 th {
-    width: 50%;
+    width: 33vw;
     border-bottom: solid black 2px;
 }
 
 .score {
     text-align: center;
     border-bottom: 1px black solid;
+    width: 33%;
 }
 
 .name {
     border-bottom: 1px black solid;
     text-align: center;
+    width: 33%;
+}
+
+.platz{
+    border-bottom: 1px black solid;
+    text-align: center;
+    width: 33%;
 }
 
 /*row highlighting*/
@@ -44,6 +63,6 @@ th {
     border: 2px solid rebeccapurple;
 }
 
-.stinkingHeader{
-    position: relative; 
+.friends{
+    font-weight: bold;
 }

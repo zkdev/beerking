@@ -41,7 +41,7 @@
     <link rel="stylesheet" type="text/css" href="css/profile.css">
     <script type="text/javascript" src="js/jquery-2.x.min.js"></script>
     <script type="text/javascript" src="js/jquery.mobile.custom.min.js"></script>
-    <script src="js/md5.min.js"></script>
+    <script type="text/javascript" src="js/md5.min.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
     <script type="text/javascript" src="./js/game.js"></script>
     <script type="text/javascript" src="./js/profile.js"></script>
@@ -59,19 +59,25 @@
             <button id="tab0" class="tablinks" onclick="openTab(event, 'leaderboard')">Leaderboard</button>
             <button id="tab1" class="tablinks" onclick="openTab(event, 'game')">Spiel</button>
             <button id="tab2" class="tablinks" onclick="openTab(event, 'profile')">Profil</button>
+            <button id="tab3" class="tablinks" onclick="openTab(event, 'friends')">Freunde</button>
+        </div>
+
+        <!-- Tab content -->
+        <div id="friends" class="tabcontent">
+            <div id="friend_list">
+            </div>
+            <button id="addfriend" class="btn_style" onclick="addFriend()">Neue Freunde</button>
         </div>
 
         <!-- Tab content -->
         <div id="leaderboard" class="tabcontent">
             <table class="leaderboard">
-                <thead>
-                    <th>Nickname</th><th>Score</th>
+                <thead id="leaderboard_header">
                 </thead>
                 <tbody id="leaderboard_table">
-
                 </tbody>
-            <div class="loader" id="loader_leaderboard"></div>
             </table>
+            <div class="loader" id="loader_leaderboard"></div>
         </div>
 
         <div id="game" class="tabcontent">
