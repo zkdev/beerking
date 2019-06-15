@@ -70,7 +70,7 @@
         <div id="friends" class="tabcontent">
             <div>
                 <input type="text" id="username" width="50%"/>
-                <button id="addfriend" class="btn_style" onclick="addFriend()">Neue Freunde</button>
+                <button id="addfriend" class="btn_style" onclick="addFriend()">Hinzufügen</button>
             </div>
             <div id="friend_list">
                 <div class="loader" id="loader_friend"></div>
@@ -97,14 +97,14 @@
             </div>
             <div id="active_game">
                 <span style="color:black;font-size: larger">Gewinner: </span>
-                <select style="font-size: larger" id="select_winner"
+                <select style="font-size: 20px;width: 80vw;border-color: #B3121D;border-width: 2px;" id="select_winner"
                     onchange="if (this.selectedIndex) onWinnerSelected();">
                     <option disabled selected value> -- Wähle den Sieger -- </option>
                     <option value="0">Mein Team</option>
                     <option value="1">Gegner Team</option>
                 </select>
                 <p id="winner"></p>
-                <button id="send_winner" class="btn_style" type="button" onclick="sendWinner()" disabled>Fertig</button>
+                <button id="send_winner" style="width:80vw" class="btn_style" type="button" onclick="sendWinner()" disabled>Ergebnis abschicken</button>
             </div>
         </div>
 

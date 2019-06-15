@@ -23,7 +23,7 @@ function onLogin() {
                 window.location = './main.html';
             } else {
                 // wrong email / wrong username
-                navigator.notification.alert(resp.error_message, null, "Login fehlgeschlagen", "Ok");
+                navigator.notification.alert(resp.server_message, null, "Login fehlgeschlagen", "Ok");
                 document.getElementById("pswd").value = "";
                 document.getElementById("user").value = "";
 

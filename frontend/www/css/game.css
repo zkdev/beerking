@@ -36,13 +36,15 @@
 
 .team_ch {
     text-align: center;
-    font-size: large;
+    font-size: larger;
+    margin-top: -50%;
+    color: black;
 }
 
 .teammember {
     text-align: center;
     font-size: larger;
-    border: solid black 1px;
+    border: solid #B3121D 1px;
     padding: 5px;
     margin: 5px;
 }

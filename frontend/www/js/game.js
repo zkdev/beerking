@@ -63,17 +63,19 @@ function displayTeam(ids, team_size) {
         players = ids;
         var teams = document.getElementById("team");
         var div = document.createElement("DIV");
-        div.innerText = "Waehle deinen Partner:";
+        div.innerText = "Wähle deinen Partner:";
         div.className = "team_ch";
         teams.appendChild(div);
 
+        var sel = document.createElement("DIV");
+        var html = "<select style='font-size: 20px;width: 80vw;border-color: #B3121D;border-width: 2px;' id='select_teammate' onchange='if (this.selectedIndex) chooseTeammate();'><option disabled selected value> -- Wählen -- </option>";
         for (var i = 0; i < ids.length; i++) {
-            var div = document.createElement("DIV");
-            div.innerText = ids[i].name;
-            div.className = "teammember";
-            div.onclick = chooseTeammate;
-            teams.appendChild(div);
+            html += "<option value='"+ ids[i].name +"'>" + ids[i].name + "</option>";
         }
+        html += "</select>";
+        sel.innerHTML = html;
+        div.appendChild(sel);
+        
     } else if (ids.length === team_size && team_size === 1) {
         //start game ajax
         players = ids;
@@ -125,11 +127,12 @@ function sendWinner() {
     return;
 }
 
-function chooseTeammate(evt) {
+function chooseTeammate() {
+    var name = document.getElementById("select_teammate").value;
     var players_akt = [];
     var index = 0;
     for (var i = 0; i < players.length; i++) {
-        if (players[i].name === evt.currentTarget.innerText) {
+        if (players[i].name === name) {
             players_akt.push(players[i]);
             index = i;
         }
@@ -145,13 +148,7 @@ function chooseTeammate(evt) {
         players_akt.push(players[0]);
         players_akt.push(players[1]);
     }
-    var table = document.getElementById("team");
-    var child = table.lastElementChild;
-    while (child) {
-        table.removeChild(child);
-        child = table.lastElementChild;
-    }
-    //start game ajax
+    document.getElementById("select_teammate").disabled = "true";
     players = players_akt;
     document.getElementById("active_game").style.visibility = "visible";
     document.getElementById("select_winner").options[1].innerText = window.localStorage.getItem("user") + " " + players[0].name;
@@ -162,11 +159,11 @@ function onWinnerSelected() {
     var v = document.getElementById("select_winner").value;
     if (v == 0) {
         document.getElementById("winner").innerText = "DU HAST GEWONNEN";
-        document.getElementById("winner").style.color = "green";
+        document.getElementById("winner").style = "color: green;font-size: larger;font-weight:bold";
         document.getElementById("send_winner").disabled = false;
     } else if (v == 1) {
         document.getElementById("winner").innerText = "DU HAST VERLOREN";
-        document.getElementById("winner").style.color = "red";
+        document.getElementById("winner").style = "color: red;font-size: larger;font-weight:bold";
         document.getElementById("send_winner").disabled = false;
     }
 }
