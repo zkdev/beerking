@@ -3,7 +3,7 @@
 | ------ | ------ | ------ | ------ | ------ | ------ | ------ | 
 | /user/create | POST | version ||username, mail, passwd, version | creates a user | `user_created`<br>`username_unique`<br>`username_too_short`<br>`mail_exists`
 | /user/mail/update | PUT | version || username, mail, passwd, version | updates the users mail adress | `mail_updated`
-| /users/profile | GET | version | username, passwd, version | | retrieves the user's profile | `auth`<br>`user_id`<br>`mail`
+| /user/profile | GET | version | username, passwd, version | | retrieves the user's profile | `auth`<br>`user_id`<br>`mail`
 | /match/1v1 | POST | version || host, enemy, winner, version | starts a new 1v1 match | `match_started`
 | /match/2v2 | POST | version || host, friend, enemy1, enemy2, winner, version | starts a new 2v2 match | `match_started`
 | /match/pending | GET | version |userid, version || retrieves pending matches to confirm | `matches_received`<br>`matches.matchid`<br>`matches.hostname`<br>`matches.winner`<br>`matches.datetime`
