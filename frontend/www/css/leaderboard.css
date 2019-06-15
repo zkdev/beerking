@@ -4,14 +4,14 @@
     border-collapse: collapse;
 }
 
-.leaderboard tbody{
-    overflow-y:scroll;
-    height:60vh;
+.leaderboard tbody {
+    overflow-y: scroll;
+    height: 60vh;
     width: 88vw;
-    display:block;
+    display: block;
 }
 
-.leaderboard thead{
+.leaderboard thead {
     display: block;
     width: 88vw;
     overflow: auto;
@@ -32,20 +32,22 @@ th {
 .score {
     text-align: center;
     font-weight: bold;
-    width: 33%;
+    width: 33vw;
 }
 
 .name {
     text-align: center;
-    width: 33%;
+    width: 33vw;
 }
 
-.platz{
+.platz {
     text-align: center;
-    width: 33%;
+    width: 33vw;
 }
+
 
 /*row highlighting*/
+
 .other {
     background-color: #0977B3;
 }
@@ -61,7 +63,7 @@ th {
 }
 
 .third {
-    color: #c49c47  ;
+    color: #c49c47;
     font-weight: bold;
 }
 
@@ -69,6 +71,6 @@ th {
     border: 2px solid rebeccapurple;
 }
 
-.friends{
+.friends {
     font-weight: bold;
 }

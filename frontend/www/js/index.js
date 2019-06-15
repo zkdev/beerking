@@ -16,36 +16,42 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var base_url = "http://zeggiedieziege.de:7000"
+var port = 7000;
+var base_url = "http://zeggiedieziege.de:" + port;
 var options = { dimBackground: true };
 var version = 104;
 
+$.ajaxSetup({
+    beforeSend: function(xhr) {
+        xhr.setRequestHeader("version", version);
+    }
+});
+
 var app = {
     // Application Constructor
-    initialize: function (env) {
-        console.log(env);
+    initialize: function(env) {
         if (env === 'index') {
             document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         } else if (env === 'main') {
             document.addEventListener('backbutton', onBackPressed, false);
         }
     },
-    onDeviceReady: function () {
+    onDeviceReady: function() {
         var user = {};
         try {
             user.username = window.localStorage.getItem("user");
             user.passwd = window.localStorage.getItem("password");
-            if (user.passwd !== undefined || user.passwd === "") {
+            if (user.passwd !== undefined && user.passwd !== "") {
                 SpinnerPlugin.activityStart("Logging in...", options);
                 $.ajax({
                     type: "GET",
                     url: base_url + "/user/profile",
                     data: user,
-                    complete: function (response) {
+                    complete: function(response) {
                         SpinnerPlugin.activityStop();
                         var resp = JSON.parse(response.responseText);
-                        if (resp.status === 'login successful') {
-                            window.localStorage.setItem("uuid", resp.userid);
+                        if (resp.auth === true) {
+                            window.localStorage.setItem("uuid", resp.user_id);
                             window.localStorage.setItem("email", resp.mail);
                             window.location = './main.html';
                         }
@@ -53,9 +59,7 @@ var app = {
                     dataType: "text/json"
                 });
             }
-        } catch (e) {
-            console.log(e);
-        }
+        } catch (e) {}
     }
 };
 

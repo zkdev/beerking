@@ -1,13 +1,13 @@
 function createAccount() {
     var account_setting = {};
     account_setting.passwd = hash(document.getElementById("pswd").value);
-    if(document.getElementById("pswd").value === "" || document.getElementById("user").value === ""){
+    if (document.getElementById("pswd").value === "" || document.getElementById("user").value === "") {
         //No user or password
         navigator.notification.alert("Nutzer und Passwort muessen ausgefuellt werden", null, "Falsche Eingabe", "Ok");
         window.location = './creating.html';
         return;
     }
-    if(hash(document.getElementById("pswd2").value) !== account_setting.passwd){
+    if (hash(document.getElementById("pswd2").value) !== account_setting.passwd) {
         //Different passwords
         document.getElementById("pswd2").className += " error";
         document.getElementById("pswd").className += " error";
@@ -21,18 +21,18 @@ function createAccount() {
     SpinnerPlugin.activityStart("Account erstellen...", options);
     $.ajax({
         type: "POST",
-        url: base_url + "/users/creation",
+        url: base_url + "/user/create",
         data: account_setting,
-        complete: function (response) {
+        complete: function(response) {
             SpinnerPlugin.activityStop();
             var resp = JSON.parse(response.responseText);
-            if(resp.status === "user creation successful"){
+            if (resp.user_created === true) {
                 window.localStorage.setItem("password", account_setting.passwd);
                 window.localStorage.setItem("user", account_setting.username);
                 window.location = './index.html';
-            }else{
+            } else {
                 //Create error message
-                navigator.notification.alert(resp.status, null, "Fehler", "Ok");
+                navigator.notification.alert("TODO", null, "Fehler", "Ok");
             }
         },
         dataType: "text/json"

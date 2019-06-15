@@ -1,4 +1,3 @@
-
 function generateProfile(profile) {
     cordova.plugins.qrcodejs.encode('TEXT_TYPE', profile.uuid + "[&!?]" + profile.user, (base64EncodedQRImage) => {
         document.getElementById("QRimage").src = base64EncodedQRImage;
@@ -31,11 +30,11 @@ function save() {
     SpinnerPlugin.activityStart("Speichern...", options);
     $.ajax({
         type: "PUT",
-        url: base_url + "/users/mail/update",
+        url: base_url + "/user/mail/update",
         data: profile,
-        complete: function (response) {
+        complete: function(response) {
             SpinnerPlugin.activityStop();
-            if (JSON.parse(response.responseText).status === "mail updated") {
+            if (JSON.parse(response.responseText).mail_updated === true) {
                 window.localStorage.setItem("email", profile.mail);
                 workOn("profile", undefined);
             }
@@ -49,9 +48,9 @@ function gerneratePersonalHistory() {
     request.passwd = window.localStorage.getItem("password");
     $.ajax({
         type: "GET",
-        url: base_url + "/users/history",
+        url: base_url + "/user/history",
         data: request,
-        complete: function (response) {
+        complete: function(response) {
             function formatString(date) {
                 function double(min) {
                     if (min < 10) {

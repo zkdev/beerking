@@ -43,7 +43,7 @@ function workOn(tabname, param) {
             generateProfile(profile);
         }
     }
-    if(tabname === "friends"){
+    if (tabname === "friends") {
         createFriendsList();
     }
 }
@@ -58,7 +58,7 @@ function onLeftSwipe() {
                 openTab({ currentTarget: tablinks[1] }, "game");
             } else if (i == 1) {
                 openTab({ currentTarget: tablinks[2] }, "profile");
-            } else if (i == 2){
+            } else if (i == 2) {
                 openTab({ currentTarget: tablinks[3] }, "friends");
             }
             return;
@@ -76,7 +76,7 @@ function onRightSwipe() {
                 openTab({ currentTarget: tablinks[0] }, "leaderboard");
             } else if (i == 2) {
                 openTab({ currentTarget: tablinks[1] }, "game");
-            } else if (i == 3){
+            } else if (i == 3) {
                 openTab({ currentTarget: tablinks[2] }, "profile");
             }
             return;
@@ -94,7 +94,6 @@ function confirmResults() {
     for (var i = 0; i < confirms.length; i++) {
         confirms[i].confirmed = document.getElementById("check" + i).checked;
     }
-    request.version = version;
     request.matches = JSON.stringify(confirms);
     confirms = [];
     SpinnerPlugin.activityStart("Schicke Bestaetigungen...", options);
@@ -102,9 +101,8 @@ function confirmResults() {
         type: "POST",
         url: base_url + "/match/confirm",
         data: request,
-        complete: function (response) {
+        complete: function(response) {
             SpinnerPlugin.activityStop();
-            console.log("Confirmed");
             document.getElementById("confirmPopup").style.visibility = "hidden";
             document.getElementById("tab0").disabled = false;
             document.getElementById("tab1").disabled = false;
@@ -119,12 +117,11 @@ function confirmResults() {
 function createConfirmPopup() {
     var request = {};
     request.userid = window.localStorage.getItem("uuid");
-    request.version = version;
     $.ajax({
         type: "GET",
         url: base_url + "/match/pending",
         data: request,
-        complete: function (response) {
+        complete: function(response) {
             confirms = JSON.parse(response.responseText).matches;
             if (confirms.length !== 0) {
                 deactivated = true;
@@ -159,12 +156,11 @@ function createConfirmPopup() {
 function createLeaderboard() {
     var request = {};
     request.userid = window.localStorage.getItem("uuid");
-    request.version = version;
     $.ajax({
         type: "GET",
         url: base_url + "/leaderboard",
         data: request,
-        complete: function (response) {
+        complete: function(response) {
             var name = window.localStorage.getItem("user");
             var ind = 0;
             document.getElementById("loader_leaderboard").style.display = "none";
@@ -192,20 +188,18 @@ function createLeaderboard() {
                 }
                 if (i == 0) {
                     row.className = "first";
-                }
-                else if (i == 1) {
+                } else if (i == 1) {
                     row.className = "second";
-                }
-                else if (i == 2) {
+                } else if (i == 2) {
                     row.className = "third";
                 }
-                if((i + 1)% 2 == 0) {
+                if ((i + 1) % 2 == 0) {
                     row.className += " other";
                 }
                 if (players_leaderboard[i].username === window.localStorage.getItem("user")) {
                     row.className += " ich";
                 }
-                if (players_leaderboard[i].isfriend === "1"){
+                if (players_leaderboard[i].isfriend === true) {
                     row.className += " friends";
                 }
                 var nr = row.insertCell(0);
@@ -222,7 +216,7 @@ function createLeaderboard() {
                 }
             }
             var rows = leaderboard.querySelectorAll('tr');
-            rows[ind-3].scrollIntoView({
+            rows[ind - 3].scrollIntoView({
                 behavior: 'smooth',
                 block: 'center'
             });

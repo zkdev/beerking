@@ -1,4 +1,3 @@
-
 var players;
 
 
@@ -8,7 +7,7 @@ function startNewGame(event, team_size) {
     team_size = team_size * 2 - 1;
     var ids = [];
     try {
-        var callback = function (err, text) {
+        var callback = function(err, text) {
             window.QRScanner.destroy();
             if (err) {
                 window.location = "./main.html";
@@ -26,13 +25,12 @@ function startNewGame(event, team_size) {
                 SpinnerPlugin.activityStart("Checke Spieler...", options);
                 $.ajax({
                     type: "GET",
-                    url: base_url + "/userid",
+                    url: base_url + "/check/userid",
                     data: request,
-                    complete: function (response) {
+                    complete: function(response) {
                         SpinnerPlugin.activityStop();
                         navigator.notification.alert(name, null, "Spieler gescannt");
-                        if (JSON.parse(response.responseText).status === "userid exists") {
-                            //check wether id exists:
+                        if (JSON.parse(response.responseText).userid_exists === true) {
                             ids.push({ name: name, uuid: uuid });
                             if (ids.length === team_size) {
                                 displayTeam(ids, team_size);
@@ -103,9 +101,8 @@ function sendWinner() {
             type: "POST",
             url: base_url + "/match/2v2",
             data: game,
-            complete: function (response) {
+            complete: function(response) {
                 SpinnerPlugin.activityStop();
-                console.log(response);
                 window.location = "./main.html";
             },
             dataType: "text/json"
@@ -118,9 +115,8 @@ function sendWinner() {
             type: "POST",
             url: base_url + "/match/1v1",
             data: game,
-            complete: function (response) {
+            complete: function(response) {
                 SpinnerPlugin.activityStop();
-                console.log(response);
                 window.location = "./main.html";
             },
             dataType: "text/json"

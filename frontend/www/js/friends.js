@@ -11,7 +11,7 @@ function createFriendsList() {
         type: "GET",
         url: base_url + "/friends",
         data: request,
-        complete: function (response) {
+        complete: function(response) {
             var friends = JSON.parse(response.responseText).friends;
             for (var i = 0; i < friends.length; i++) {
                 var fr = document.createElement("DIV");
@@ -32,23 +32,23 @@ function addFriend() {
         type: "POST",
         url: base_url + "/friends/add",
         data: request,
-        complete: function () {
+        complete: function() {
             SpinnerPlugin.activityStop();
             createFriendsList();
         }
     });
 }
 
-function deleteFriend(evt){
+function deleteFriend(evt) {
     var request = {};
     request.userid = window.localStorage.getItem("uuid");
-    request.friendid = evt.name;
+    request.friendname = evt.name;
     SpinnerPlugin.activityStart("Freund entfernen...", options);
     $.ajax({
         type: "DELETE",
         url: base_url + "/friends/remove",
         data: request,
-        complete: function () {
+        complete: function() {
             SpinnerPlugin.activityStop();
             createFriendsList();
         }
