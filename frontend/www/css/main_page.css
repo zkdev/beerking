@@ -1,5 +1,5 @@
 .mainapp {
-  color: #f2f2f2;
+  color: #000000;
 }
 
 /* Tabs style */
@@ -13,7 +13,7 @@
 }
 
 .tab button {
-  background: rgb(7, 75, 112);
+  background: rgb(224, 7, 7);
   float: left;
   border: none;
   outline: none;
@@ -82,10 +82,6 @@
   background-color: #B3121D;
   width: 50%;
   margin-top: 10%;
-}
-
-.app {
-  position: relative;
 }
 
 #confirmPopup {

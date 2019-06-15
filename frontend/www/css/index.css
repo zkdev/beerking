@@ -3,6 +3,9 @@ body {
     width: 100%;
     padding: 0px;
     margin: 0px;
+    background: rgba(1, 62, 97, 0.637);
+    opacity: 1.0;
+    box-shadow: inset 0 0 5rem rgba(0, 0, 0, .8);
 }
 
 input {
@@ -76,7 +79,7 @@ a {
 .input_field {
     margin: 1%;
     border-style: solid;
-    border-color: #0977B3;
+    border-color: rgb(179, 9, 37);
     border-radius: 5px;
     background-color: white;
     font-size: large;
@@ -84,7 +87,7 @@ a {
 }
 
 .heading {
-    background-image: linear-gradient(top, transparent, #0977B3);
+    background-image: linear-gradient(top, transparent, rgb(0, 0, 0));
     width: 100%;
     position: fixed;
     height: 30%;
@@ -94,7 +97,14 @@ a {
 
 .app {
     width: 100%;
+    height: 100%;
     font-family: 'Segoe UI';
+    position: relative;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    bottom: calc(0px - constant(safe-area-inset-top));
 }
 
 .input_field.error{
@@ -114,12 +124,6 @@ a {
     outline: #B3121D;
     outline-width: thin;
     outline-style: solid;
-}
-
-
-.body_bg {
-    background: #148CCC;
-    opacity: 1.0;
 }
 
 .body_bg_invisible {
