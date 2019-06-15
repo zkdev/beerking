@@ -112,7 +112,7 @@ bin/*
 !/plugins
 !/plugins/android.json
 !/plugins/fetch.json
-frontend/platforms/browser
+frontend/platforms/*
 frontend/node_modules/*
 frontend/.vscode/*
 
