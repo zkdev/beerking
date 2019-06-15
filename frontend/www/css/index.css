@@ -17,6 +17,17 @@ h1 {
     font-weight: normal;
 }
 
+a {
+    border-radius: 3px;
+    padding: 12px;
+    padding-left: 11px;
+    padding-right: 11px;
+    margin-top: 5%;
+    font-size: large;
+    text-decoration: none;
+    color: white;
+}
+
 #login_btn {
     border: solid black 0px;
     padding: 12px;
