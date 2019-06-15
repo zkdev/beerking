@@ -16,7 +16,7 @@ function createFriendsList() {
             for (var i = 0; i < friends.length; i++) {
                 var fr = document.createElement("DIV");
                 fr.className = "friend";
-                fr.innerHTML = "<span class='friend_name'>" + friends[i].friendname + "</span><img onclick='deleteFriend(this)' src='./img/del.png' height='20px' width='20px' name='" + friends[i].friend + "' class='del_item'/>";
+                fr.innerHTML = "<span class='friend_name'>" + friends[i].friendname + "</span><img onclick='deleteFriend(this)' src='./img/del.png' height='20px' width='20px' name='" + friends[i].friendname + "' class='del_item'/>";
                 table.appendChild(fr);
             }
         }
@@ -26,7 +26,8 @@ function createFriendsList() {
 function addFriend() {
     var request = {};
     request.userid = window.localStorage.getItem("uuid");
-    request.friendname = document.getElementById("username").value;
+    request.friendname = document.getElementById("username").value.trim();
+    document.getElementById("username").value = "";
     SpinnerPlugin.activityStart("Neuer Freund ...", options);
     $.ajax({
         type: "POST",
