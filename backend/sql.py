@@ -1,16 +1,22 @@
 import datetime
 
 
+from .enums import UniqueMode
+
+
 def get_match(conn, matchid):
     c = conn.cursor()
     return c.execute("""SELECT * FROM PendingMatches WHERE matchid = ?;""", (str(matchid),))
 
 
-def is_unique(conn, key, value):
+def is_unique(conn, mode, value):
     c = conn.cursor()
-    sql = """SELECT 1 FROM users WHERE userid = ?;"""
-    if key is 'username':
-        sql = """SELECT 1 FROM users WHERE username = ?;"""
+    if mode is UniqueMode.USER_ID:
+        sql = """SELECT 1 FROM Users WHERE userid = ?;"""
+    elif mode is UniqueMode.USERNAME:
+        sql = """SELECT 1 FROM Users WHERE username = ?;"""
+    elif mode is UniqueMode.MATCH_ID:
+        sql = """SELECT 1 FROM Matches WHERE matchid = ?;"""
     return c.execute(sql, (str(value),))
 
 
@@ -134,3 +140,11 @@ def remove_friend(conn, userid, friendid):
 def is_friend(conn, userid, friendid):
     c = conn.cursor()
     return c.execute("""SELECT 1 FROM Friends WHERE userid = ? AND friendid = ?;""", (str(userid), str(friendid)))
+
+
+def update_elo_history(conn, matchid, host_elo_old, friend_elo_old, enemy1_elo_old, enemy2_elo_old, host_elo_new,
+                       friend_elo_new, enemy1_elo_new, enemy2_elo_new):
+    c = conn.cursor()
+    c.execute("""UPDATE Matches SET host_elo_delta = ?, friend_elo_delta = ?, enemy1_elo_delta = ?, enemy2_elo_delta = ? WHERE matchid = ?;""", (
+        int(host_elo_new - host_elo_old), int(friend_elo_new - friend_elo_old),
+        int(enemy1_elo_new - enemy1_elo_old), int(enemy2_elo_new - enemy2_elo_old), matchid))

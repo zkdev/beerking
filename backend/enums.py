@@ -8,6 +8,8 @@ class User(Enum):
     NOT_CREATED = 3
     MAIL_UPDATED = 4
     MAIL_UPDATE_FAILED = 5
+    ID_EXISTS = 6
+    ID_DOESNT_EXIST = 7
 
 
 class Mail(Enum):
@@ -15,11 +17,9 @@ class Mail(Enum):
     UPDATE_FAILED = 1
 
 
-class Login(Enum):
+class Auth(Enum):
     SUCCESSFUL = 0
-    PASSWD_WRONG = 1
-    USERNAME_NOT_FOUND = 2
-    FAILED = 3
+    FAILED = 1
 
 
 class Match(Enum):
@@ -49,20 +49,26 @@ class History(Enum):
     RETRIEVED = 0
 
 
-class Id(Enum):
-    EXISTS = 0
-    DOESNT_EXIST = 1
-
-
-class Error(Enum):
-    ERROR = 0
-
-
 class Friends(Enum):
-    FINE = 0
+    RETRIEVED = 0
     ADDED = 1
     REMOVED = 2
+    NOT_ADDED = 3
 
 
 class Version(Enum):
     OUTDATED = 0
+
+
+class Reason(Enum):
+    USERNAME_NOT_UNIQUE = 0
+    USERNAME_TOO_SHORT = 1
+    MAIL_DOESNT_EXIST = 2
+    FRIEND_DOESNT_EXIST = 3
+    FRIENDS_ALREADY = 4
+
+
+class UniqueMode(Enum):
+    USER_ID = 0
+    USERNAME = 1
+    MATCH_ID = 2

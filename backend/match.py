@@ -1,4 +1,4 @@
-from . import sql, log, generator, elo
+from . import sql, generator, elo
 from .enums import Match, Mode
 
 
@@ -46,43 +46,44 @@ def update_elo(conn, matchid, mode, winner):
         participants = sql.get_match_participants(conn, matchid).fetchall()
         host = participants[0][0]
         enemy1 = participants[0][2]
-        host_elo = sql.get_elo(conn, host).fetchone()[0]
-        enemy1_elo = sql.get_elo(conn, enemy1).fetchone()[0]
+        host_elo_old = sql.get_elo(conn, host).fetchone()[0]
+        enemy1_elo_old = sql.get_elo(conn, enemy1).fetchone()[0]
         if int(winner) == 0:
-            elo_new = elo.rate_1v1(host_elo, enemy1_elo)
-            host_new = elo_new[0]
-            enemy1_new = elo_new[1]
+            # winner = host
+            elo_new = elo.rate_1v1(host_elo_old, enemy1_elo_old)
+            host_elo_new = int(elo_new[0] + 1)
+            enemy1_elo_new = int(elo_new[1])
         else:
-            elo_new = elo.rate_1v1(enemy1_elo, host_elo)
-            enemy1_new = elo_new[0]
-            host_new = elo_new[1]
-        sql.update_elo(conn, host, host_new)
-        sql.update_elo(conn, enemy1, enemy1_new)
+            # winner = enemy
+            elo_new = elo.rate_1v1(enemy1_elo_old, host_elo_old)
+            enemy1_elo_new = int(elo_new[0] + 1)
+            host_elo_new = int(elo_new[1])
+        sql.update_elo(conn, host, host_elo_new)
+        sql.update_elo(conn, enemy1, enemy1_elo_new)
+        sql.update_elo_history(conn, matchid, host_elo_old, 0, enemy1_elo_old, 0, host_elo_new, 0, enemy1_elo_new, 0)
     elif mode is Mode.DUO:
         participants = sql.get_match_participants(conn, matchid).fetchall()
-        host = participants[0][0]
-        friend = participants[0][1]
-        enemy1 = participants[0][2]
-        enemy2 = participants[0][3]
-        host_elo = sql.get_elo(conn, host).fetchone()[0]
-        friend_elo = sql.get_elo(conn, friend).fetchone()[0]
-        enemy1_elo = sql.get_elo(conn, enemy1).fetchone()[0]
-        enemy2_elo = sql.get_elo(conn, enemy2).fetchone()[0]
+        host, friend, enemy1, enemy2 = participants[0]
+        host_elo_old = sql.get_elo(conn, host).fetchone()[0]
+        friend_elo_old = sql.get_elo(conn, friend).fetchone()[0]
+        enemy1_elo_old = sql.get_elo(conn, enemy1).fetchone()[0]
+        enemy2_elo_old = sql.get_elo(conn, enemy2).fetchone()[0]
         if int(winner) == 0:
-            elo_new = elo.rate_2v2(host_elo, friend_elo, enemy1_elo, enemy2_elo)
-            host_new = elo.rate_1v1(host_elo, elo_new[1])[0]
-            friend_new = elo.rate_1v1(friend_elo, elo_new[1])[0]
-            enemy1_new = elo.rate_1v1(elo_new[0], enemy1_elo)[1]
-            enemy2_new = elo.rate_1v1(elo_new[0], enemy2_elo)[1]
+            # winner = team_host
+            elo_new = elo.rate_2v2(host_elo_old, friend_elo_old, enemy1_elo_old, enemy2_elo_old)
+            host_elo_new = int(elo.rate_1v1(host_elo_old, elo_new[1])[0] + 1)
+            friend_elo_new = int(elo.rate_1v1(friend_elo_old, elo_new[1])[0] + 1)
+            enemy1_elo_new = int(elo.rate_1v1(elo_new[0], enemy1_elo_old)[1])
+            enemy2_elo_new = int(elo.rate_1v1(elo_new[0], enemy2_elo_old)[1])
         else:
-            elo_new = elo.rate_2v2(enemy1_elo, enemy2_elo, host_elo, friend_elo)
-            host_new = elo.rate_1v1(elo_new[0], host_elo)[1]
-            friend_new = elo.rate_1v1(elo_new[0], friend_elo)[1]
-            enemy1_new = elo.rate_1v1(enemy1_elo, elo_new[1])[0]
-            enemy2_new = elo.rate_1v1(enemy2_elo, elo_new[1])[0]
-        sql.update_elo(conn, host, host_new)
-        sql.update_elo(conn, friend, friend_new)
-        sql.update_elo(conn, enemy1, enemy1_new)
-        sql.update_elo(conn, enemy2, enemy2_new)
-    else:
-        log.error('match mode not found')
+            # winner = team_enemy
+            elo_new = elo.rate_2v2(enemy1_elo_old, enemy2_elo_old, host_elo_old, friend_elo_old)
+            host_elo_new = int(elo.rate_1v1(elo_new[0], host_elo_old)[1])
+            friend_elo_new = int(elo.rate_1v1(elo_new[0], friend_elo_old)[1])
+            enemy1_elo_new = int(elo.rate_1v1(enemy1_elo_old, elo_new[1])[0] + 1)
+            enemy2_elo_new = int(elo.rate_1v1(enemy2_elo_old, elo_new[1])[0] + 1)
+        sql.update_elo(conn, host, host_elo_new)
+        sql.update_elo(conn, friend, friend_elo_new)
+        sql.update_elo(conn, enemy1, enemy1_elo_new)
+        sql.update_elo(conn, enemy2, enemy2_elo_new)
+        sql.update_elo_history(conn, matchid, host_elo_old, friend_elo_old, enemy1_elo_old, enemy2_elo_old, host_elo_new, friend_elo_new, enemy1_elo_new, enemy2_elo_new)

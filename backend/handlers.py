@@ -3,16 +3,16 @@ from flask import request
 
 
 from . import validate, sql, elo, catch, match
-from .enums import User, Match
+from .enums import User, Match, Reason, Friends, UniqueMode
 
 
 def create_user(conn, userid, username, mail, passwd):
-    if validate.check_mail(mail):
+    if validate.mail_is_fine(mail):
         m = User.WILL_CREATE
     else:
         m = User.WONT_CREATE
 
-    if catch.empty_mail(mail):
+    if validate.catch_empty_mail(mail):
         mail = ""
         m = User.WILL_CREATE
 
@@ -25,10 +25,16 @@ def create_user(conn, userid, username, mail, passwd):
         sql.create_user(conn, userid, username, mail, passwd, elo.initial_elo())
         return User.CREATED
     else:
-        return User.NOT_CREATED
+        if m is not User.WILL_CREATE:
+            return Reason.MAIL_DOESNT_EXIST
+        elif u is not User.WILL_CREATE:
+            if validate.is_unique(conn, UniqueMode.USERNAME, username):
+                return Reason.USERNAME_TOO_SHORT
+            else:
+                return Reason.USERNAME_NOT_UNIQUE
 
 
-def login(conn, username, passwd):
+def auth(conn, username, passwd):
     c = conn.cursor()
     r = sql.login(c, username, passwd)
     if r is None:
@@ -39,9 +45,9 @@ def login(conn, username, passwd):
 
 def update_mail(conn, username, passwd, mail):
     r = User.MAIL_UPDATE_FAILED
-    if login(conn, username, passwd):
+    if auth(conn, username, passwd):
         userid = sql.get_userid(conn, username).fetchone()[0]
-        if validate.check_mail(mail):
+        if validate.mail_is_fine(mail):
             sql.update_user_mail(conn, userid, mail)
             r = User.MAIL_UPDATED
     return r
@@ -76,3 +82,21 @@ def user_history(conn, username):
     userid = sql.get_userid(conn, username).fetchone()[0]
     h = sql.get_user_history(conn, userid).fetchall()
     return h
+
+
+def add_friend(conn, userid, friendname):
+    if not validate.is_unique(conn, UniqueMode.USERNAME, friendname):
+        friendid = sql.get_userid(conn, friendname).fetchone()[0]
+        if sql.is_friend(conn, userid, friendid).fetchone() is None:
+            sql.add_friend(conn, userid, friendid)
+            r = Friends.ADDED
+        else:
+            r = Reason.FRIENDS_ALREADY
+    else:
+        r = Reason.FRIEND_DOESNT_EXIST
+    return r
+
+
+def remove_friend(conn, userid, friendname):
+    friendid = sql.get_userid(conn, friendname).fetchone()[0]
+    sql.remove_friend(conn, userid, friendid)
