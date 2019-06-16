@@ -33,7 +33,9 @@
         -->
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
-    <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0">    
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/main_page.css">
     <link rel="stylesheet" type="text/css" href="css/leaderboard.css">
@@ -51,8 +53,6 @@
 </head>
 
 <body onload="openTab(null, 'leaderboard');" class="body_bg">
-    <div class="heading">
-    </div>
     <div id="confirmPopup">
         <table id="confirms"></table>
         <button id="popup" style="margin-top:5%;" class="btn_style" onclick="confirmResults(event)">Bestätigen</button>
@@ -120,9 +120,8 @@
                     <div class="loader" id="loader_hist"></div>
                 </div>
             </div>
-
-
         </div>
+
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
