@@ -32,17 +32,17 @@ th {
 .score {
     text-align: center;
     font-weight: bold;
-    width: 33vw;
+    width: 33%;
 }
 
 .name {
     text-align: center;
-    width: 33vw;
+    width: 30vw;
 }
 
 .platz {
     text-align: center;
-    width: 33vw;
+    width: 30vw;
 }
 
 
@@ -58,7 +58,7 @@ th {
 }
 
 .second {
-    color: #D7D7D7;
+    color: rgb(160, 160, 160);
     font-weight: bold;
 }
 
@@ -68,11 +68,13 @@ th {
 }
 
 .ich {
-    border: 2px solid rebeccapurple;
+    border-top: 2px solid rebeccapurple;
+    border-bottom: 2px solid rebeccapurple;
+    background: rgba(102, 51, 153, 0.5);
 }
 
 .friends {
-    font-weight: bold;
+    background: rgba(255, 255, 124, 0.288);
 }
 
 #popup{    

@@ -17,6 +17,7 @@ function startNewGame(event, team_size) {
                 var uuid = text.split("[&!?]")[0];
                 for (var i = 0; i < ids.length; i++) {
                     if (ids[i].uuid === uuid) {
+                        SpinnerPlugin.activityStop();
                         window.location = "./main.html";
                     }
                 }
