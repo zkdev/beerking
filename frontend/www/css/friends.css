@@ -2,13 +2,32 @@
     text-align: center;
 }
 
+#username {
+    width: 40%;
+    margin: 1%;
+    border-style: solid;
+    border-color: rgb(179, 9, 37);
+    border-radius: 5px;
+    color: black;
+    background-color: white;
+    font-size: large;
+    padding: 2px;
+}
+
+#addfriend {
+    font-size: 18px;
+    padding: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
 #friend_list {
     height: 65vh;
     width: 100%;
-    margin: 2%;
+    margin-top: 3%;
     overflow: scroll;
-    border: 2px solid blue;
-    background: rgb(48, 163, 224);
+    border: 2px solid rgb(1, 62, 97);
+    background: rgba(48, 162, 224, 0.096);
 }
 
 .friend_name {

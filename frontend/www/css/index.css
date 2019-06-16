@@ -5,6 +5,10 @@ html {
 
 body {
     font-family: 'Segoe UI';
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    left: 0;
     width: 100%;
     padding: 0px;
     margin: 0px;
@@ -15,7 +19,7 @@ body {
 input {
     font-family: 'Segoe UI';
     border-radius: 3px;
-    background-color: #B3121D;
+    background-color: rgba(179, 18, 29, 0.856);
     color: black;
 }
 
@@ -83,7 +87,7 @@ a {
 .input_field {
     margin: 1%;
     border-style: solid;
-    border-color: rgb(179, 9, 37);
+    border-color: rgba(179, 18, 29, 0.856);
     border-radius: 5px;
     background-color: white;
     font-size: large;
@@ -103,6 +107,10 @@ a {
     width: 100%;
     font-family: 'Segoe UI';
     position: relative;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
 }
 
 .input_field.error{
