@@ -51,7 +51,7 @@ var app = {
                         SpinnerPlugin.activityStop();
                         var resp = JSON.parse(response.responseText);
                         if (resp.auth === true) {
-                            window.localStorage.setItem("uuid", resp.user_id);
+                            window.localStorage.setItem("uuid", resp.userid);
                             window.localStorage.setItem("email", resp.mail);
                             window.location = './main.html';
                         }

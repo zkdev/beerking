@@ -137,3 +137,18 @@
     transform: rotate(360deg);
   }
 }
+
+#confirms{
+  width: 100%;
+}
+
+.checkResult{
+  width: 20px;
+  height: 20px;
+}
+
+.checkResultText{
+  font-size: larger;
+  left: -5%;
+  position: relative;
+}

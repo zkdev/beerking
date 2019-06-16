@@ -142,9 +142,9 @@ function createConfirmPopup() {
                     checker.innerHTML = "<input id='check" + i + "' class='checkResult' type='checkbox' checked='true'/>";
                     var text = row.insertCell(1);
                     if (confirms[i].winner === 0) {
-                        text.innerHTML = "<span class='checkResultText' style='font-color:red'>Verloren gegen " + confirms[i].hostname + "</span>";
+                        text.innerHTML = "<span class='checkResultText'>Verloren gegen " + confirms[i].hostname + "</span>";
                     } else {
-                        text.innerHTML = "<span class='checkResultText' style='font-color:green'>Gewonnen gegen " + confirms[i].hostname + "</span>";
+                        text.innerHTML = "<span class='checkResultText'>Gewonnen gegen " + confirms[i].hostname + "</span>";
                     }
                 }
             }

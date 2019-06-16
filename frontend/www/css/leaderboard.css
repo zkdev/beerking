@@ -74,3 +74,8 @@ th {
 .friends {
     font-weight: bold;
 }
+
+#popup{    
+    text-align: center;
+    width: 70vw;
+}

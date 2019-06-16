@@ -13,8 +13,8 @@
 
 .friend_name {
     margin: 0px;
-    padding: 2%;
-    margin-left: 5%;
+    padding: 2px;
+    left: 25px;
     font-size: larger;
 }
 
@@ -24,7 +24,7 @@
     top: 50%;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
-    right: 20px;
+    right: 25px;
 }
 
 .friend {
