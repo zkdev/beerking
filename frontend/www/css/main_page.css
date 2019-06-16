@@ -13,7 +13,7 @@
 }
 
 .tab button {
-  background: rgb(224, 7, 7);
+  background: rgba(1, 62, 97, 0.637);
   float: left;
   border: none;
   outline: none;
@@ -79,7 +79,7 @@
   margin: auto;
   border: 0px;
   border-radius: 4px;
-  background-color: #B3121D;
+  background-color: rgba(179, 18, 29, 0.856);
   width: 50%;
   margin-top: 10%;
 }
