@@ -1,7 +1,7 @@
 import datetime
 
 
-from .enums import Profile
+from .enums import UniqueMode
 
 
 def get_match(conn, matchid):
@@ -9,22 +9,20 @@ def get_match(conn, matchid):
     return c.execute("""SELECT * FROM PendingMatches WHERE matchid = ?;""", (str(matchid),))
 
 
-def is_unique(conn, key, value):
-
+def is_unique(conn, mode, value):
     c = conn.cursor()
-
-    # somehow I'm not able to provide the key as a binding as well
-    # so I use this ugly if statement to prepare the sql statement
-
-    sql = """SELECT 1 FROM users WHERE userid = ?;"""
-    if key is 'username':
-        sql = """SELECT 1 FROM users WHERE username = ?;"""
+    if mode is UniqueMode.USER_ID:
+        sql = """SELECT 1 FROM Users WHERE userid = ? COLLATE NOCASE;"""
+    elif mode is UniqueMode.USERNAME:
+        sql = """SELECT 1 FROM Users WHERE username = ? COLLATE NOCASE;"""
+    elif mode is UniqueMode.MATCH_ID:
+        sql = """SELECT 1 FROM Matches WHERE matchid = ? COLLATE NOCASE;"""
     return c.execute(sql, (str(value),))
 
 
 def leaderboard(conn):
     c = conn.cursor()
-    return c.execute("""SELECT username, elo FROM Users ORDER BY elo DESC;""")
+    return c.execute("""SELECT userid, username, elo FROM Users ORDER BY elo DESC;""")
 
 
 def login(c, username, passwd):
@@ -51,7 +49,8 @@ def start_2v2(conn, matchid, host, friend, enemy1, enemy2, winner):
                                      str(winner), str(date)))
 
 
-def get_profile(c, username, passwd):
+def get_profile(conn, username, passwd):
+    c = conn.cursor()
     return c.execute("""SELECT userid, mail FROM Users WHERE username = ? AND passwd = ?;""", (str(username), str(passwd)))
 
 
@@ -65,8 +64,9 @@ def get_pending_matches(conn, userid):
     return c.execute("""SELECT matchid, host, winner, datetime, username FROM PendingMatches, Users WHERE Users.userid = host AND (enemy1 = ? OR enemy2 = ?);""", (str(userid), str(userid)))
 
 
-def create_user(c, userid, username, mail, passwd, elo):
-    return c.execute("""INSERT INTO users(userid, username, mail, passwd, elo) 
+def create_user(conn, userid, username, mail, passwd, elo):
+    c = conn.cursor()
+    c.execute("""INSERT INTO users(userid, username, mail, passwd, elo) 
         VALUES (?,?,?,?,?);""", (str(userid), str(username), str(mail), str(passwd), int(elo)))
 
 
@@ -99,7 +99,6 @@ def get_userid(conn, username):
 def update_user_mail(conn, userid, mail):
     c = conn.cursor()
     c.execute("""UPDATE Users SET mail = ? WHERE userid = ?;""", (str(mail), str(userid)))
-    return Profile.UPDATED
 
 
 def get_user_history_v2(conn, userid):
@@ -117,4 +116,35 @@ def get_user_history(conn, userid):
     LEFT OUTER JOIN Users as m2 on m2.userid = Matches.friend
     LEFT OUTER JOIN Users as m3 on m3.userid = Matches.enemy1
     LEFT OUTER JOIN Users as m4 on m4.userid = Matches.enemy2
-    WHERE host = ? OR friend = ? OR enemy1 = ? OR enemy2 = ?;""", (str(userid), str(userid), str(userid), str(userid)))
+    WHERE host = ? OR friend = ? OR enemy1 = ? OR enemy2 = ?
+    ORDER BY datetime DESC;""", (str(userid), str(userid), str(userid), str(userid)))
+
+
+def get_friends(conn, userid):
+    c = conn.cursor()
+    return c.execute("""SELECT m1.username, friendid FROM Friends
+    LEFT OUTER JOIN Users as m1 on m1.userid = Friends.friendid
+    WHERE Friends.userid = ?;""", (str(userid),))
+
+
+def add_friend(conn, userid, friendid):
+    c = conn.cursor()
+    c.execute("""INSERT INTO Friends (userid, friendid) VALUES (?, ?);""", (str(userid), str(friendid)))
+
+
+def remove_friend(conn, userid, friendid):
+    c = conn.cursor()
+    c.execute("""DELETE FROM Friends WHERE userid = ? AND friendid = ?;""", (str(userid), str(friendid)))
+
+
+def is_friend(conn, userid, friendid):
+    c = conn.cursor()
+    return c.execute("""SELECT 1 FROM Friends WHERE userid = ? AND friendid = ?;""", (str(userid), str(friendid)))
+
+
+def update_elo_history(conn, matchid, host_elo_old, friend_elo_old, enemy1_elo_old, enemy2_elo_old, host_elo_new,
+                       friend_elo_new, enemy1_elo_new, enemy2_elo_new):
+    c = conn.cursor()
+    c.execute("""UPDATE Matches SET host_elo_delta = ?, friend_elo_delta = ?, enemy1_elo_delta = ?, enemy2_elo_delta = ? WHERE matchid = ?;""", (
+        int(host_elo_new - host_elo_old), int(friend_elo_new - friend_elo_old),
+        int(enemy1_elo_new - enemy1_elo_old), int(enemy2_elo_new - enemy2_elo_old), matchid))
