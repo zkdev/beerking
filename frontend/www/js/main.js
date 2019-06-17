@@ -129,7 +129,7 @@ function createConfirmPopup() {
                 document.getElementById("tab0").disabled = true;
                 document.getElementById("tab1").disabled = true;
                 document.getElementById("tab2").disabled = true;
-                document.getElementById("tab3").disabled = false;
+                document.getElementById("tab3").disabled = true;
                 var table = document.getElementById("confirms");
                 var child = table.lastElementChild;
                 while (child) {
@@ -139,7 +139,7 @@ function createConfirmPopup() {
                 for (var i = 0; i < confirms.length; i++) {
                     var row = table.insertRow(-1);
                     var checker = row.insertCell(0);
-                    checker.innerHTML = "<input id='check" + i + "' class='checkResult' type='checkbox' checked='true'/>";
+                    checker.innerHTML = "<label class='switch'><input id='check" + i + "' class='checkResult' type='checkbox' checked='true'/><span class='slider round'></span></label>";
                     var text = row.insertCell(1);
                     if (confirms[i].winner === 0) {
                         text.innerHTML = "<span class='checkResultText'>Verloren gegen " + confirms[i].hostname + "</span>";
