@@ -48,11 +48,12 @@ a {
 }
 
 #login_btn:active {
-    background-color: rgb(230, 23, 31);
+    background-color: rgba(156, 0, 5, 0.623);
     border: 0px;
 }
 
 #create_btn {
+    color: white;
     border: solid black 0px;
     padding: 12px;
     padding-left: 50px;
@@ -63,7 +64,7 @@ a {
 }
 
 #create_btn:active {
-    background-color: rgb(230, 23, 31);
+    background-color: rgba(156, 0, 5, 0.623);
     border: 0px;
 }
 
@@ -114,22 +115,15 @@ a {
 }
 
 .input_field.error{
-    border-color: rgb(240, 106, 106);
-    border-style: dotted;
+    border-color: rgb(0, 0, 0);
 }
 
 .input_field.error:focus{
-    border-style: solid;
-    outline: rgb(240, 106, 106);
-    outline-width: thick;
-    outline-style: solid;
+    border-color: rgb(0, 0, 0);
 }
 
 .input_field:focus {
-    border-color: rgb(230, 23, 31);
-    outline: rgb(230, 23, 31);
-    outline-width: thin;
-    outline-style: solid;
+    border-color: rgba(133, 0, 4, 0.514);
 }
 
 .body_bg_invisible {
