@@ -4,7 +4,8 @@ function createAccount() {
     if (document.getElementById("pswd").value === "" || document.getElementById("user").value === "") {
         //No user or password
         navigator.notification.alert("Nutzer und Passwort muessen ausgefuellt werden", null, "Falsche Eingabe", "Ok");
-        window.location = './creating.html';
+        document.getElementById("pswd").value = "";
+        document.getElementById("pswd2").value = "";
         return;
     }
     if (hash(document.getElementById("pswd2").value) !== account_setting.passwd) {
@@ -31,8 +32,21 @@ function createAccount() {
                 window.localStorage.setItem("user", account_setting.username);
                 window.location = './index.html';
             } else {
-                //Create error message
-                navigator.notification.alert("TODO", null, "Fehler", "Ok");
+                if(resp.username_unique !== true){
+                    navigator.notification.alert("Deinen Nickname gibt es leider schon!", null, "Fehler", "Ok");
+                    window.location = "./creating.html";
+                    return;
+                }
+                if(resp.username_too_short === true){
+                    navigator.notification.alert("Dein Nickname ist zu kurz (mindestens 3 Zeichen)", null, "Fehler", "Ok");
+                    window.location = "./creating.html";
+                    return;
+                }
+                if(resp.mail_exists !== false){
+                    navigator.notification.alert("Die Email existiert nicht, gib keine oder eine existierende Email an", null, "Fehler", "Ok");
+                    window.location = "./creating.html";
+                    return;
+                }
             }
         },
         dataType: "text/json"
