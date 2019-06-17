@@ -66,6 +66,7 @@ class Reason(Enum):
     MAIL_DOESNT_EXIST = 2
     FRIEND_DOESNT_EXIST = 3
     FRIENDS_ALREADY = 4
+    SAME_AS_USER = 5
 
 
 class UniqueMode(Enum):

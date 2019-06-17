@@ -3,7 +3,7 @@ from . import sql
 from .enums import UniqueMode
 
 
-version = 104
+version = 120
 
 
 def mail_is_fine(mail):

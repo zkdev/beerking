@@ -71,9 +71,9 @@ def leaderboard(conn, userid):
         elo = entry[2]
         friendids = [elem[1] for elem in fl]
         if entry[0] in friendids:
-            isfriend = "1"
+            isfriend = True
         else:
-            isfriend = "0"
+            isfriend = False
         arr.append({"username": username, "elo": elo, "isfriend": isfriend})
     return arr
 
@@ -88,8 +88,11 @@ def add_friend(conn, userid, friendname):
     if not validate.is_unique(conn, UniqueMode.USERNAME, friendname):
         friendid = sql.get_userid(conn, friendname).fetchone()[0]
         if sql.is_friend(conn, userid, friendid).fetchone() is None:
-            sql.add_friend(conn, userid, friendid)
-            r = Friends.ADDED
+            if str(userid) == str(friendid):
+                r = Reason.SAME_AS_USER
+            else:
+                sql.add_friend(conn, userid, friendid)
+                r = Friends.ADDED
         else:
             r = Reason.FRIENDS_ALREADY
     else:

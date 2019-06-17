@@ -91,6 +91,9 @@ def build(enum, rs=None):
     elif enum is Reason.FRIEND_DOESNT_EXIST:
         resp.status_code = 400
         json_obj = {"friend_added": False, "friend_doesnt_exist": True}
+    elif enum is Reason.SAME_AS_USER:
+        resp.status_code = 400
+        json_obj = {"friend_added": False, "friend_equal_user": True}
     else:
         resp.status_code = 500
 
