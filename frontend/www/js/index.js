@@ -32,7 +32,7 @@ var app = {
     initialize: function(env) {
         if (env === 'index') {
             document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-                $(document).on('keypress', keyhandler);
+            $(document).on('keypress', keyLogin);
         } else if (env === 'main') {
             document.addEventListener('backbutton', onBackPressed, false);
         }
@@ -79,9 +79,8 @@ function onBackPressed() {
     })
 }
 
-function keyhandler(e) {
-    console.log('You tapped a key');
+function keyLogin(e) {
     if (e.keyCode  == 13) {
-        console.log('You tapped ENTER! Yay!');
+        onLogin();
     }
 }
