@@ -37,6 +37,7 @@ a {
 }
 
 #login_btn {
+    color: black;
     border: solid black 0px;
     padding: 12px;
     padding-left: 50px;
