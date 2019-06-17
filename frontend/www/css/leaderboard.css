@@ -53,17 +53,17 @@ th {
 }
 
 .first {
-    color: #C9B037;
+    color: rgb(228, 191, 10);
     font-weight: bold;
 }
 
 .second {
-    color: rgb(160, 160, 160);
+    color: rgb(196, 196, 196);
     font-weight: bold;
 }
 
 .third {
-    color: #c49c47;
+    color: #e29e0c;
     font-weight: bold;
 }
 
