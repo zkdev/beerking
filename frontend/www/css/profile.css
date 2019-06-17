@@ -43,7 +43,7 @@
 .win {
     margin-top: 3px;
     margin-bottom: 3px;
-    background-color: green;
+    background-color: rgba(0, 128, 0, 0.5);
     text-align: center;
     width: 100%;
 }
@@ -51,7 +51,7 @@
 .loss {
     margin-top: 3px;
     margin-bottom: 3px;
-    background-color: red;
+    background-color: rgba(255, 0, 0, 0.5);
     text-align: center;
     width: 100%;
 }
