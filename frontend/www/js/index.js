@@ -32,6 +32,7 @@ var app = {
     initialize: function(env) {
         if (env === 'index') {
             document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+                $(document).on('keypress', keyhandler);
         } else if (env === 'main') {
             document.addEventListener('backbutton', onBackPressed, false);
         }
@@ -76,4 +77,11 @@ function onBackPressed() {
             window.location = "./main.html";
         }
     })
+}
+
+function keyhandler(e) {
+    console.log('You tapped a key');
+    if (e.keyCode  == 13) {
+        console.log('You tapped ENTER! Yay!');
+    }
 }

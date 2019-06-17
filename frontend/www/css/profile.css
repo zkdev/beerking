@@ -5,10 +5,10 @@
 }
 
 #save_btn {
-    width: 50%;
-    font-size: large;
-    padding: 2px;
-    margin: 4px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 5%;
+    text-align: center;
 }
 
 #match_hist {
@@ -19,7 +19,9 @@
     padding-top: 5px;
     padding-bottom: 5px;
     margin-bottom: 5%;
+    margin-top: 2%;
 }
+
 
 #datenschutz {
     margin-top: 15px;
