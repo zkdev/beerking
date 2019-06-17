@@ -6,16 +6,13 @@ function generateProfile(profile) {
         if (document.getElementById("email_entry").lastChild !== null) {
             document.getElementById("email_entry").removeChild(document.getElementById("email_entry").lastChild);
         }
-        if (profile.email === undefined || profile.email === "undefined" || profile.email === null || profile.email === "") {
-            var div = document.createElement('div');
-            div.innerHTML = "<input id='input_email' type='email' placeholder='Hinterlege deine Email' class='info'/><br\><input type='button' value='Speichern' id='save_btn' onclick='save()'/>";
-            document.getElementById("email_entry").appendChild(div);
-        } else {
-            var div = document.createElement('div');
-            div.innerHTML = "<p id='email_profile' class='info'></p>"
-            div.firstChild.innerText = profile.email;
-            document.getElementById("email_entry").appendChild(div);
+        if(profile.mail === null || profile.mail === undefined){
+            profile.mail = "";
         }
+        var div = document.createElement('div');
+        div.innerHTML = "<input id='input_email' type='email' placeholder='Hinterlege deine Email' class='info' value='" + profile.mail + "'/><input type='button' value='Speichern' id='save_btn' class='btn_style' onclick='save()'/>";
+        document.getElementById("email_entry").appendChild(div);
+        
         gerneratePersonalHistory();
     }, (err) => {
         console.error('QRCodeJS error is ' + JSON.stringify(err));
