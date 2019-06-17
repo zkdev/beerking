@@ -12,5 +12,5 @@
 | /match/confirm | POST | version || username, passwd | confirms a pending match | `matches_confirmed`
 | /leaderboard | GET | version |userid || retrieves the leaderboard | `leaderboard.username`<br>`leaderboard.elo`<br>`leaderboard.isfriend`
 | /friends | GET | version | userid || retrieves the user's friendlist | `friends.friend`<br>`friends.friendname`
-| /friends/add | POST | version || userid, friendname | adds a friend on the user's friendlist | `friend_added`
+| /friends/add | POST | version || userid, friendname | adds a friend on the user's friendlist | `friend_added`<br>`friend_equal_user`
 | /friends/remove | DELETE | version || userid, friendname | removes a friend from the user's friendlist | `friend_removed`
