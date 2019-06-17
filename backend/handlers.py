@@ -2,7 +2,7 @@ import json
 from flask import request
 
 
-from . import validate, sql, elo, catch, match
+from . import validate, sql, elo, match
 from .enums import User, Match, Reason, Friends, UniqueMode
 
 

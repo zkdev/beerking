@@ -2,13 +2,13 @@ from deprecated import deprecated
 from flask import Flask
 from flask import request
 from flask_cors import CORS
-from . import generator, connection, handlers, match, sql, response, validate, catch
+from . import generator, connection, handlers, match, sql, response, validate
 from .enums import Match, Auth, Leaderboard, History, User, Version, Friends, UniqueMode
 
 
 app = Flask(__name__)
 CORS(app)
-path = '/home/devking/server/devking.db'
+path = '/home/beerking/server/database/beerking.db'
 
 
 @deprecated
