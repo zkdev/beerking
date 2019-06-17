@@ -4,10 +4,9 @@ from flask import Response
 from .enums import Auth, User, Match, Version, Leaderboard, History, Friends, Reason
 
 
-def build(enum, rs=None):
+def build(enum, rs=None, server_message="This version is under development and might be unstable."):
     resp = Response(mimetype='application/json')
     resp.headers.add('Access-Control-Allow-Origin', '*')
-    server_message = "This version is under development and might be unstable."
 
     if enum is Auth.SUCCESSFUL:
         userid, mail = rs[0]
@@ -45,7 +44,9 @@ def build(enum, rs=None):
         json_obj = {"match_started": False}
     elif enum is Version.OUTDATED:
         resp.status_code = 403
-        json_obj = {"outdated_app_version": True}
+        json_obj = {"outdated_app_version": True, "status": "Du benutzt eine veraltete App Version. "
+                                                            "Bitte lade die neuste Version herunter um BeerKing "
+                                                            "weiter nutzen zu können. GutTrink du Saufnase!"}
     elif enum is Match.CONFIRMED:
         resp.status_code = 201
         json_obj = {"matches_confirmed": True}
@@ -64,7 +65,8 @@ def build(enum, rs=None):
             enemy2 = entry[3]
             winner = entry[4]
             date_data = entry[5]
-            arr.append({"host": host, "friend": friend, "enemy1": enemy1, "enemy2": enemy2, "winner": winner, "datetime": date_data})
+            arr.append({"host": host, "friend": friend, "enemy1": enemy1, "enemy2": enemy2, "winner": winner,
+                        "datetime": date_data})
         return json.dumps({"matches": arr})
     elif enum is User.ID_EXISTS:
         resp.status_code = 200

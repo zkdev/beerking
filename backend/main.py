@@ -1,3 +1,4 @@
+from deprecated import deprecated
 from flask import Flask
 from flask import request
 from flask_cors import CORS
@@ -8,6 +9,12 @@ from .enums import Match, Auth, Leaderboard, History, User, Version, Friends, Un
 app = Flask(__name__)
 CORS(app)
 path = '/home/devking/server/devking.db'
+
+
+@deprecated
+@app.route('/users/login', methods=['GET'])
+def router_login_user():
+    return response.build(Version.OUTDATED)
 
 
 @app.route('/user/create', methods=['POST'])
@@ -72,10 +79,10 @@ def router_auth():
         if handlers.auth(conn, username, passwd):
             p = sql.get_profile(conn, username, passwd).fetchall()
             connection.kill(conn)
-            return response.build(Auth.SUCCESSFUL, p)
+            return response.build(Auth.SUCCESSFUL, rs=p)
         else:
             connection.kill(conn)
-            return response.build(Auth.FAILED)
+            return response.build(Auth.FAILED, server_message='Nickname oder Passwort ist falsch.')
     else:
         return response.build(Version.OUTDATED)
 

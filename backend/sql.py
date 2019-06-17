@@ -12,11 +12,11 @@ def get_match(conn, matchid):
 def is_unique(conn, mode, value):
     c = conn.cursor()
     if mode is UniqueMode.USER_ID:
-        sql = """SELECT 1 FROM Users WHERE userid = ?;"""
+        sql = """SELECT 1 FROM Users WHERE userid = ? COLLATE NOCASE;"""
     elif mode is UniqueMode.USERNAME:
-        sql = """SELECT 1 FROM Users WHERE username = ?;"""
+        sql = """SELECT 1 FROM Users WHERE username = ? COLLATE NOCASE;"""
     elif mode is UniqueMode.MATCH_ID:
-        sql = """SELECT 1 FROM Matches WHERE matchid = ?;"""
+        sql = """SELECT 1 FROM Matches WHERE matchid = ? COLLATE NOCASE;"""
     return c.execute(sql, (str(value),))
 
 
