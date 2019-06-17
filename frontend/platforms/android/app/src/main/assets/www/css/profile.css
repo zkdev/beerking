@@ -1,0 +1,45 @@
+#QRimage {
+    width: 50%;
+    height: 50%;
+    margin: 5px;
+}
+
+#save_btn {
+    width: 50%;
+    font-size: large;
+    padding: 2px;
+    margin: 4px;
+}
+
+#match_hist {
+    margin-top: 5px;
+}
+
+.hist_header {
+    border-bottom: solid black 1px;
+    font-size: large;
+    padding: 3px;
+}
+
+#history {
+    list-style-type: none;
+    text-align: center;
+    height: 15vh;
+    overflow-y: scroll;
+}
+
+.win {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    background-color: green;
+    text-align: center;
+    width: 100%;
+}
+
+.loss {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    background-color: red;
+    text-align: center;
+    width: 100%;
+}

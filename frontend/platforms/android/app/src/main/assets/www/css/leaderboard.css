@@ -1,0 +1,74 @@
+.leaderboard {
+    width: 100%;
+    margin-bottom: 5%;
+    border-collapse: collapse;
+}
+
+.leaderboard tbody{
+    overflow-y:scroll;
+    height:60vh;
+    width: 88vw;
+    display:block;
+}
+
+.leaderboard thead{
+    display: block;
+    width: 88vw;
+    overflow: auto;
+}
+
+#leaderboard {
+    margin-top: 7%;
+    text-align: center;
+}
+
+th {
+    width: 33vw;
+    border-bottom: solid black 2px;
+    color: black;
+    font-size: 18px;
+}
+
+.score {
+    text-align: center;
+    font-weight: bold;
+    width: 33%;
+}
+
+.name {
+    text-align: center;
+    width: 33%;
+}
+
+.platz{
+    text-align: center;
+    width: 33%;
+}
+
+/*row highlighting*/
+.other {
+    background-color: #0977B3;
+}
+
+.first {
+    color: #C9B037;
+    font-weight: bold;
+}
+
+.second {
+    color: #D7D7D7;
+    font-weight: bold;
+}
+
+.third {
+    color: #c49c47  ;
+    font-weight: bold;
+}
+
+.ich {
+    border: 2px solid rebeccapurple;
+}
+
+.friends{
+    font-weight: bold;
+}

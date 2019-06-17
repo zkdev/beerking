@@ -1,0 +1,54 @@
+/* Game result */
+
+#active_game {
+    color: #ccc;
+    visibility: hidden;
+    font-size: large;
+    font-style: bold;
+    color: blue;
+    text-align: center;
+    padding: 5px;
+}
+
+#game {
+    text-align: center;
+    margin: 5px;
+    height: 100%;
+}
+
+#profile {
+    text-align: center;
+}
+
+.info {
+    width: 100%;
+    border: black solid 1px;
+    background-color: lightgray;
+    padding: 2px;
+    margin: 3px;
+    font-size: large;
+}
+
+#team {
+    text-align: center;
+    font-size: large;
+}
+
+.team_ch {
+    text-align: center;
+    font-size: larger;
+    margin-top: -50%;
+    color: black;
+}
+
+.teammember {
+    text-align: center;
+    font-size: larger;
+    border: solid #B3121D 1px;
+    padding: 5px;
+    margin: 5px;
+}
+
+select {
+    margin: 5%;
+}

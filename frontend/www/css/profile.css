@@ -1,0 +1,62 @@
+#QRimage {
+    width: 50%;
+    height: 50%;
+    margin: 5px;
+}
+
+#save_btn {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 5%;
+    justify-content: center;
+}
+
+#match_hist {
+    margin-top: 5px;
+}
+
+#logout_btn {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 5%;
+    margin-top: 2%;
+}
+
+
+#datenschutz {
+    margin-top: 15px;
+    padding: 1%;
+    font-size: large;
+}
+
+.hist_header {
+    border-bottom: solid black 1px;
+    font-size: large;
+    padding: 3px;
+    margin: 5px;
+}
+
+#history {
+    list-style-type: none;
+    text-align: center;
+    height: 14vh;
+    overflow-y: scroll;
+}
+
+.win {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    background-color: rgba(0, 128, 0, 0.5);
+    text-align: center;
+    width: 100%;
+}
+
+.loss {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    background-color: rgba(255, 0, 0, 0.5);
+    text-align: center;
+    width: 100%;
+}

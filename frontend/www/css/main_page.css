@@ -1,204 +1,103 @@
-/*
-  leaderboard table
-*/
-
-.leaderboard {
-  margin-top: 5%;
-  width: 100%;
-  margin-bottom: 5%;
-  border-collapse: collapse;
-}
-
-#leaderboard{
-  text-align: center;
-}
-
-th {
-  width: 50%;
-  border-bottom: solid black 2px;
-}
-
-.score {
-  text-align: center;
-  border-bottom: 1px black solid;
-}
-
-.name {
-  border-bottom: 1px black solid;
-  text-align: center;
+.mainapp {
+  color: #f2f2f2;
 }
 
 /* Tabs style */
 
 .tab {
   overflow: hidden;
-  border-radius: 5px;
-  background-color: #f1f1f1;
   display: inline-block;
   width: 100%;
   text-align: center;
   align-content: center;
-  margin-top: 8%;
 }
 
 .tab button {
-  background-color: inherit;
+  background: rgb(0, 142, 224);
   float: left;
   border: none;
   outline: none;
   cursor: pointer;
-  border-radius: 5px;
   padding: 14px 16px;
+  padding-top: 17%;
   transition: 0.3s;
-  margin: 3px;
-  width: 31.5%;
+  width: 25%;
 }
 
-/* Change background color of buttons on hover */
 
-.tab button:hover {
-  background-color: #ddd;
+#tab0 {
+  background-image: url("../img/leaderboard.png");
+  background-repeat: no-repeat;
+  background-position: center; 
+}
+
+#tab1 {
+  background-image: url("../img/play-button.png");
+  background-repeat: no-repeat;
+  background-position: center; 
+}
+
+#tab2 {
+  background-image: url("../img/profile.png");
+  background-repeat: no-repeat;
+  background-position: center; 
+}
+
+#tab3 {
+  background-image: url("../img/firends.png");
+  background-repeat: no-repeat;
+  background-position: center; 
+}
+
+#username_profile {
+  color: black;
+}
+
+#email_entry {
+  color: black;
 }
 
 /* Create an active/current tablink class */
 
 .tab button.active {
-  background-color: #ccc;
+  background-color: transparent;
 }
 
 /* Style the tab content */
 
 .tabcontent {
   display: none;
-  padding: 6px 12px;
+  margin: 6%;
   border-top: none;
+  height: 100%;
 }
 
 /* New game buttons design */
 
-.new_game {
-  padding: 5px;
+#start_game {
+  margin-top: 20%;
+}
+
+.btn_style {
+  color: white;
+  font-family: "Segoe UI";
+  font-size: 20px;
+  padding: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
   margin: auto;
-  border: outset rgb(35, 169, 247) 2px;
+  border: 3px;
+  border-color: black;
   border-radius: 4px;
-  background-color: rgb(35, 169, 247);
+  background-color: rgb(230, 23, 31);
   width: 50%;
-  margin-top: 5px;
-}
-
-/* Game result */
-
-#active_game {
-  color: #ccc;
-  visibility: hidden;
-  font-size: large;
-  font-style: bold;
-  color: blue;
-  text-align: center;
-  padding: 5px;
-}
-
-#game {
-  text-align: center;
-  margin: 5px;
-  height: 100%;
-}
-
-.Becher {
-  margin: 5px;
-  border: solid black 1px;
-  border-radius: 4px;
-  padding: 5px;
-}
-
-#profile {
-  text-align: center;
-}
-
-.info {
-  width: 100%;
-  border: black solid 1px;
-  background-color: lightgray;
-  padding: 2px;
-  margin: 3px;
-  font-size: large;
-}
-
-#QRimage {
-  width: 50%;
-  height: 50%;
-  margin: 5px;
-}
-
-#save_btn {
-  width: 50%;
-  font-size: large;
-  padding: 2px;
-  margin: 4px;
-}
-
-#match_hist {
-  margin-top: 5px;
-}
-
-.hist_header {
-  border-bottom: solid black 1px;
-  font-size: large;
-  padding: 3px;
-}
-
-#history {
-  list-style-type: none;
-  text-align: center;
-  height: 15vh;
-  overflow-y: scroll;
-}
-
-.win {
-  margin-top: 3px;
-  margin-bottom: 3px;
-  background-color: green;
-  text-align: center;
-  width: 100%;
-}
-
-.loss {
-  margin-top: 3px;
-  margin-bottom: 3px;
-  background-color: red;
-  text-align: center;
-  width: 100%;
-}
-
-#team {
-  text-align: center;
-  font-size: large;
-}
-
-.team_ch {
-  text-align: center;
-  font-size: large;
-}
-
-.teammember {
-  text-align: center;
-  font-size: larger;
-  border: solid black 1px;
-  padding: 5px;
-  margin: 5px;
-}
-
-.app {
-  position: relative;
-}
-
-.checkResultText {
-  text-align: center;
-  font-size: medium;
+  margin-top: 10%;
+  box-shadow: inset 0 0 3.5rem rgba(64, 38, 38, 0.4);
 }
 
 #confirmPopup {
   visibility: hidden;
+  color:white;
   text-align: center;
   display: inline-block;
   cursor: pointer;
@@ -213,22 +112,23 @@ th {
   z-index: 10;
   border: none;
   border-radius: 10px;
-  background-color: rgba(100, 100, 100, 0.9);
+  background-color: rgba(80, 81, 109, 0.9);
   padding: 2%;
 }
 
-#datenschutz {
-  margin: 2%;
-  padding: 1%;
-  font-size: large;
-  display: inline-block;
+#popup {
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .loader {
   text-align: center;
   display: inline-block;
-  border: 3px solid #f3f3f3; /* Light grey */
-  border-top: 3px solid #666d72; /* Blue */
+  border: 3px solid #f3f3f3;
+  /* Light grey */
+  border-top: 3px solid #666d72;
+  /* Blue */
   border-radius: 50%;
   width: 20px;
   height: 20px;
@@ -237,10 +137,88 @@ th {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-select{
-  margin: 5%;
+#confirms{
+  width: 100%;
+}
+
+.checkResult{
+  width: 20px;
+  height: 20px;
+}
+
+.checkResultText{
+  font-size: larger;
+  left: -5%;
+  position: relative;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(179, 20, 20);
+  -webkit-transition: .1s;
+  transition: .1s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .1s;
+  transition: .1s;
+}
+
+input:checked + .slider {
+  background-color: rgb(62, 199, 74);
+}
+
+input:focus + .slider {
+  /* on tap */
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }

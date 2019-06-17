@@ -36,51 +36,75 @@
     <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/main_page.css">
+    <link rel="stylesheet" type="text/css" href="css/leaderboard.css">
+    <link rel="stylesheet" type="text/css" href="css/game.css">
+    <link rel="stylesheet" type="text/css" href="css/profile.css">
+    <link rel="stylesheet" type="text/css" href="css/friends.css">
     <script type="text/javascript" src="js/jquery-2.x.min.js"></script>
     <script type="text/javascript" src="js/jquery.mobile.custom.min.js"></script>
-    <script src="js/md5.min.js"></script>
+    <script type="text/javascript" src="js/md5.min.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
+    <script type="text/javascript" src="./js/game.js"></script>
+    <script type="text/javascript" src="./js/profile.js"></script>
+    <script type="text/javascript" src="./js/friends.js"></script>
     <title>BeerKing</title>
 </head>
 
 <body onload="openTab(null, 'leaderboard');" class="body_bg">
+    <div class="heading">
+    </div>
     <div id="confirmPopup">
         <table id="confirms"></table>
-        <button id="popup" class="new_game" onclick="confirmResults(event)">Bestaetigen</button>
+        <button id="popup" class="btn_style" onclick="confirmResults(event)">Bestaetigen</button>
     </div>
-    <div class="app">
+    <div class="app mainapp">
         <!-- Tab links -->
         <div class="tab">
             <button id="tab0" class="tablinks" onclick="openTab(event, 'leaderboard')">Leaderboard</button>
             <button id="tab1" class="tablinks" onclick="openTab(event, 'game')">Spiel</button>
             <button id="tab2" class="tablinks" onclick="openTab(event, 'profile')">Profil</button>
+            <button id="tab3" class="tablinks" onclick="openTab(event, 'friends')">Freunde</button>
+        </div>
+
+        <!-- Tab content -->
+        <div id="friends" class="tabcontent">
+            <div>
+                <input type="text" id="username" width="50%"/>
+                <button id="addfriend" class="btn_style" onclick="addFriend()">Neue Freunde</button>
+            </div>
+            <div id="friend_list">
+                <div class="loader" id="loader_friend"></div>
+            </div>
         </div>
 
         <!-- Tab content -->
         <div id="leaderboard" class="tabcontent">
-            <table id="leaderboard_table" class="leaderboard">
-            <div class="loader" id="loader_leaderboard"></div>
+            <table class="leaderboard">
+                <thead id="leaderboard_header">
+                </thead>
+                <tbody id="leaderboard_table">
+                </tbody>
             </table>
+            <div class="loader" id="loader_leaderboard"></div>
         </div>
 
         <div id="game" class="tabcontent">
             <div id="start_game">
-                <button class="new_game" type="button" onclick="new_game(event, 1)">1 vs. 1</button>
-                <button class="new_game" type="button" onclick="new_game(event, 2)">2 vs. 2</button>
+                <button class="btn_style" type="button" onclick="startNewGame(event, 1)">1 vs. 1</button>
+                <button class="btn_style" type="button" onclick="startNewGame(event, 2)">2 vs. 2</button>
             </div>
             <div id="team">
             </div>
             <div id="active_game">
                 <span style="color:black;font-size: larger">Gewinner: </span>
-                <select style="font-size: larger" id="select_winner" onchange="if (this.selectedIndex) check_winner();">
-                        <option disabled selected value> -- Wähle den Sieger -- </option>
-                        <option value="0">Mein Team</option>
-                        <option value="1">Gegner Team</option>
+                <select style="font-size: larger" id="select_winner"
+                    onchange="if (this.selectedIndex) onWinnerSelected();">
+                    <option disabled selected value> -- Wähle den Sieger -- </option>
+                    <option value="0">Mein Team</option>
+                    <option value="1">Gegner Team</option>
                 </select>
-                <!--<input id="b1" class="Becher" type="number" placeholder="Deine Becher" onchange="check_winner()" />
-                <input id="b2" class="Becher" type="number" placeholder="Andere Becher" onchange="check_winner()" />-->
                 <p id="winner"></p>
-                <button id="send_winner" class="new_game" type="button" onclick="send_winner()" disabled>Fertig</button>
+                <button id="send_winner" class="btn_style" type="button" onclick="sendWinner()" disabled>Fertig</button>
             </div>
         </div>
 
@@ -88,7 +112,7 @@
             <img id="QRimage" />
             <p id="username_profile" class="info"></p>
             <div id="email_entry"></div>
-            <button class="new_game" type="button" onclick="logout()">Logout</button>
+            <button class="btn_style" type="button" onclick="logout()">Logout</button>
             <a id="datenschutz" href="./datenschutz.html">Datenschutzerklärung</a>
             <div id="match_hist">
                 <h4 class="hist_header">Vergangene Spiele</h4>

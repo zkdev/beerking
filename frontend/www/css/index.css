@@ -1,57 +1,138 @@
-#login_btn {
-    border: solid black 1px;
+.body_bg {
+    font-family: 'Segoe UI';
+    position: fixed;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    background: rgb(0, 142, 224);
+    opacity: 1.0;
+    height: 100%;
+    box-shadow: inset 5px 5px 20vw rgba(0, 0, 0, 0.5);
+}
+
+input {
+    font-family: 'Segoe UI';
+    border-radius: 3px;
+    background-color: rgb(230, 23, 31);
+    color: black;
+}
+
+h1 {
+    color: white;
+    font-weight: normal;
+}
+
+a {
+    border-radius: 3px;
+    padding: 12px;
+    padding-left: 11px;
+    padding-right: 11px;
     margin-top: 5%;
     font-size: large;
+    text-decoration: none;
+    color: white;
+}
+
+#login_btn {
+    color: white;
+    border: solid black 0px;
+    padding: 12px;
+    padding-left: 50px;
+    padding-right: 50px;
+    margin-top: 5%;
+    font-size: large;
+    box-shadow: inset 0 0 3.5rem rgba(64, 38, 38, 0.4);
+}
+
+#login_btn:active {
+    background-color: rgba(156, 0, 5, 0.623);
+    border: 0px;
 }
 
 #create_btn {
-    border: solid black 1px;
+    color: white;
+    border: solid black 0px;
+    padding: 12px;
+    padding-left: 50px;
+    padding-right: 50px;
     margin-top: 5%;
     font-size: large;
+    box-shadow: inset 0 0 3.5rem rgba(64, 38, 38, 0.4);
+}
+
+#create_btn:active {
+    background-color: rgba(156, 0, 5, 0.623);
+    border: 0px;
+}
+
+#new_account {
+    border-radius: 3px;
+    padding: 12px;
+    padding-left: 11px;
+    padding-right: 11px;
+    margin-top: 5%;
+    font-size: large;
+    text-decoration: none;
+    color: white;
+}
+
+#login {
+    margin-top: 40%;
+    position: relative;
+    text-align: center;
 }
 
 .input_field {
     margin: 1%;
     border-style: solid;
-    border-color: darkblue;
-    border-radius: 2px;
+    border-color: rgb(230, 23, 31);
+    border-radius: 5px;
+    background-color: white;
     font-size: large;
     padding: 4px;
 }
 
+.heading {
+    background-image: linear-gradient(top, transparent, rgb(0, 0, 0));
+    width: 100%;
+    position: fixed;
+    height: 30%;
+    top: 0;
+    left: 0;
+}
+
+.app {
+    width: 100%;
+    font-family: 'Segoe UI';
+    position: relative;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+}
+
 .input_field.error{
-    border-color: rgb(240, 106, 106);
-    border-style: dotted;
+    border-color: rgb(0, 0, 0);
 }
 
 .input_field.error:focus{
-    border-style: solid;
-    outline: rgb(240, 106, 106);
-    outline-width: thick;
-    outline-style: solid;
+    border-color: rgb(0, 0, 0);
 }
 
 .input_field:focus {
-    border-color: lightblue;
-    outline: lightblue;
-    outline-width: thick;
-    outline-style: dashed;
-}
-
-#login {
-    margin-top: 10%;
-    text-align: center;
-}
-
-.body_bg {
-    background: url("./../img/wood.png");
-    background-color: white;
-    opacity: 1.0;
+    border-color: rgba(133, 0, 4, 0.514);
 }
 
 .body_bg_invisible {
     opacity: 0.0;
-    background: transparent;
+    background-color: transparent;
+    background-image: url("./../img/preview.png");
+    background-repeat: no-repeat;
+    background-position: 50% 50%; 
+    background-size: 65vw;
 }
 
 #new_account {

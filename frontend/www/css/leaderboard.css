@@ -1,0 +1,83 @@
+.leaderboard {
+    width: 100%;
+    margin-bottom: 5%;
+    border-collapse: collapse;
+}
+
+.leaderboard tbody {
+    overflow-y: scroll;
+    height: 60vh;
+    width: 88vw;
+    display: block;
+}
+
+.leaderboard thead {
+    display: block;
+    width: 88vw;
+    overflow: auto;
+}
+
+#leaderboard {
+    margin-top: 7%;
+    text-align: center;
+}
+
+th {
+    width: 33vw;
+    border-bottom: solid black 2px;
+    color: black;
+    font-size: 18px;
+}
+
+.score {
+    text-align: center;
+    font-weight: bold;
+    width: 33%;
+}
+
+.name {
+    text-align: center;
+    width: 30vw;
+}
+
+.platz {
+    text-align: center;
+    width: 30vw;
+}
+
+
+/*row highlighting*/
+
+.other {
+    background-color: rgba(0, 0, 0, 0.137);
+}
+
+.first {
+    color: rgb(228, 191, 10);
+    font-weight: bold;
+}
+
+.second {
+    color: rgb(196, 196, 196);
+    font-weight: bold;
+}
+
+.third {
+    color: #e29e0c;
+    font-weight: bold;
+}
+
+.ich {
+    border-top: 2px solid rebeccapurple;
+    border-bottom: 2px solid rebeccapurple;
+    background: rgba(102, 51, 153, 0.5);
+}
+
+.friends {
+    background: rgba(255, 255, 124, 0.288);
+}
+
+#popup{    
+    text-align: center;
+    width: 70vw;
+}
