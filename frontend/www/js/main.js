@@ -224,3 +224,7 @@ function createLeaderboard() {
         dataType: "text/json"
     });
 }
+
+function backToGame(){
+    window.location = './main.html';
+}
