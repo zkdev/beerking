@@ -49,6 +49,14 @@
   background-position: center; 
 }
 
+#username_profile {
+  color: black;
+}
+
+#email_entry {
+  color: black;
+}
+
 /* Create an active/current tablink class */
 
 .tab button.active {
