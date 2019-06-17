@@ -81,6 +81,7 @@ function displayTeam(ids, team_size) {
         //start game ajax
         players = ids;
         document.getElementById("active_game").style.visibility = "visible";
+        document.getElementById("active_game").style.marginTop = "-50%";
         document.getElementById("select_winner").options[1].innerText = window.localStorage.getItem("user");
         document.getElementById("select_winner").options[2].innerText = ids[0].name;
 
