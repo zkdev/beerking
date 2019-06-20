@@ -63,10 +63,10 @@ def get_pending_matches(conn, userid):
     return c.execute("""SELECT matchid, host, winner, datetime, username FROM PendingMatches, Users WHERE Users.userid = host AND (enemy1 = ? OR enemy2 = ?);""", (str(userid), str(userid)))
 
 
-def create_user(conn, userid, username, mail, passwd, elo):
+def create_user(conn, userid, username, mail, passwd, elo, create_date):
     c = conn.cursor()
-    c.execute("""INSERT INTO users(userid, username, mail, passwd, elo) 
-        VALUES (?,?,?,?,?);""", (str(userid), str(username), str(mail), str(passwd), int(elo)))
+    c.execute("""INSERT INTO users(userid, username, mail, passwd, elo, create_date) 
+        VALUES (?,?,?,?,?);""", (str(userid), str(username), str(mail), str(passwd), int(elo), str(create_date)))
 
 
 def confirm_match(conn, matchid, host, friend, enemy1, enemy2, winner, date_data):
