@@ -10,6 +10,7 @@ class User(Enum):
     MAIL_UPDATE_FAILED = 5
     ID_EXISTS = 6
     ID_DOESNT_EXIST = 7
+    BANNED = 8
 
 
 class Mail(Enum):
@@ -56,8 +57,9 @@ class Friends(Enum):
     NOT_ADDED = 3
 
 
-class Version(Enum):
-    OUTDATED = 0
+class Error(Enum):
+    VERSION_OUTDATED = 0
+    SECURITY_INCIDENT = 1
 
 
 class Reason(Enum):

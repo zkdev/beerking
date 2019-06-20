@@ -2,7 +2,7 @@ import json
 from flask import request
 
 
-from . import validate, sql, elo, catch, match
+from . import validate, sql, elo, match, log
 from .enums import User, Match, Reason, Friends, UniqueMode
 
 
@@ -23,6 +23,7 @@ def create_user(conn, userid, username, mail, passwd):
 
     if m is User.WILL_CREATE and u is User.WILL_CREATE:
         sql.create_user(conn, userid, username, mail, passwd, elo.initial_elo())
+        log.info('User created. Username: ' + str(username))
         return User.CREATED
     else:
         if m is not User.WILL_CREATE:
