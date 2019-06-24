@@ -3,6 +3,8 @@ from flask import request
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_cors import CORS
+
+
 from . import generator, connection, handlers, match, sql, response, validate, security, log
 from .enums import Match, Auth, Leaderboard, History, User, Error, Friends, UniqueMode
 
@@ -14,7 +16,8 @@ limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["20 per minute", "1 per second"],
 )
-path = '/home/devking/server/database/devking.db'
+path = '/home/beerking/server/database/beerking.db'
+
 
 
 @app.route('/users/login', methods=['GET'])
