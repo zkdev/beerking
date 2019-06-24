@@ -1,3 +1,6 @@
+import datetime
+
+
 from . import sql, generator, elo
 from .enums import Match, Mode
 
@@ -5,7 +8,8 @@ from .enums import Match, Mode
 def start_1v1(conn, host, enemy, winner):
     try:
         matchid = generator.create_uuid(conn)
-        sql.start_1v1(conn, matchid, host, enemy, winner)
+        date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        sql.start_1v1(conn, matchid, host, enemy, winner, date)
         return Match.STARTED
     except:
         return Match.NOT_STARTED
@@ -13,6 +17,7 @@ def start_1v1(conn, host, enemy, winner):
 
 def start_2v2(conn, host, friend, enemy1, enemy2, winner):
     try:
+        date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         matchid = generator.create_uuid(conn)
         sql.start_2v2(conn, matchid, host, friend, enemy1, enemy2, winner)
         return Match.STARTED
