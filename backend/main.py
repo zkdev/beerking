@@ -82,14 +82,17 @@ def router_update_mail():
     if not security.ip_is_banned(conn, ip):
         if not security.user_is_banned(conn, username):
             if security.is_no_sql_injection(arr):
-                if correct_version:
+                if security.is_no_rdp_attempt(request):
+                    if correct_version:
 
-                    r = handlers.update_mail(conn, username, passwd, mail)
-                    connection.kill(conn)
-                    return response.build(r)
+                        r = handlers.update_mail(conn, username, passwd, mail)
+                        connection.kill(conn)
+                        return response.build(r)
 
+                    else:
+                        return response.build(Error.VERSION_OUTDATED)
                 else:
-                    return response.build(Error.VERSION_OUTDATED)
+                    return response.build(Error.SECURITY_INCIDENT)
             else:
                 return response.build(Error.SECURITY_INCIDENT)
         else:
@@ -117,22 +120,25 @@ def router_auth():
     if not security.ip_is_banned(conn, ip):
         if not security.user_is_banned(conn, username):
             if security.is_no_sql_injection(arr):
-                if correct_version:
+                if security.is_no_rdp_attempt(request):
+                    if correct_version:
 
-                    conn = connection.create(path)
-                    if validate.catch_empty_auth(username, passwd):
-                        connection.kill(conn)
-                        return response.build(Auth.FAILED)
-                    if handlers.auth(conn, username, passwd):
-                        p = sql.get_profile(conn, username, passwd).fetchall()
-                        connection.kill(conn)
-                        return response.build(Auth.SUCCESSFUL, rs=p)
+                        conn = connection.create(path)
+                        if validate.catch_empty_auth(username, passwd):
+                            connection.kill(conn)
+                            return response.build(Auth.FAILED)
+                        if handlers.auth(conn, username, passwd):
+                            p = sql.get_profile(conn, username, passwd).fetchall()
+                            connection.kill(conn)
+                            return response.build(Auth.SUCCESSFUL, rs=p)
+                        else:
+                            connection.kill(conn)
+                            return response.build(Auth.FAILED, server_message='Nickname oder Passwort ist falsch.')
+
                     else:
-                        connection.kill(conn)
-                        return response.build(Auth.FAILED, server_message='Nickname oder Passwort ist falsch.')
-
+                        return response.build(Error.VERSION_OUTDATED)
                 else:
-                    return response.build(Error.VERSION_OUTDATED)
+                    return response.build(Error.SECURITY_INCIDENT)
             else:
                 return response.build(Error.SECURITY_INCIDENT)
         else:
@@ -160,15 +166,18 @@ def router_start_1v1():
 
     if not security.ip_is_banned(conn, ip):
         if security.is_no_sql_injection(arr):
-            if correct_version:
+            if security.is_no_rdp_attempt(request):
+                if correct_version:
 
-                conn = connection.create(path)
-                r = match.start_1v1(conn, host, enemy, winner)
-                connection.kill(conn)
-                return response.build(r)
+                    conn = connection.create(path)
+                    r = match.start_1v1(conn, host, enemy, winner)
+                    connection.kill(conn)
+                    return response.build(r)
 
+                else:
+                    return response.build(Error.VERSION_OUTDATED)
             else:
-                return response.build(Error.VERSION_OUTDATED)
+                return response.build(Error.SECURITY_INCIDENT)
         else:
             return response.build(Error.SECURITY_INCIDENT)
     else:
@@ -196,15 +205,18 @@ def router_start_2v2():
 
     if not security.ip_is_banned(conn, ip):
         if security.is_no_sql_injection(arr):
-            if correct_version:
+            if security.is_no_rdp_attempt(request):
+                if correct_version:
 
-                conn = connection.create(path)
-                r = match.start_2v2(conn, host, friend, enemy1, enemy2, winner)
-                connection.kill(conn)
-                return response.build(r)
+                    conn = connection.create(path)
+                    r = match.start_2v2(conn, host, friend, enemy1, enemy2, winner)
+                    connection.kill(conn)
+                    return response.build(r)
 
+                else:
+                    return response.build(Error.VERSION_OUTDATED)
             else:
-                return response.build(Error.VERSION_OUTDATED)
+                return response.build(Error.SECURITY_INCIDENT)
         else:
             return response.build(Error.SECURITY_INCIDENT)
     else:
@@ -230,15 +242,18 @@ def router_get_pending_matches():
     if not security.ip_is_banned(conn, ip):
         if not security.user_is_banned(conn, username):
             if security.is_no_sql_injection(arr):
-                if correct_version:
+                if security.is_no_rdp_attempt(request):
+                    if correct_version:
 
-                    conn = connection.create(path)
-                    ja = match.get_pending_matches(conn, userid)
-                    connection.kill(conn)
-                    return response.build(Match.RECEIVED, ja)
+                        conn = connection.create(path)
+                        ja = match.get_pending_matches(conn, userid)
+                        connection.kill(conn)
+                        return response.build(Match.RECEIVED, ja)
 
+                    else:
+                        return response.build(Error.VERSION_OUTDATED)
                 else:
-                    return response.build(Error.VERSION_OUTDATED)
+                    return response.build(Error.SECURITY_INCIDENT)
             else:
                 return response.build(Error.SECURITY_INCIDENT)
         else:
@@ -266,16 +281,19 @@ def router_confirm_match():
     if not security.ip_is_banned(conn, ip):
         if not security.user_is_banned(conn, username):
             if security.is_no_sql_injection(arr):
-                if correct_version:
+                if security.is_no_rdp_attempt(request):
+                    if correct_version:
 
-                    conn = connection.create(path)
-                    if handlers.auth(conn, username, passwd):
-                        r = handlers.confirm_match(conn)
-                    connection.kill(conn)
-                    return response.build(r)
+                        conn = connection.create(path)
+                        if handlers.auth(conn, username, passwd):
+                            r = handlers.confirm_match(conn)
+                        connection.kill(conn)
+                        return response.build(r)
 
+                    else:
+                        return response.build(Error.VERSION_OUTDATED)
                 else:
-                    return response.build(Error.VERSION_OUTDATED)
+                    return response.build(Error.SECURITY_INCIDENT)
             else:
                 return response.build(Error.SECURITY_INCIDENT)
         else:
@@ -303,14 +321,17 @@ def router_get_leaderboard():
     if not security.ip_is_banned(conn, ip):
         if not security.user_is_banned(conn, username):
             if security.is_no_sql_injection(arr):
-                if correct_version:
+                if security.is_no_rdp_attempt(request):
+                    if correct_version:
 
-                    conn = connection.create(path)
-                    arr = handlers.leaderboard(conn, userid)
-                    return response.build(Leaderboard.RETRIEVED, arr)
+                        conn = connection.create(path)
+                        arr = handlers.leaderboard(conn, userid)
+                        return response.build(Leaderboard.RETRIEVED, arr)
 
+                    else:
+                        return response.build(Error.VERSION_OUTDATED)
                 else:
-                    return response.build(Error.VERSION_OUTDATED)
+                    return response.build(Error.SECURITY_INCIDENT)
             else:
                 return response.build(Error.SECURITY_INCIDENT)
         else:
@@ -338,16 +359,19 @@ def router_get_user_history():
     if not security.ip_is_banned(conn, ip):
         if not security.user_is_banned(conn, username):
             if security.is_no_sql_injection(arr):
-                if correct_version:
+                if security.is_no_rdp_attempt(request):
+                    if correct_version:
 
-                    conn = connection.create(path)
-                    if handlers.auth(conn, username, passwd):
-                        h = handlers.user_history(conn, username)
-                        connection.kill(conn)
-                        return response.build(History.RETRIEVED, h)
+                        conn = connection.create(path)
+                        if handlers.auth(conn, username, passwd):
+                            h = handlers.user_history(conn, username)
+                            connection.kill(conn)
+                            return response.build(History.RETRIEVED, h)
 
+                    else:
+                        return response.build(Error.VERSION_OUTDATED)
                 else:
-                    return response.build(Error.VERSION_OUTDATED)
+                    return response.build(Error.SECURITY_INCIDENT)
             else:
                 return response.build(Error.SECURITY_INCIDENT)
         else:
@@ -373,18 +397,21 @@ def router_check_if_userid_exists():
 
     if not security.ip_is_banned(conn, ip):
         if security.is_no_sql_injection(arr):
-            if correct_version:
+            if security.is_no_rdp_attempt(request):
+                if correct_version:
 
-                conn = connection.create(path)
-                if not validate.is_unique(conn, UniqueMode.USER_ID, userid):
-                    connection.kill(conn)
-                    return response.build(User.ID_EXISTS)
+                    conn = connection.create(path)
+                    if not validate.is_unique(conn, UniqueMode.USER_ID, userid):
+                        connection.kill(conn)
+                        return response.build(User.ID_EXISTS)
+                    else:
+                        connection.kill(conn)
+                        return response.build(User.ID_DOESNT_EXIST)
+
                 else:
-                    connection.kill(conn)
-                    return response.build(User.ID_DOESNT_EXIST)
-
+                    return response.build(Error.VERSION_OUTDATED)
             else:
-                return response.build(Error.VERSION_OUTDATED)
+                return response.build(Error.SECURITY_INCIDENT)
         else:
             return response.build(Error.SECURITY_INCIDENT)
     else:
@@ -410,15 +437,18 @@ def router_get_friends():
     if not security.ip_is_banned(conn, ip):
         if not security.user_is_banned(conn, username):
             if security.is_no_sql_injection(arr):
-                if correct_version:
+                if security.is_no_rdp_attempt(request):
+                    if correct_version:
 
-                    conn = connection.create(path)
-                    fl = sql.get_friends(conn, userid).fetchall()
-                    connection.kill(conn)
-                    return response.build(Friends.RETRIEVED, fl)
+                        conn = connection.create(path)
+                        fl = sql.get_friends(conn, userid).fetchall()
+                        connection.kill(conn)
+                        return response.build(Friends.RETRIEVED, fl)
 
+                    else:
+                        return response.build(Error.VERSION_OUTDATED)
                 else:
-                    return response.build(Error.VERSION_OUTDATED)
+                    return response.build(Error.SECURITY_INCIDENT)
             else:
                 return response.build(Error.SECURITY_INCIDENT)
         else:
@@ -447,15 +477,18 @@ def router_add_friend():
     if not security.ip_is_banned(conn, ip):
         if not security.user_is_banned(conn, username):
             if security.is_no_sql_injection(arr):
-                if correct_version:
+                if security.is_no_rdp_attempt(request):
+                    if correct_version:
 
-                    conn = connection.create(path)
-                    r = handlers.add_friend(conn, userid, friendname)
-                    connection.kill(conn)
-                    return response.build(r)
+                        conn = connection.create(path)
+                        r = handlers.add_friend(conn, userid, friendname)
+                        connection.kill(conn)
+                        return response.build(r)
 
+                    else:
+                        return response.build(Error.VERSION_OUTDATED)
                 else:
-                    return response.build(Error.VERSION_OUTDATED)
+                    return response.build(Error.SECURITY_INCIDENT)
             else:
                 return response.build(Error.SECURITY_INCIDENT)
         else:
@@ -484,15 +517,18 @@ def router_remove_friend():
     if not security.ip_is_banned(conn, ip):
         if not security.user_is_banned(conn, username):
             if security.is_no_sql_injection(arr):
-                if correct_version:
+                if security.is_no_rdp_attempt(request):
+                    if correct_version:
 
-                    conn = connection.create(path)
-                    handlers.remove_friend(conn, userid, friendname)
-                    connection.kill(conn)
-                    return response.build(Friends.REMOVED)
+                        conn = connection.create(path)
+                        handlers.remove_friend(conn, userid, friendname)
+                        connection.kill(conn)
+                        return response.build(Friends.REMOVED)
 
+                    else:
+                        return response.build(Error.VERSION_OUTDATED)
                 else:
-                    return response.build(Error.VERSION_OUTDATED)
+                    return response.build(Error.SECURITY_INCIDENT)
             else:
                 return response.build(Error.SECURITY_INCIDENT)
         else:
