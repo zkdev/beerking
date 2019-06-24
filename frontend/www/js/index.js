@@ -71,7 +71,7 @@ function hash(text) {
 
 function onBackPressed() {
     //if scanner active -> close
-    window.QRScanner.getStatus((status) => {
+    window.QRScanner.getStatus(function(status){
         if (status.scanning === true) {
             window.QRScanner.cancelScan();
             window.location = "./main.html";

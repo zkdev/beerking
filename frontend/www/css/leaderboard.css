@@ -23,7 +23,6 @@
 }
 
 th {
-    width: 33vw;
     border-bottom: solid black 2px;
     color: black;
     font-size: 18px;
@@ -32,7 +31,7 @@ th {
 .score {
     text-align: center;
     font-weight: bold;
-    width: 33%;
+    width: 28vw;
 }
 
 .name {

@@ -1,5 +1,5 @@
 function generateProfile(profile) {
-    cordova.plugins.qrcodejs.encode('TEXT_TYPE', profile.uuid + "[&!?]" + profile.user, (base64EncodedQRImage) => {
+    cordova.plugins.qrcodejs.encode('TEXT_TYPE', profile.uuid + "[&!?]" + profile.user, function(base64EncodedQRImage){
         document.getElementById("QRimage").src = base64EncodedQRImage;
         document.getElementById("username_profile").innerText = profile.user;
 
@@ -10,11 +10,11 @@ function generateProfile(profile) {
             profile.mail = "";
         }
         var div = document.createElement('div');
-        div.innerHTML = "<input id='input_email' type='email' placeholder='Hinterlege deine Email' class='info' value='" + profile.mail + "'/><input type='button' value='Speichern' id='save_btn' class='btn_style' onclick='save()'/>";
+        div.innerHTML = "<input id='input_email' type='email' placeholder='Hinterlege deine Email' class='info' value='" + profile.email + "'/><input type='button' value='Speichern' id='save_btn' class='btn_style' onclick='save()'/>";
         document.getElementById("email_entry").appendChild(div);
         
         gerneratePersonalHistory();
-    }, (err) => {
+    }, function(err){
         console.error('QRCodeJS error is ' + JSON.stringify(err));
     });
 }
@@ -33,6 +33,9 @@ function save() {
             SpinnerPlugin.activityStop();
             if (JSON.parse(response.responseText).mail_updated === true) {
                 window.localStorage.setItem("email", profile.mail);
+                workOn("profile", undefined);
+            }else{
+                navigator.notification.alert("Diese Email existiert nicht", null, "Fehler");
                 workOn("profile", undefined);
             }
         }

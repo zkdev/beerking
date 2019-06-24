@@ -8,6 +8,12 @@ function createAccount() {
         document.getElementById("pswd2").value = "";
         return;
     }
+    if(document.getElementById("user").value.trim().includes(";") || document.getElementById("user").value.trim().includes("'") || document.getElementById("user").value.trim().includes("%") || document.getElementById("user").value.trim().includes("--")){
+        navigator.notification.alert("Der Nickname darf keines der folgenden Zeichen erhalten: ; ' -- %", null, "Nicht erlaubte Eingabe", "Ok")
+        document.getElementById("user").value = "";
+        return;
+    }
+
     if (hash(document.getElementById("pswd2").value) !== account_setting.passwd) {
         //Different passwords
         document.getElementById("pswd2").className += " error";
