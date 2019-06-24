@@ -42,15 +42,18 @@ def router_create_user():
     if not security.ip_is_banned(conn, ip):
         if not security.user_is_banned(conn, username):
             if security.is_no_sql_injection(arr):
-                if correct_version:
+                if security.is_no_rdp_attempt(request):
+                    if correct_version:
 
-                    userid = generator.create_uuid(conn)
-                    r = handlers.create_user(conn, userid, username, mail, passwd)
-                    connection.kill(conn)
-                    return response.build(r)
+                        userid = generator.create_uuid(conn)
+                        r = handlers.create_user(conn, userid, username, mail, passwd)
+                        connection.kill(conn)
+                        return response.build(r)
 
+                    else:
+                        return response.build(Error.VERSION_OUTDATED)
                 else:
-                    return response.build(Error.VERSION_OUTDATED)
+                    return response.build(Error.SECURITY_INCIDENT)
             else:
                 return response.build(Error.SECURITY_INCIDENT)
         else:

@@ -19,6 +19,16 @@ def is_no_sql_injection(arr):
     return True
 
 
+def is_no_rdp_attempt(request):
+    if request.form.get('mstshash') is None:
+        return True
+    else:
+        log.security('Possible RDP attempt detected. Trigger: ' + str(request.form.get('mstshash')))
+        log.security('IP ban executed. IP: ' + str(request.remote_addr))
+        ban_ip(request.remote_addr, 'Possible RDP attempt detected, keyword: ' + str(request.form.get('mstshash')))
+        return False
+
+
 def ban_user(userid, period, reason, ip):
     conn = connection.create(path)
     banid = generator.create_uuid(conn)
