@@ -2,9 +2,9 @@
 ![Version](https://img.shields.io/badge/version-1.2.0-brightgreen.svg?style=flat-square)
 ![Version](https://img.shields.io/badge/release-release-green.svg?style=flat-square)
 
-# Information
-Productive:  zeggiedieziege.de:7000
-Development: zeggiedieziege.de:5000
+# Connection Information
+**Productive**:  shared.zeggiedieziege.de:7000<br>
+**Development**: shared.zeggiedieziege.de:5000 (currently disabled)<br>
 
 # Backend Documentation
 | router | method | header | param | body | description | response |
