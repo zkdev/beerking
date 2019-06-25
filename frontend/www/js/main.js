@@ -228,3 +228,7 @@ function createLeaderboard() {
 function backToGame(){
     window.location = './main.html';
 }
+
+function share(content){
+    navigator.share(content,"Teile das Beerking-Erlebnis", "text/plain");
+}

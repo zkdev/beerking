@@ -17,9 +17,9 @@
  * under the License.
  */
 var port = 7000;
-var base_url = "http://zeggiedieziege.de:" + port;
+var base_url = "http://shared.zeggiedieziege.de:" + port;
 var options = { dimBackground: true };
-var version = 120;
+var version = 121;
 
 $.ajaxSetup({
     beforeSend: function(xhr) {

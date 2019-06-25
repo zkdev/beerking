@@ -35,7 +35,7 @@
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0">    
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/main_page.css">
     <link rel="stylesheet" type="text/css" href="css/leaderboard.css">
@@ -69,7 +69,7 @@
         <!-- Tab content -->
         <div id="friends" class="tabcontent">
             <div>
-                <input type="text" id="username" width="50%"/>
+                <input type="text" id="username" width="50%" placeholder="Füge einen Freund hinzu"/>
                 <button id="addfriend" class="btn_style" onclick="addFriend()">Hinzufügen</button>
             </div>
             <div id="friend_list">
@@ -91,9 +91,19 @@
         <div id="game" class="tabcontent">
             <div id="start_game">
                 <button class="btn_style" type="button" onclick="startNewGame(event, 1)">1 vs. 1</button>
-                <button style="margin-bottom: 10%" class="btn_style" type="button" onclick="startNewGame(event, 2)">2 vs. 2</button>
+                <button style="margin-bottom: 10%" class="btn_style" type="button" onclick="startNewGame(event, 2)">2
+                    vs. 2</button>
                 <br>
-                <a href="./anleitung.html">Wie funktioniert das ?</a>
+                <a href="./anleitung.html" style="text-decoration: underline">Wie funktioniert das ?</a>
+                <br />
+                <div class="link">
+                    <a href="https://play.google.com/store/apps/details?id=dev.zeekay.beerking" style="text-decoration: underline">Play Store App</a>
+                    <button class="btn_style btn_share" type="button" onclick="share('Lade dir die BeerkingApp auf dein Handy herunter: https:\/\/play.google.com/store/apps/details?id=dev.zeekay.beerking')">Teilen ...</button>
+                </div>
+                <div class="link" style="margin-top: 2%">
+                    <a href="http://shared.zeggiedieziege.de/beerking" style="text-decoration: underline">Mobile Website z.B. für IOS</a>
+                    <button class="btn_style btn_share" type="button" onclick="share('Besuche Beerking im Web auf der mobilen Website: http:\/\/shared.zeggiedieziege.de/beerking')">Teilen ...</button>
+                </div>
             </div>
             <div id="team">
             </div>
@@ -106,7 +116,8 @@
                     <option value="1">Gegner Team</option>
                 </select>
                 <p id="winner"></p>
-                <button id="send_winner" style="width:80vw" class="btn_style" type="button" onclick="sendWinner()" disabled>Ergebnis abschicken</button>
+                <button id="send_winner" style="width:80vw" class="btn_style" type="button" onclick="sendWinner()"
+                    disabled>Ergebnis abschicken</button>
             </div>
         </div>
 

@@ -23,7 +23,10 @@ function onLogin() {
                 window.location = './main.html';
             } else {
                 // wrong email / wrong username
-                navigator.notification.alert(resp.server_message, null, "Login fehlgeschlagen", "Ok");
+                if(resp.status === "" || resp.status === null || resp.status === undefined || resp.status.startsWith('<')){
+                    resp.status = "Server gerade nicht erreichbar, versuchen sie es spaeter erneut oder laden sie die neuste Version aus dem Appstore herunter";
+                }
+                navigator.notification.alert(resp.status, null, "Login fehlgeschlagen", "Ok");
                 document.getElementById("pswd").value = "";
                 document.getElementById("user").value = "";
 

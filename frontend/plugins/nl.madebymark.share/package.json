@@ -1,0 +1,47 @@
+{
+  "_from": "cordova-plugin-share",
+  "_id": "cordova-plugin-share@0.1.3",
+  "_inBundle": false,
+  "_integrity": "sha1-eMdQnn1x5MSmpLFaACP5oLuKn88=",
+  "_location": "/cordova-plugin-share",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-plugin-share",
+    "name": "cordova-plugin-share",
+    "escapedName": "cordova-plugin-share",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-share/-/cordova-plugin-share-0.1.3.tgz",
+  "_shasum": "78c7509e7d71e4c4a6a4b15a0023f9a0bb8a9fcf",
+  "_spec": "cordova-plugin-share",
+  "_where": "C:\\Users\\d073556\\Desktop\\github-projects\\beerking\\frontend",
+  "author": {
+    "name": "Mark Marijnissen"
+  },
+  "bugs": {
+    "url": "https://github.com/markmarijnissen/cordova-plugin-share/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Cordova plugin for Native Sharing",
+  "homepage": "https://github.com/markmarijnissen/cordova-plugin-share#readme",
+  "license": "MIT",
+  "main": "index.js",
+  "name": "cordova-plugin-share",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markmarijnissen/cordova-plugin-share.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.1.3"
+}
