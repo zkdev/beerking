@@ -2,8 +2,9 @@ var players;
 
 
 function startNewGame(event, team_size) {
-    document.getElementsByTagName("body")[0].className = "body_bg_invisible";
+    document.getElementById("cont").style.display = "none";
     document.getElementById("start_game").style.visibility = "hidden";
+    document.getElementById("preview").className = "body_bg_invisible";
     team_size = team_size * 2 - 1;
     var ids = [];
     try {
@@ -49,7 +50,8 @@ function startNewGame(event, team_size) {
         window.QRScanner.show();
     } catch (e) {
         document.getElementById("start_game").style.visibility = "visible";
-        document.getElementsByTagName("body")[0].className = "body_bg";
+        document.getElementById("cont").style.display = "block";
+        document.getElementById("preview").className = "";
     }
 }
 

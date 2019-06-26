@@ -1,9 +1,10 @@
 html {
   -webkit-user-select: none;
+  overflow: hidden;
 }
 
 .mainapp {
-  color: #f2f2f2;
+  color: white;
 }
 
 /* Tabs style */
@@ -108,7 +109,7 @@ html {
 }
 
 .link{
-  margin-top: 30%;
+  margin-top: 20%;
 }
 
 #confirmPopup {
