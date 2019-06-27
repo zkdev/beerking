@@ -36,6 +36,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="shortcut icon" type="image/x-icon" href="img/beeicon.png">
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/main_page.css">
     <link rel="stylesheet" type="text/css" href="css/leaderboard.css">
@@ -49,6 +51,7 @@
     <script type="text/javascript" src="./js/game.js"></script>
     <script type="text/javascript" src="./js/profile.js"></script>
     <script type="text/javascript" src="./js/friends.js"></script>
+	<script src="./js/scanner.js"></script>
     <title>BeerKing</title>
 </head>
 
@@ -106,7 +109,7 @@
                             ...</button>
                     </div>
                     <div class="link" style="margin-top: 2%">
-                        <a href="http://shared.zeggiedieziege.de/beerking" style="text-decoration: underline">Mobile
+                        <a href="https://shared.zeggiedieziege.de:80/beerking" style="text-decoration: underline">Mobile
                             Website z.B. für IOS</a>
                         <button class="btn_style btn_share" type="button"
                             onclick="share('Besuche Beerking im Web auf der mobilen Website: http:\/\/shared.zeggiedieziege.de/beerking')">Teilen
@@ -156,7 +159,9 @@
         </div>
     </div>
 
-    <div id="preview"></div>
+    <div id="preview" class="invis">
+    </div>
+    <video id="prev" class="invis"></video>
 </body>
 
 </html>

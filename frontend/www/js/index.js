@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var port = 7000;
-var base_url = "http://shared.zeggiedieziege.de:" + port;
+var port = 5000;
+var base_url = "https://shared.zeggiedieziege.de:" + port;
 var options = { dimBackground: true };
-var version = 121;
+var version = 122;
 
 $.ajaxSetup({
     beforeSend: function(xhr) {
@@ -71,13 +71,9 @@ function hash(text) {
 
 function onBackPressed() {
     //if scanner active -> close
-    window.QRScanner.getStatus(function(status){
-        if (status.scanning === true) {
-            window.QRScanner.cancelScan();
+    if(document.getElementById("prev").className === "active")
             window.location = "./main.html";
         }
-    })
-}
 
 function keyLogin(e) {
     if (e.keyCode  == 13) {
