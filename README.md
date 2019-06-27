@@ -1,10 +1,12 @@
 # BeerKing
-![Version](https://img.shields.io/badge/version-1.2.0-brightgreen.svg?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.2.1-brightgreen.svg?style=flat-square)
 ![Version](https://img.shields.io/badge/release-release-green.svg?style=flat-square)
 
 # Connection Information
-**Productive**:  shared.zeggiedieziege.de:7000<br>
-**Development**: shared.zeggiedieziege.de:5000 (currently disabled)<br>
+**Frontend SSL**:  shared.zeggiedieziege.de:80<br>
+**Frontend NO SSL**: shared.zeggiedieziege.de:81<br>
+**Backend SSL**:  shared.zeggiedieziege.de:5000<br>
+**Backend NO SSL**: shared.zeggiedieziege.de:7000<br>
 
 # Backend Documentation
 | router | method | header | param | body | description | response |
