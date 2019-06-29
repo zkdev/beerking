@@ -19,7 +19,7 @@
 var port = 5000;
 var base_url = "https://shared.zeggiedieziege.de:" + port;
 var options = { dimBackground: true };
-var version = 122;
+var version = 125;
 
 $.ajaxSetup({
     beforeSend: function(xhr) {
