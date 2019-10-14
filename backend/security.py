@@ -13,7 +13,7 @@ def is_no_sql_injection(arr):
     identifier = ['DROP', 'TABLE', 'SELECT', 'INSERT', 'UPDATE', 'DELETE', ';', '%', '--', '\'']
     for value in arr:
         for element in identifier:
-            if element in value:
+            if element == value:
                 log.security('Possible SQL injection detected. Trigger: ' + str(element))
                 log.security('IP ban executed. IP: ' + str(arr[0]))
                 ban_ip(arr[0], 'Possible SQL injection detected, keyword: ' + str(element))

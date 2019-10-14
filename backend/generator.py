@@ -1,7 +1,7 @@
 import uuid as uuid4
 
-from . import validate
-from .enums import UniqueMode
+import validate
+from enums import UniqueMode
 
 
 def create_uuid(conn):
