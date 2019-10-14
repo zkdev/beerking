@@ -1,7 +1,7 @@
 import json
 
 from flask import Response
-from .enums import Auth, User, Match, Error, Leaderboard, History, Friends, Reason
+from enums import Auth, User, Match, Error, Leaderboard, History, Friends, Reason
 
 
 def build(enum, rs=None, server_message="This version is under development and might be unstable."):

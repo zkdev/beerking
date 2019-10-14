@@ -5,8 +5,14 @@ from flask_limiter.util import get_remote_address
 from flask_cors import CORS
 
 
-from . import generator, connection, handlers, match, sql, response, validate, security, log
-from .enums import Match, Auth, Leaderboard, History, User, Error, Friends, UniqueMode
+import generator
+import connection
+import match
+import sql
+import response
+import validate
+import security
+from enums import Match, Auth, Leaderboard, History, User, Error, Friends, UniqueMode
 
 
 app = Flask(__name__)

@@ -1,8 +1,10 @@
 import datetime
 
 
-from . import connection, log, sql, generator
-
+import connection
+import log
+import sql
+import generator
 
 path = '/home/devking/server/database/devking.db'
 

@@ -1,8 +1,8 @@
 import datetime
 
 
-from . import log
-from .enums import UniqueMode
+import log
+from enums import UniqueMode
 
 
 def get_match(conn, matchid):

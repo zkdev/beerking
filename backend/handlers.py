@@ -2,7 +2,7 @@ import json, datetime
 from flask import request
 
 
-from . import validate, sql, elo, match, log
+from . import validate, sql, elo_handler, match, log
 from .enums import User, Match, Reason, Friends, UniqueMode
 
 
@@ -22,7 +22,7 @@ def create_user(conn, userid, username, mail, passwd):
         u = User.WONT_CREATE
 
     if m is User.WILL_CREATE and u is User.WILL_CREATE:
-        sql.create_user(conn, userid, username, mail, passwd, elo.initial_elo(), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        sql.create_user(conn, userid, username, mail, passwd, elo_handler.initial_elo(), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         log.info('User created. Username: ' + str(username))
         return User.CREATED
     else:

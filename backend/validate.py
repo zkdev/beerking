@@ -1,6 +1,7 @@
 from validate_email import validate_email
-from . import sql
-from .enums import UniqueMode
+
+import sql
+from enums import UniqueMode
 
 
 version = 120
