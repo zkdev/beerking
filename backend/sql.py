@@ -1,6 +1,3 @@
-import datetime
-
-
 import log
 from enums import UniqueMode
 
@@ -66,7 +63,7 @@ def get_pending_matches(conn, userid):
 def create_user(conn, userid, username, mail, passwd, elo, create_date):
     c = conn.cursor()
     c.execute("""INSERT INTO users(userid, username, mail, passwd, elo, create_date) 
-        VALUES (?,?,?,?,?);""", (str(userid), str(username), str(mail), str(passwd), int(elo), str(create_date)))
+        VALUES (?,?,?,?,?,?);""", (str(userid), str(username), str(mail), str(passwd), int(elo), str(create_date)))
 
 
 def confirm_match(conn, matchid, host, friend, enemy1, enemy2, winner, date_data):

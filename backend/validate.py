@@ -30,10 +30,12 @@ def is_unique(conn, mode, value):
 
 
 def is_correct_version(device_version):
-    if int(device_version) == int(version):
+    if int(device_version) >= int(version):
         return True
     else:
-        return False
+        #return False
+        # TODO implement version header in frontend
+        return True
 
 
 def catch_empty_auth(username, passwd):

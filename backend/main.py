@@ -7,6 +7,7 @@ from flask_cors import CORS
 
 import generator
 import connection
+import handlers
 import match
 import sql
 import response
@@ -22,7 +23,7 @@ limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["20 per minute", "1 per second"],
 )
-path = '/home/beerking/server/database/beerking.db'
+path = '/database/beerking.db'
 
 
 
