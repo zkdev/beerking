@@ -33,9 +33,7 @@ def is_correct_version(device_version):
     if int(device_version) >= int(version):
         return True
     else:
-        #return False
-        # TODO implement version header in frontend
-        return True
+        return False
 
 
 def catch_empty_auth(username, passwd):
