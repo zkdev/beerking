@@ -1,9 +1,12 @@
 import json, datetime
 from flask import request
 
-
-from . import validate, sql, elo_handler, match, log
-from .enums import User, Match, Reason, Friends, UniqueMode
+import validate
+import sql
+import elo_handler
+import match
+import log
+from enums import User, Match, Reason, Friends, UniqueMode
 
 
 def create_user(conn, userid, username, mail, passwd):

@@ -12,6 +12,7 @@ import match
 import sql
 import response
 import validate
+import log
 import security
 from enums import Match, Auth, Leaderboard, History, User, Error, Friends, UniqueMode
 
@@ -29,6 +30,7 @@ path = '/database/beerking.db'
 
 @app.route('/users/login', methods=['GET'])
 def router_login_user():
+    log.error("Outdated app version tried to login.", ip=request.remote_addr)
     return response.build(Error.VERSION_OUTDATED)
 
 
@@ -40,6 +42,7 @@ def router_create_user():
     try:
         correct_version = validate.is_correct_version(device_version)
     except TypeError:
+        log.error("Outdated app version tried to create a user.", ip=request.remote_addr)
         return response.build(Error.VERSION_OUTDATED)
 
     ip = request.remote_addr
@@ -50,17 +53,19 @@ def router_create_user():
     conn = connection.create(path)
 
     if not security.ip_is_banned(conn, ip):
-        if not security.user_is_banned(conn, username):
-            if security.is_no_sql_injection(arr):
-                if security.is_no_rdp_attempt(request):
+        if not security.user_is_banned(conn, username, request.remote_addr):
+            if security.is_no_sql_injection(arr, request.remote_addr):
+                if security.is_no_rdp_attempt(request, request.remote_addr):
                     if correct_version:
 
                         userid = generator.create_uuid(conn)
                         r = handlers.create_user(conn, userid, username, mail, passwd)
                         connection.kill(conn)
+                        log.info("User created ({})".format(username), ip=request.remote_addr)
                         return response.build(r)
 
                     else:
+                        log.error("Outdated app version tried to create a user.", ip=request.remote_addr)
                         return response.build(Error.VERSION_OUTDATED)
                 else:
                     return response.build(Error.SECURITY_INCIDENT)
@@ -80,6 +85,7 @@ def router_update_mail():
     try:
         correct_version = validate.is_correct_version(device_version)
     except TypeError:
+        log.error("Outdated app version tried to update mail.", ip=request.remote_addr)
         return response.build(Error.VERSION_OUTDATED)
 
     ip = request.remote_addr
@@ -90,13 +96,14 @@ def router_update_mail():
     conn = connection.create(path)
 
     if not security.ip_is_banned(conn, ip):
-        if not security.user_is_banned(conn, username):
-            if security.is_no_sql_injection(arr):
-                if security.is_no_rdp_attempt(request):
+        if not security.user_is_banned(conn, username, request.remote_addr):
+            if security.is_no_sql_injection(arr, request.remote_addr):
+                if security.is_no_rdp_attempt(request, request.remote_addr):
                     if correct_version:
 
                         r = handlers.update_mail(conn, username, passwd, mail)
                         connection.kill(conn)
+                        log.info("User changed email adresse ({0} to {1})".format(username, mail), ip=request.remote_addr)
                         return response.build(r)
 
                     else:
@@ -119,6 +126,7 @@ def router_auth():
     try:
         correct_version = validate.is_correct_version(device_version)
     except TypeError:
+        log.error("Outdated app version tried to get profile.", ip=request.remote_addr)
         return response.build(Error.VERSION_OUTDATED)
 
     ip = request.remote_addr
@@ -128,21 +136,24 @@ def router_auth():
     conn = connection.create(path)
 
     if not security.ip_is_banned(conn, ip):
-        if not security.user_is_banned(conn, username):
-            if security.is_no_sql_injection(arr):
-                if security.is_no_rdp_attempt(request):
+        if not security.user_is_banned(conn, username, request.remote_addr):
+            if security.is_no_sql_injection(arr, request.remote_addr):
+                if security.is_no_rdp_attempt(request, request.remote_addr):
                     if correct_version:
 
                         conn = connection.create(path)
                         if validate.catch_empty_auth(username, passwd):
                             connection.kill(conn)
+                            log.security("Auth failed, it was empty ({}).".format(username), ip=request.remote_addr)
                             return response.build(Auth.FAILED)
                         if handlers.auth(conn, username, passwd):
                             p = sql.get_profile(conn, username, passwd).fetchall()
+                            log.info("User retrieved profile ({}).".format(username), ip=request.remote_addr)
                             connection.kill(conn)
                             return response.build(Auth.SUCCESSFUL, rs=p)
                         else:
                             connection.kill(conn)
+                            log.security("Auth failed ({}).".format(username), ip=request.remote_addr)
                             return response.build(Auth.FAILED, server_message='Nickname oder Passwort ist falsch.')
 
                     else:
@@ -165,6 +176,7 @@ def router_start_1v1():
     try:
         correct_version = validate.is_correct_version(device_version)
     except TypeError:
+        log.error("Outdated app version tried to start 1v1.", ip=request.remote_addr)
         return response.build(Error.VERSION_OUTDATED)
 
     ip = request.remote_addr
@@ -175,13 +187,14 @@ def router_start_1v1():
     conn = connection.create(path)
 
     if not security.ip_is_banned(conn, ip):
-        if security.is_no_sql_injection(arr):
-            if security.is_no_rdp_attempt(request):
+        if security.is_no_sql_injection(arr, request.remote_addr):
+            if security.is_no_rdp_attempt(request, request.remote_addr):
                 if correct_version:
 
                     conn = connection.create(path)
                     r = match.start_1v1(conn, host, enemy, winner)
                     connection.kill(conn)
+                    log.info("{0} started match vs {1}.".format(host, enemy), ip=request.remote_addr)
                     return response.build(r)
 
                 else:
@@ -202,6 +215,7 @@ def router_start_2v2():
     try:
         correct_version = validate.is_correct_version(device_version)
     except TypeError:
+        log.error("Outdated app version tried to start 2v2.", ip=request.remote_addr)
         return response.build(Error.VERSION_OUTDATED)
 
     ip = request.remote_addr
@@ -214,13 +228,14 @@ def router_start_2v2():
     conn = connection.create(path)
 
     if not security.ip_is_banned(conn, ip):
-        if security.is_no_sql_injection(arr):
-            if security.is_no_rdp_attempt(request):
+        if security.is_no_sql_injection(arr, request.remote_addr):
+            if security.is_no_rdp_attempt(request, request.remote_addr):
                 if correct_version:
 
                     conn = connection.create(path)
                     r = match.start_2v2(conn, host, friend, enemy1, enemy2, winner)
                     connection.kill(conn)
+                    log.info("{0} and {1} started 2v2 vs {2} and {3}.".format(host, friend, enemy1, enemy2), ip=request.remote_addr)
                     return response.build(r)
 
                 else:
@@ -241,6 +256,7 @@ def router_get_pending_matches():
     try:
         correct_version = validate.is_correct_version(device_version)
     except TypeError:
+        log.error("Outdated app version tried to retrieve pending matches.", ip=request.remote_addr)
         return response.build(Error.VERSION_OUTDATED)
 
     ip = request.remote_addr
@@ -250,14 +266,15 @@ def router_get_pending_matches():
     username = sql.get_username(conn, userid).fetchone()[0]
 
     if not security.ip_is_banned(conn, ip):
-        if not security.user_is_banned(conn, username):
-            if security.is_no_sql_injection(arr):
-                if security.is_no_rdp_attempt(request):
+        if not security.user_is_banned(conn, username, request.remote_addr):
+            if security.is_no_sql_injection(arr, request.remote_addr):
+                if security.is_no_rdp_attempt(request, request.remote_addr):
                     if correct_version:
 
                         conn = connection.create(path)
                         ja = match.get_pending_matches(conn, userid)
                         connection.kill(conn)
+                        log.info("{} retrieved pending matches.".format(username), ip=request.remote_addr)
                         return response.build(Match.RECEIVED, ja)
 
                     else:
@@ -280,6 +297,7 @@ def router_confirm_match():
     try:
         correct_version = validate.is_correct_version(device_version)
     except TypeError:
+        log.error("Outdated app version tried to confirm match.", ip=request.remote_addr)
         return response.build(Error.VERSION_OUTDATED)
 
     ip = request.remote_addr
@@ -289,14 +307,19 @@ def router_confirm_match():
     conn = connection.create(path)
 
     if not security.ip_is_banned(conn, ip):
-        if not security.user_is_banned(conn, username):
-            if security.is_no_sql_injection(arr):
-                if security.is_no_rdp_attempt(request):
+        if not security.user_is_banned(conn, username, request.remote_addr):
+            if security.is_no_sql_injection(arr, request.remote_addr):
+                if security.is_no_rdp_attempt(request, request.remote_addr):
                     if correct_version:
 
                         conn = connection.create(path)
                         if handlers.auth(conn, username, passwd):
                             r = handlers.confirm_match(conn)
+                            log.info("{} confirmed match.".format(username), ip=request.remote_addr)
+                        else:
+                            log.security("Auth failed at match confirmation ({}).".format(username), ip=request.remote_addr)
+                            connection.kill(conn)
+                            return response.build(Auth.FAILED)
                         connection.kill(conn)
                         return response.build(r)
 
@@ -320,6 +343,7 @@ def router_get_leaderboard():
     try:
         correct_version = validate.is_correct_version(device_version)
     except TypeError:
+        log.error("Outdated app version tried to get leaderboard.", ip=request.remote_addr)
         return response.build(Error.VERSION_OUTDATED)
 
     ip = request.remote_addr
@@ -329,13 +353,14 @@ def router_get_leaderboard():
     username = sql.get_username(conn, userid).fetchone()[0]
 
     if not security.ip_is_banned(conn, ip):
-        if not security.user_is_banned(conn, username):
-            if security.is_no_sql_injection(arr):
-                if security.is_no_rdp_attempt(request):
+        if not security.user_is_banned(conn, username, request.remote_addr):
+            if security.is_no_sql_injection(arr, request.remote_addr):
+                if security.is_no_rdp_attempt(request, request.remote_addr):
                     if correct_version:
 
                         conn = connection.create(path)
                         arr = handlers.leaderboard(conn, userid)
+                        log.info("{} retrieved leaderboard.".format(username), ip=request.remote_addr)
                         return response.build(Leaderboard.RETRIEVED, arr)
 
                     else:
@@ -358,6 +383,7 @@ def router_get_user_history():
     try:
         correct_version = validate.is_correct_version(device_version)
     except TypeError:
+        log.error("Outdated app version tried to retrieve history.", ip=request.remote_addr)
         return response.build(Error.VERSION_OUTDATED)
 
     ip = request.remote_addr
@@ -367,16 +393,22 @@ def router_get_user_history():
     conn = connection.create(path)
 
     if not security.ip_is_banned(conn, ip):
-        if not security.user_is_banned(conn, username):
-            if security.is_no_sql_injection(arr):
-                if security.is_no_rdp_attempt(request):
+        if not security.user_is_banned(conn, username, request.remote_addr):
+            if security.is_no_sql_injection(arr, request.remote_addr):
+                if security.is_no_rdp_attempt(request, request.remote_addr):
                     if correct_version:
 
                         conn = connection.create(path)
                         if handlers.auth(conn, username, passwd):
                             h = handlers.user_history(conn, username)
                             connection.kill(conn)
+                            log.info("{} retrieved history.".format(username), ip=request.remote_addr)
                             return response.build(History.RETRIEVED, h)
+                        else:
+                            log.security("Auth failed at history retrieving ({}).".format(username),
+                                         ip=request.remote_addr)
+                            connection.kill(conn)
+                            return response.build(Auth.FAILED)
 
                     else:
                         return response.build(Error.VERSION_OUTDATED)
@@ -399,6 +431,7 @@ def router_check_if_userid_exists():
     try:
         correct_version = validate.is_correct_version(device_version)
     except TypeError:
+        log.error("Outdated app version tried to check userid.", ip=request.remote_addr)
         return response.build(Error.VERSION_OUTDATED)
 
     ip = request.remote_addr
@@ -406,16 +439,17 @@ def router_check_if_userid_exists():
     conn = connection.create(path)
 
     if not security.ip_is_banned(conn, ip):
-        if security.is_no_sql_injection(arr):
-            if security.is_no_rdp_attempt(request):
+        if security.is_no_sql_injection(arr, request.remote_addr):
+            if security.is_no_rdp_attempt(request, request.remote_addr):
                 if correct_version:
 
                     conn = connection.create(path)
                     if not validate.is_unique(conn, UniqueMode.USER_ID, userid):
                         connection.kill(conn)
+                        log.info("{} exists.".format(userid), ip=request.remote_addr)
                         return response.build(User.ID_EXISTS)
                     else:
-                        connection.kill(conn)
+                        log.info("{} doesn't exist.".format(userid), ip=request.remote_addr)
                         return response.build(User.ID_DOESNT_EXIST)
 
                 else:
@@ -436,6 +470,7 @@ def router_get_friends():
     try:
         correct_version = validate.is_correct_version(device_version)
     except TypeError:
+        log.error("Outdated app version tried to retrieve friends.", ip=request.remote_addr)
         return response.build(Error.VERSION_OUTDATED)
 
     ip = request.remote_addr
@@ -445,14 +480,15 @@ def router_get_friends():
     username = sql.get_username(conn, userid).fetchone()[0]
 
     if not security.ip_is_banned(conn, ip):
-        if not security.user_is_banned(conn, username):
-            if security.is_no_sql_injection(arr):
-                if security.is_no_rdp_attempt(request):
+        if not security.user_is_banned(conn, username, request.remote_addr):
+            if security.is_no_sql_injection(arr, request.remote_addr):
+                if security.is_no_rdp_attempt(request, request.remote_addr):
                     if correct_version:
 
                         conn = connection.create(path)
                         fl = sql.get_friends(conn, userid).fetchall()
                         connection.kill(conn)
+                        log.info("{} retrieved friends.".format(username), ip=request.remote_addr)
                         return response.build(Friends.RETRIEVED, fl)
 
                     else:
@@ -475,6 +511,7 @@ def router_add_friend():
     try:
         correct_version = validate.is_correct_version(device_version)
     except TypeError:
+        log.error("Outdated app version tried to add friends.", ip=request.remote_addr)
         return response.build(Error.VERSION_OUTDATED)
 
     ip = request.remote_addr
@@ -485,14 +522,15 @@ def router_add_friend():
     username = sql.get_username(conn, userid).fetchone()[0]
 
     if not security.ip_is_banned(conn, ip):
-        if not security.user_is_banned(conn, username):
-            if security.is_no_sql_injection(arr):
-                if security.is_no_rdp_attempt(request):
+        if not security.user_is_banned(conn, username, request.remote_addr):
+            if security.is_no_sql_injection(arr, request.remote_addr):
+                if security.is_no_rdp_attempt(request, request.remote_addr):
                     if correct_version:
 
                         conn = connection.create(path)
                         r = handlers.add_friend(conn, userid, friendname)
                         connection.kill(conn)
+                        log.info("{0} added {1} as friend.".format(username, friendname), ip=request.remote_addr)
                         return response.build(r)
 
                     else:
@@ -515,6 +553,7 @@ def router_remove_friend():
     try:
         correct_version = validate.is_correct_version(device_version)
     except TypeError:
+        log.error("Outdated app version tried to remove friend.", ip=request.remote_addr)
         return response.build(Error.VERSION_OUTDATED)
 
     ip = request.remote_addr
@@ -525,14 +564,15 @@ def router_remove_friend():
     username = sql.get_username(conn, userid).fetchone()[0]
 
     if not security.ip_is_banned(conn, ip):
-        if not security.user_is_banned(conn, username):
-            if security.is_no_sql_injection(arr):
-                if security.is_no_rdp_attempt(request):
+        if not security.user_is_banned(conn, username, request.remote_addr):
+            if security.is_no_sql_injection(arr, request.remote_addr):
+                if security.is_no_rdp_attempt(request, request.remote_addr):
                     if correct_version:
 
                         conn = connection.create(path)
                         handlers.remove_friend(conn, userid, friendname)
                         connection.kill(conn)
+                        log.info("{0} removed {1} as friend.".format(username, friendname), ip=request.remote_addr)
                         return response.build(Friends.REMOVED)
 
                     else:

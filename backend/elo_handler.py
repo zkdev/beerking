@@ -1,4 +1,4 @@
-from elo_handler import rate_1vs1 as elo_1v1
+from elo import rate_1vs1 as elo_1v1
 
 
 def initial_elo():

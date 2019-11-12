@@ -1,4 +1,3 @@
-import log
 from enums import UniqueMode
 
 
@@ -164,11 +163,11 @@ def user_is_banned(conn, username):
 
 def ban_user(conn, banid, userid, ban_date, ban_expire, reason, ip):
     c = conn.cursor()
-    log.info('banid: ' + str(banid))
-    log.info('userid: ' + str(userid))
-    log.info('ban_date: ' + str(ban_date))
-    log.info('ban_expire: ' + str(ban_expire))
-    log.info('reason: ' + str(reason))
-    log.info('ip: ' + str(ip))
     c.execute("""INSERT INTO Bans_User (banid, userid, ban_date, ban_expire, reason, ip) 
             VALUES (?,?,?,?,?,?);""", (str(banid), str(userid), str(ban_date), str(ban_expire), str(reason), str(ip)))
+
+
+def insert_log(conn, loglevel, date, msg, ip):
+    c = conn.cursor()
+    c.execute("""INSERT INTO log (loglevel, date, msg, ip) 
+        VALUES (?,?,?,?);""", (str(loglevel), str(date), str(msg), str(ip)))
