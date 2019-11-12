@@ -171,3 +171,9 @@ def insert_log(conn, loglevel, date, msg, ip):
     c = conn.cursor()
     c.execute("""INSERT INTO log (loglevel, date, msg, ip) 
         VALUES (?,?,?,?);""", (str(loglevel), str(date), str(msg), str(ip)))
+
+
+def count_matches(conn, userid):
+    c = conn.cursor()
+    return c.execute("""SELECT COUNT(*) FROM Matches WHERE host = ? OR friend = ? OR enemy1 = ? OR enemy2 = ?;""",
+                     (str(userid), str(userid), str(userid), str(userid)))

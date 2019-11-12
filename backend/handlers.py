@@ -6,6 +6,7 @@ import sql
 import elo_handler
 import match
 import log
+import handlers
 from enums import User, Match, Reason, Friends, UniqueMode
 
 
@@ -78,7 +79,12 @@ def leaderboard(conn, userid):
             isfriend = True
         else:
             isfriend = False
-        arr.append({"username": username, "elo": elo, "isfriend": isfriend})
+        userid = sql.get_userid(conn, username).fetchall()[0][0]
+        matches = sql.count_matches(conn, userid).fetchall()[0][0]
+        display = False
+        if matches >= 1:
+            display = True
+        arr.append({"username": username, "elo": elo, "isfriend": isfriend, "display": display})
     return arr
 
 
