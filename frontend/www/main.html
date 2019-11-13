@@ -90,31 +90,22 @@
                     <tbody id="leaderboard_table">
                     </tbody>
                 </table>
+                <div class="infoGames">Spieler werden erst ab einem Spiel im Leaderboard angezeigt</div>
                 <div class="loader" id="loader_leaderboard"></div>
             </div>
 
             <div id="game" class="tabcontent">
                 <div id="start_game">
                     <button class="btn_style" type="button" onclick="startNewGame(event, 1)">1 vs. 1</button>
-                    <button style="margin-bottom: 10%" class="btn_style" type="button"
-                        onclick="startNewGame(event, 2)">2
-                        vs. 2</button>
+                    <button style="margin-bottom: 10%" class="btn_style" type="button" onclick="startNewGame(event, 2)">
+                        2 vs. 2
+                    </button>
                     <br>
-                    <a href="./anleitung.html" style="text-decoration: underline">Wie funktioniert das ?</a>
+                        <a href="./anleitung.html" style="text-decoration: underline">Wie funktioniert das ?</a>
                     <br />
                     <div class="link">
                         <a href="https://play.google.com/store/apps/details?id=dev.zeekay.beerking"
                             style="text-decoration: underline">Play Store App</a>
-                        <button class="btn_style btn_share" type="button"
-                            onclick="share('Lade dir die BeerkingApp auf dein Handy herunter: https:\/\/play.google.com/store/apps/details?id=dev.zeekay.beerking')">Teilen
-                            ...</button>
-                    </div>
-                    <div class="link" style="margin-top: 2%">
-                        <a href="https://shared.zeggiedieziege.de:80/beerking" style="text-decoration: underline">Mobile
-                            Website z.B. für IOS</a>
-                        <button class="btn_style btn_share" type="button"
-                            onclick="share('Besuche Beerking im Web auf der mobilen Website: http:\/\/shared.zeggiedieziege.de/beerking')">Teilen
-                            ...</button>
                     </div>
                 </div>
                 <div id="team">
@@ -161,6 +152,8 @@
     </div>
 
     <div id="preview" class="invis">
+        <button class="switchBtn btn_style" onclick="switchCamera()">Kamera wechseln</button>
+        <button class="btn_style exitBtn" onclick="hideCameraViews();scanner.stop()">X</button>
     </div>
     <video id="prev" class="invis" playsinline autoplay></video>
 </body>

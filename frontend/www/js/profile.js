@@ -1,41 +1,41 @@
 function generateProfile(profile) {
-    cordova.plugins.qrcodejs.encode('TEXT_TYPE', profile.uuid + "[&!?]" + profile.user, function(base64EncodedQRImage){
-        document.getElementById("QRimage").src = base64EncodedQRImage;
-        document.getElementById("username_profile").innerText = profile.user;
+    cordova.plugins.qrcodejs.encode('TEXT_TYPE', profile.uuid + "[&!?]" + profile.user, function (base64EncodedQRImage) {
+        $("#QRimage").attr("src", base64EncodedQRImage);
+        $("#username_profile").text(profile.user);
 
         if (document.getElementById("email_entry").lastChild !== null) {
             document.getElementById("email_entry").removeChild(document.getElementById("email_entry").lastChild);
         }
-        if(profile.mail === null || profile.mail === undefined){
+        if (profile.mail === null || profile.mail === undefined) {
             profile.mail = "";
         }
         var div = document.createElement('div');
         div.innerHTML = "<input id='input_email' type='email' placeholder='Hinterlege deine Email' class='info' value='" + profile.email + "'/><input type='button' value='Speichern' id='save_btn' class='btn_style' onclick='save()'/>";
         document.getElementById("email_entry").appendChild(div);
-        
+
         gerneratePersonalHistory();
-    }, function(err){
-        console.error('QRCodeJS error is ' + JSON.stringify(err));
-    });
+    }, function (err) { });
 }
 
 function save() {
-    var profile = {};
-    profile.username = window.localStorage.getItem("user");
-    profile.mail = document.getElementById("input_email").value;
-    profile.passwd = window.localStorage.getItem("password");
-    SpinnerPlugin.activityStart("Speichern...", options);
+    var profile = {
+        username: window.localStorage.getItem("user"),
+        mail: $("#input_email").val(),
+        passwd: window.localStorage.getItem("password")
+    };
+
+    SpinnerPlugin.activityStart(i18n.save, options);
     $.ajax({
         type: "PUT",
         url: base_url + "/user/mail/update",
         data: profile,
-        complete: function(response) {
+        complete: function (response) {
             SpinnerPlugin.activityStop();
             if (JSON.parse(response.responseText).mail_updated === true) {
                 window.localStorage.setItem("email", profile.mail);
                 workOn("profile", undefined);
-            }else{
-                navigator.notification.alert("Diese Email existiert nicht", null, "Fehler");
+            } else {
+                navigator.notification.alert(i18n.profile_not_existing_mail, null, i18n.login_alert_button);
                 workOn("profile", undefined);
             }
         }
@@ -43,21 +43,18 @@ function save() {
 }
 
 function gerneratePersonalHistory() {
-    var request = {};
-    request.username = window.localStorage.getItem("user");
-    request.passwd = window.localStorage.getItem("password");
+    var request = {
+        username: window.localStorage.getItem("user"),
+        passwd: window.localStorage.getItem("password")
+    }
     $.ajax({
         type: "GET",
         url: base_url + "/user/history",
         data: request,
-        complete: function(response) {
+        complete: function (response) {
             function formatString(date) {
                 function double(min) {
-                    if (min < 10) {
-                        return "0" + min;
-                    } else {
-                        return "" + min;
-                    }
+                    return (min < 10) ? ("0" + min) : ("" + min);
                 }
                 return "" + double(date.getDate()) + "." + double(date.getMonth() + 1) + " " + double(date.getHours()) + ":" + double(date.getMinutes());
             }
@@ -68,12 +65,11 @@ function gerneratePersonalHistory() {
                 table.removeChild(child);
                 child = table.lastElementChild;
             }
-            for (var i = 0; i < games.length; i++) {
+            for (let i = 0; i < games.length; i++) {
                 var game = document.createElement("DIV");
-                var text = "";
                 var user = window.localStorage.getItem("user");
                 if (games[i].friend === user || games[i].host === user) {
-                    var text = formatString(new Date(games[i].datetime)) + " : ";
+                    let text = formatString(new Date(games[i].datetime.replace(/-/g, "/"))) + " : ";
                     if (games[i].enemy2 === null) {
                         text += games[i].enemy1;
                     } else {
@@ -85,7 +81,7 @@ function gerneratePersonalHistory() {
                         game.innerHTML = "<p class='loss'>" + text + "</p>";
                     }
                 } else {
-                    var text = formatString(new Date(games[i].datetime)) + " : ";
+                    let text = formatString(new Date(games[i].datetime.replace(/-/g, "/"))) + " : ";
                     if (games[i].friend === null) {
                         text += games[i].host;
                     } else {

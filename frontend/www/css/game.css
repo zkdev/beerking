@@ -52,3 +52,19 @@
 select {
     margin: 5%;
 }
+
+.switchBtn{
+    bottom: 5vh;
+    position: absolute;
+    left: 50vw;
+    transform: translate(-50%, 0);
+}
+
+.exitBtn{
+    position: absolute;
+    top: 2%;
+    right: 2%;
+    margin-top: 0;
+    width: 10%;
+    padding: 2px;
+}

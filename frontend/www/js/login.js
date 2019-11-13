@@ -1,21 +1,21 @@
 function onLogin() {
     //Summit login values
-    var login_values = {};
-    login_values.passwd = hash(document.getElementById("pswd").value);
-    login_values.username = document.getElementById("user").value.trim();
+    let login_values = {
+        passwd: hash($("#pswd").val()),
+        username: $("#user").val().trim()
+    }
 
-    SpinnerPlugin.activityStart("Einloggen...", options);
+    SpinnerPlugin.activityStart(i18n.login_message, options);
     $.ajax({
         type: "GET",
         url: base_url + "/user/profile",
         data: login_values,
         complete: function (response) {
             SpinnerPlugin.activityStop();
-            var resp = "";
             try {
-                resp = JSON.parse(response.responseText);
+                var resp = JSON.parse(response.responseText);
             } catch (e) { }
-            if (resp.auth === true) {
+            if (resp && resp.auth === true) {
                 window.localStorage.setItem("password", login_values.passwd);
                 window.localStorage.setItem("user", login_values.username);
                 window.localStorage.setItem("uuid", resp.userid);
@@ -23,16 +23,13 @@ function onLogin() {
                 window.location = './main.html';
             } else {
                 // wrong email / wrong username
-                if (resp.status === "" || resp.status === null || resp.status === undefined || resp.status.startsWith('<')) {
-                    text = "Server gerade nicht erreichbar, versuchen sie es spaeter erneut oder laden sie die neuste Version aus dem Appstore herunter";
-                    navigator.notification.alert(text, null, "Login fehlgeschlagen", "Ok");
-                    document.getElementById("pswd").value = "";
-                    document.getElementById("user").value = "";
+                if (!resp || resp.server_message === "" || resp.server_message === null || resp.server_message === undefined || resp.server_message.startsWith('<')) {
+                    navigator.notification.alert(i18n.login_alert_standard_message, null, i18n.login_alert_heading, i18n.login_alert_button);
                 } else {
-                    navigator.notification.alert(resp.status, "Login fehlgeschlagen", "Ok");
-                    document.getElementById("pswd").value = "";
-                    document.getElementById("user").value = "";
+                    navigator.notification.alert(resp.server_message, i18n.login_alert_heading, i18n.login_alert_button);
                 }
+                $("#pswd").val("");
+                $("#user").val("");
             }
         },
         dataType: "text/json"

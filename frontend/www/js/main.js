@@ -1,23 +1,16 @@
 function openTab(evt, tabname) {
-    // Declare all variables
     var i, tabcontent, tablinks;
-
-    // Get all elements with class="tabcontent" and hide them
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
     }
-
-    // Get all elements with class="tablinks" and remove the class "active"
     tablinks = document.getElementsByClassName("tablinks");
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
-
-    // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(tabname).style.display = "block";
+    $("#" + tabname).css("display", "block");
     if (evt === null) {
-        document.getElementById("tab0").className += " active";
+        $("#tab0").attr("class", "tablinks active");
     } else {
         evt.currentTarget.className += " active";
     }
@@ -36,10 +29,11 @@ function workOn(tabname, param) {
         if (param !== undefined) {
             generateProfile(param)
         } else {
-            var profile = {};
-            profile.email = window.localStorage.getItem("email");
-            profile.user = window.localStorage.getItem("user");
-            profile.uuid = window.localStorage.getItem("uuid");
+            var profile = {
+                email: window.localStorage.getItem("email"),
+                user: window.localStorage.getItem("user"),
+                uuid: window.localStorage.getItem("uuid")
+            };
             generateProfile(profile);
         }
     }
@@ -88,26 +82,27 @@ var deactivated = false;
 var confirms;
 
 function confirmResults() {
-    var request = {}
-    request.username = window.localStorage.getItem("user");
-    request.passwd = window.localStorage.getItem("password");
     for (var i = 0; i < confirms.length; i++) {
         confirms[i].confirmed = document.getElementById("check" + i).checked;
     }
-    request.matches = JSON.stringify(confirms);
+    var request = {
+        username: window.localStorage.getItem("user"),
+        passwd: window.localStorage.getItem("password"),
+        matches: JSON.stringify(confirms)
+    }
     confirms = [];
-    SpinnerPlugin.activityStart("Schicke Bestaetigungen...", options);
+    SpinnerPlugin.activityStart(i18n.send_accept, options);
     $.ajax({
         type: "POST",
         url: base_url + "/match/confirm",
         data: request,
-        complete: function(response) {
+        complete: function (response) {
             SpinnerPlugin.activityStop();
-            document.getElementById("confirmPopup").style.visibility = "hidden";
-            document.getElementById("tab0").disabled = false;
-            document.getElementById("tab1").disabled = false;
-            document.getElementById("tab2").disabled = false;
-            document.getElementById("tab3").disabled = false;
+            $("#confirmPopup").css("visibility", "hidden");
+            $("#tab0").attr("disabled", "false");
+            $("#tab1").attr("disabled", "false");
+            $("#tab2").attr("disabled", "false");
+            $("#tab3").attr("disabled", "false");
             deactivated = false;
             workOn("leaderboard", undefined);
         }
@@ -115,28 +110,29 @@ function confirmResults() {
 }
 
 function createConfirmPopup() {
-    var request = {};
-    request.userid = window.localStorage.getItem("uuid");
+    var request = {
+        userid: window.localStorage.getItem("uuid")
+    };
     $.ajax({
         type: "GET",
         url: base_url + "/match/pending",
         data: request,
-        complete: function(response) {
+        complete: function (response) {
             confirms = JSON.parse(response.responseText).matches;
             if (confirms.length !== 0) {
                 deactivated = true;
-                document.getElementById("confirmPopup").style.visibility = "visible";
-                document.getElementById("tab0").disabled = true;
-                document.getElementById("tab1").disabled = true;
-                document.getElementById("tab2").disabled = true;
-                document.getElementById("tab3").disabled = true;
+                $("#confirmPopup").css("visibility", "visible");
+                $("#tab0").attr("disabled", "true");
+                $("#tab1").attr("disabled", "true");
+                $("#tab2").attr("disabled", "true");
+                $("#tab3").attr("disabled", "true");
                 var table = document.getElementById("confirms");
                 var child = table.lastElementChild;
                 while (child) {
                     table.removeChild(child);
                     child = table.lastElementChild;
                 }
-                for (var i = 0; i < confirms.length; i++) {
+                for (let i = 0; i < confirms.length; i++) {
                     var row = table.insertRow(-1);
                     var checker = row.insertCell(0);
                     checker.innerHTML = "<label class='switch'><input id='check" + i + "' class='checkResult' type='checkbox' checked='true'/><span class='slider round'></span></label>";
@@ -154,13 +150,14 @@ function createConfirmPopup() {
 }
 
 function createLeaderboard() {
-    var request = {};
-    request.userid = window.localStorage.getItem("uuid");
+    var request = {
+        userid: window.localStorage.getItem("uuid")
+    }
     $.ajax({
         type: "GET",
         url: base_url + "/leaderboard",
         data: request,
-        complete: function(response) {
+        complete: function (response) {
             var name = window.localStorage.getItem("user");
             var ind = 0;
             document.getElementById("loader_leaderboard").style.display = "none";
@@ -179,40 +176,42 @@ function createLeaderboard() {
                 leaderboard.removeChild(child);
                 child = leaderboard.lastElementChild;
             }
+            let place = 1;
             for (var i = 0; i < players_leaderboard.length; i++) {
-                var row;
-                if (i < 3) {
-                    row = leaderboard_top.insertRow(-1);
-                } else {
-                    row = leaderboard.insertRow(-1);
-                }
-                if (i == 0) {
-                    row.className = "first";
-                } else if (i == 1) {
-                    row.className = "second";
-                } else if (i == 2) {
-                    row.className = "third";
-                }
-                if ((i + 1) % 2 == 0) {
-                    row.className += " other";
-                }
-                if (players_leaderboard[i].username === window.localStorage.getItem("user")) {
-                    row.className += " ich";
-                }
-                if (players_leaderboard[i].isfriend === true) {
-                    row.className += " friends";
-                }
-                var nr = row.insertCell(0);
-                nr.innerText = "" + (i + 1);
-                var user = row.insertCell(1);
-                var score = row.insertCell(2);
-                user.innerText = players_leaderboard[i].username;
-                score.innerText = players_leaderboard[i].elo;
-                user.className = "name";
-                score.className = "score";
-                nr.className = "platz";
-                if (i > 2 && name === players_leaderboard[i].username) {
-                    ind = i;
+                if(players_leaderboard[i].display === true){
+                    var row;
+                    if (i < 3) {
+                        row = leaderboard_top.insertRow(-1);
+                    } else {
+                        row = leaderboard.insertRow(-1);
+                    }
+                    if (i == 0) {
+                        row.className = "first";
+                    } else if (i == 1) {
+                        row.className = "second";
+                    } else if (i == 2) {
+                        row.className = "third";
+                    }
+                    if ((i + 1) % 2 == 0) {
+                        row.className += " other";
+                    }
+                    if (players_leaderboard[i].username === window.localStorage.getItem("user")) {
+                        row.className += " ich";
+                    }
+                    if (players_leaderboard[i].isfriend === true) {
+                        row.className += " friends";
+                    }
+                    var nr = row.insertCell(0);
+                    nr.innerText = "" + place;
+                    place += 1;
+                    var user = row.insertCell(1);
+                    var score = row.insertCell(2);
+                    user.innerText = players_leaderboard[i].username;
+                    score.innerText = players_leaderboard[i].elo;
+                    user.className = "name"; score.className = "score"; nr.className = "platz";
+                    if (i > 2 && name === players_leaderboard[i].username) {
+                        ind = i;
+                    }
                 }
             }
             var rows = leaderboard.querySelectorAll('tr');
@@ -225,10 +224,10 @@ function createLeaderboard() {
     });
 }
 
-function backToGame(){
+function backToGame() {
     window.location = './main.html';
 }
 
-function share(content){
-    navigator.share(content,"Teile das Beerking-Erlebnis", "text/plain");
+function share(content) {
+    navigator.share(content, i18n.share_header, "text/plain");
 }
