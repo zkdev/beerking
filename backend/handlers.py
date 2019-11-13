@@ -1,9 +1,12 @@
-import json
 from flask import request
 
-
-from . import validate, sql, elo, match
-from .enums import User, Match, Reason, Friends, UniqueMode
+import json
+import datetime
+import validate
+import sql
+import elo_handler
+import match
+from enums import User, Match, Reason, Friends, UniqueMode
 
 
 def create_user(conn, userid, username, mail, passwd):
@@ -22,7 +25,7 @@ def create_user(conn, userid, username, mail, passwd):
         u = User.WONT_CREATE
 
     if m is User.WILL_CREATE and u is User.WILL_CREATE:
-        sql.create_user(conn, userid, username, mail, passwd, elo.initial_elo())
+        sql.create_user(conn, userid, username, mail, passwd, elo_handler.initial_elo(), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         return User.CREATED
     else:
         if m is not User.WILL_CREATE:
@@ -74,7 +77,12 @@ def leaderboard(conn, userid):
             isfriend = True
         else:
             isfriend = False
-        arr.append({"username": username, "elo": elo, "isfriend": isfriend})
+        userid = sql.get_userid(conn, username).fetchall()[0][0]
+        matches = sql.count_matches(conn, userid).fetchall()[0][0]
+        display = False
+        if matches >= 1:
+            display = True
+        arr.append({"username": username, "elo": elo, "isfriend": isfriend, "display": display})
     return arr
 
 

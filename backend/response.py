@@ -1,7 +1,7 @@
 import json
 
 from flask import Response
-from .enums import Auth, User, Match, Version, Leaderboard, History, Friends, Reason
+from enums import Auth, User, Match, Error, Leaderboard, History, Friends, Reason
 
 
 def build(enum, rs=None, server_message="This version is under development and might be unstable."):
@@ -42,7 +42,7 @@ def build(enum, rs=None, server_message="This version is under development and m
     elif enum is Match.NOT_STARTED:
         resp.status_code = 400
         json_obj = {"match_started": False}
-    elif enum is Version.OUTDATED:
+    elif enum is Error.VERSION_OUTDATED:
         resp.status_code = 403
         json_obj = {"outdated_app_version": True, "status": "Du benutzt eine veraltete App Version. "
                                                             "Bitte lade die neuste Version herunter um BeerKing "
@@ -96,6 +96,12 @@ def build(enum, rs=None, server_message="This version is under development and m
     elif enum is Reason.SAME_AS_USER:
         resp.status_code = 400
         json_obj = {"friend_added": False, "friend_equal_user": True}
+    elif enum is Error.SECURITY_INCIDENT:
+        resp.status_code = 401
+        json_obj = {"blocked": True}
+    elif enum is User.BANNED:
+        resp.status_code = 401
+        json_obj = {"banned": True}
     else:
         resp.status_code = 500
 

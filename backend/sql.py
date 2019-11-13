@@ -1,7 +1,4 @@
-import datetime
-
-
-from .enums import UniqueMode
+from enums import UniqueMode
 
 
 def get_match(conn, matchid):
@@ -34,16 +31,14 @@ def remove_pending_match(conn, matchid):
     c.execute("""DELETE FROM PendingMatches WHERE matchid = ?;""", (str(matchid),))
 
 
-def start_1v1(conn, matchid, host, enemy, winner):
+def start_1v1(conn, matchid, host, enemy, winner, date):
     c = conn.cursor()
-    date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return c.execute("""INSERT INTO PendingMatches(matchid, host, enemy1, winner, datetime) 
         VALUES (?,?,?,?,?);""", (str(matchid), str(host), str(enemy), str(winner), str(date)))
 
 
-def start_2v2(conn, matchid, host, friend, enemy1, enemy2, winner):
+def start_2v2(conn, matchid, host, friend, enemy1, enemy2, winner, date):
     c = conn.cursor()
-    date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return c.execute("""INSERT INTO PendingMatches(matchid, host, friend, enemy1, enemy2, winner, datetime) 
         VALUES (?,?,?,?,?,?,?);""", (str(matchid), str(host), str(friend), str(enemy1), str(enemy2),
                                      str(winner), str(date)))
@@ -64,10 +59,10 @@ def get_pending_matches(conn, userid):
     return c.execute("""SELECT matchid, host, winner, datetime, username FROM PendingMatches, Users WHERE Users.userid = host AND (enemy1 = ? OR enemy2 = ?);""", (str(userid), str(userid)))
 
 
-def create_user(conn, userid, username, mail, passwd, elo):
+def create_user(conn, userid, username, mail, passwd, elo, create_date):
     c = conn.cursor()
-    c.execute("""INSERT INTO users(userid, username, mail, passwd, elo) 
-        VALUES (?,?,?,?,?);""", (str(userid), str(username), str(mail), str(passwd), int(elo)))
+    c.execute("""INSERT INTO users(userid, username, mail, passwd, elo, create_date) 
+        VALUES (?,?,?,?,?,?);""", (str(userid), str(username), str(mail), str(passwd), int(elo), str(create_date)))
 
 
 def confirm_match(conn, matchid, host, friend, enemy1, enemy2, winner, date_data):
@@ -148,3 +143,37 @@ def update_elo_history(conn, matchid, host_elo_old, friend_elo_old, enemy1_elo_o
     c.execute("""UPDATE Matches SET host_elo_delta = ?, friend_elo_delta = ?, enemy1_elo_delta = ?, enemy2_elo_delta = ? WHERE matchid = ?;""", (
         int(host_elo_new - host_elo_old), int(friend_elo_new - friend_elo_old),
         int(enemy1_elo_new - enemy1_elo_old), int(enemy2_elo_new - enemy2_elo_old), matchid))
+
+
+def ban_ip(conn, banid, ban_date, reason, ip):
+    c = conn.cursor()
+    c.execute("""INSERT INTO Bans_IP (banid, ban_date, reason, ip) 
+        VALUES (?,?,?,?);""", (str(banid), str(ban_date), str(reason), str(ip)))
+
+
+def ip_is_banned(conn, ip):
+    c = conn.cursor()
+    return c.execute("""SELECT 1 FROM Bans_IP WHERE ip = ?;""", (str(ip),))
+
+
+def user_is_banned(conn, username):
+    c = conn.cursor()
+    return c.execute("""SELECT 1 FROM Bans_User WHERE userid = ?;""", (str(username),))
+
+
+def ban_user(conn, banid, userid, ban_date, ban_expire, reason, ip):
+    c = conn.cursor()
+    c.execute("""INSERT INTO Bans_User (banid, userid, ban_date, ban_expire, reason, ip) 
+            VALUES (?,?,?,?,?,?);""", (str(banid), str(userid), str(ban_date), str(ban_expire), str(reason), str(ip)))
+
+
+def insert_log(conn, loglevel, date, msg, ip):
+    c = conn.cursor()
+    c.execute("""INSERT INTO log (loglevel, date, msg, ip) 
+        VALUES (?,?,?,?);""", (str(loglevel), str(date), str(msg), str(ip)))
+
+
+def count_matches(conn, userid):
+    c = conn.cursor()
+    return c.execute("""SELECT COUNT(*) FROM Matches WHERE host = ? OR friend = ? OR enemy1 = ? OR enemy2 = ?;""",
+                     (str(userid), str(userid), str(userid), str(userid)))

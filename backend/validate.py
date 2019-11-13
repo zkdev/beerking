@@ -1,6 +1,7 @@
 from validate_email import validate_email
-from . import sql
-from .enums import UniqueMode
+
+import sql
+from enums import UniqueMode
 
 
 version = 120
@@ -29,7 +30,7 @@ def is_unique(conn, mode, value):
 
 
 def is_correct_version(device_version):
-    if int(device_version) == int(version):
+    if int(device_version) >= int(version):
         return True
     else:
         return False
