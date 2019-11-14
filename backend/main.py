@@ -34,6 +34,7 @@ def router_login_user():
     return response.build({"outdated_app_version": True,
                         "status": config.text["outdated"]}, statuscode=403)
 
+
 @app.route('/user/create', methods=['POST'])
 @limiter.limit("10 per hour")
 def router_create_user():

@@ -1,4 +1,4 @@
-from werkzeug.wrappers import Request, Response, ResponseStream
+from werkzeug.wrappers import Request
 
 import config
 import validate
@@ -7,7 +7,7 @@ import security
 import connection
 
 
-class middleware():
+class Middleware:
 
     def __init__(self, app):
         self.app = app
@@ -23,10 +23,13 @@ class middleware():
         # create database connection
         conn = connection.create(config.database)
 
+        # extract app_version and request ip
         device_version = request.headers.get('version')
         ip = request.remote_addr
 
+        # suppress references before assigning warnings
         username = ""
+        passwd = ""
         arr = []
 
         # POST
@@ -66,13 +69,13 @@ class middleware():
             return res(environ, start_response)
 
         # sql injection
-        if not security.is_no_sql_injection(arr, request.remote_addr):
+        if security.is_sql_injection(arr, request.remote_addr):
             res = response.build({"status": "banned"}, statuscode=401)
             print("sql injection", flush=True)
             return res(environ, start_response)
 
         # rdp
-        if not security.is_no_rdp_attempt(request, request.remote_addr):
+        if security.is_rdp_attempt(request, request.remote_addr):
             res = response.build({"status": "banned"}, statuscode=401)
             print("rdp attempt", flush=True)
             return res(environ, start_response)
