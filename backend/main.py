@@ -3,7 +3,7 @@ from flask import request
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_cors import CORS
-from middleware import middleware
+from middleware import Middleware
 
 
 import generator
@@ -20,12 +20,19 @@ from enums import UniqueMode
 
 app = Flask(__name__)
 CORS(app)
-app.wsgi_app = middleware(app.wsgi_app)
+app.wsgi_app = Middleware(app.wsgi_app)
 limiter = Limiter(
     app,
     key_func=get_remote_address,
     default_limits=["20 per minute", "1 per second"],
 )
+
+
+@app.route('/status', methods=["GET"])
+@limiter.limit("60 per minute")
+def router_status():
+    log.info("backend status checked", ip=request.remote_addr)
+    return response.build({"status": "available"}, statuscode=200)
 
 
 @app.route('/users/login', methods=['GET'])

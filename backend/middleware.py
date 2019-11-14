@@ -25,6 +25,10 @@ class Middleware:
 
         # extract app_version and request ip
         device_version = request.headers.get('version')
+        try:
+            device_version = int(device_version)
+        except TypeError:
+            device_version = 0
         ip = request.remote_addr
 
         # suppress references before assigning warnings
