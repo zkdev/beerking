@@ -12,15 +12,15 @@ import connection
 import handlers
 import match
 import sql
-import response
+import response as response
 import validate
 import log
-from enums import Match, Auth, Leaderboard, History, User, Error, Friends, UniqueMode
+from enums import UniqueMode
 
 
 app = Flask(__name__)
-app.wsgi_app = middleware(app.wsgi_app)
 CORS(app)
+app.wsgi_app = middleware(app.wsgi_app)
 limiter = Limiter(
     app,
     key_func=get_remote_address,
@@ -31,8 +31,8 @@ limiter = Limiter(
 @app.route('/users/login', methods=['GET'])
 def router_login_user():
     log.error("Outdated app version tried to login.", ip=request.remote_addr)
-    return response.build(Error.VERSION_OUTDATED)
-
+    return response.build({"outdated_app_version": True,
+                        "status": config.text["outdated"]}, statuscode=403)
 
 @app.route('/user/create', methods=['POST'])
 @limiter.limit("10 per hour")
@@ -43,10 +43,10 @@ def router_create_user():
     conn = connection.create(config.database)
 
     userid = generator.create_uuid(conn)
-    r = handlers.create_user(conn, userid, username, mail, passwd)
+    resp = handlers.create_user(conn, userid, username, mail, passwd)
     connection.kill(conn)
     log.info("User created ({})".format(username), ip=request.remote_addr)
-    return response.build(r)
+    return resp
 
 
 @app.route('/user/mail/update', methods=['PUT'])
@@ -56,10 +56,10 @@ def router_update_mail():
     passwd = request.form.get('passwd')
     mail = request.form.get('mail')
     conn = connection.create(config.database)
-    r = handlers.update_mail(conn, username, passwd, mail)
+    resp = handlers.update_mail(conn, username, passwd, mail)
     connection.kill(conn)
     log.info("User changed email adresse ({0} to {1})".format(username, mail), ip=request.remote_addr)
-    return response.build(r)
+    return resp
 
 
 @app.route('/user/profile', methods=['GET'])
@@ -72,16 +72,16 @@ def router_auth():
     if validate.catch_empty_auth(username, passwd):
         connection.kill(conn)
         log.security("Auth failed, it was empty ({}).".format(username), ip=request.remote_addr)
-        return response.build(Auth.FAILED)
+        return response.build({"auth": False}, statuscode=401)
     if handlers.auth(conn, username, passwd):
-        p = sql.get_profile(conn, username, passwd).fetchall()
+        profile = sql.get_profile(conn, username, passwd).fetchall()
         log.info("User retrieved profile ({}).".format(username), ip=request.remote_addr)
         connection.kill(conn)
-        return response.build(Auth.SUCCESSFUL, rs=p)
+        return response.build({"auth": True, "userid": profile[0][0], "mail": profile[0][1]}, statuscode=200)
     else:
         connection.kill(conn)
         log.security("Auth failed ({}).".format(username), ip=request.remote_addr)
-        return response.build(Auth.FAILED, server_message='Nickname oder Passwort ist falsch.')
+        return response.build({"auth": False, "status": config.text["wrong_credentials"]}, statuscode=401)
 
 
 @app.route('/match/1v1', methods=['POST'])
@@ -92,10 +92,10 @@ def router_start_1v1():
     winner = request.form.get('winner')
 
     conn = connection.create(config.database)
-    r = match.start_1v1(conn, host, enemy, winner)
+    resp = match.start_1v1(conn, host, enemy, winner)
     connection.kill(conn)
     log.info("{0} started match vs {1}.".format(host, enemy), ip=request.remote_addr)
-    return response.build(r)
+    return resp
 
 
 @app.route('/match/2v2', methods=['POST'])
@@ -108,10 +108,10 @@ def router_start_2v2():
     winner = request.form.get('winner')
 
     conn = connection.create(config.database)
-    r = match.start_2v2(conn, host, friend, enemy1, enemy2, winner)
+    resp = match.start_2v2(conn, host, friend, enemy1, enemy2, winner)
     connection.kill(conn)
     log.info("{0} and {1} started 2v2 vs {2} and {3}.".format(host, friend, enemy1, enemy2), ip=request.remote_addr)
-    return response.build(r)
+    return resp
 
 
 @app.route('/match/pending', methods=['GET'])
@@ -122,10 +122,10 @@ def router_get_pending_matches():
     username = sql.get_username(conn, userid).fetchone()[0]
 
     conn = connection.create(config.database)
-    ja = match.get_pending_matches(conn, userid)
+    resp = match.get_pending_matches(conn, userid)
     connection.kill(conn)
     log.info("{} retrieved pending matches.".format(username), ip=request.remote_addr)
-    return response.build(Match.RECEIVED, ja)
+    return resp
 
 
 @app.route('/match/confirm', methods=['POST'])
@@ -135,14 +135,14 @@ def router_confirm_match():
     passwd = request.form.get('passwd')
     conn = connection.create(config.database)
     if handlers.auth(conn, username, passwd):
-        r = handlers.confirm_match(conn)
+        resp = handlers.confirm_match(conn)
         log.info("{} confirmed match.".format(username), ip=request.remote_addr)
     else:
         log.security("Auth failed at match confirmation ({}).".format(username), ip=request.remote_addr)
         connection.kill(conn)
-        return response.build(Auth.FAILED)
+        return response.build({"auth": False}, statuscode=401)
     connection.kill(conn)
-    return response.build(r)
+    return resp
 
 
 @app.route('/leaderboard', methods=['GET'])
@@ -155,7 +155,7 @@ def router_get_leaderboard():
     conn = connection.create(config.database)
     arr = handlers.leaderboard(conn, userid)
     log.info("{} retrieved leaderboard.".format(username), ip=request.remote_addr)
-    return response.build(Leaderboard.RETRIEVED, arr)
+    return response.build({"leaderboard": arr}, statuscode=200)
 
 
 @app.route('/user/history', methods=['GET'])
@@ -166,15 +166,15 @@ def router_get_user_history():
 
     conn = connection.create(config.database)
     if handlers.auth(conn, username, passwd):
-        h = handlers.user_history(conn, username)
+        resp = handlers.user_history(conn, username)
         connection.kill(conn)
         log.info("{} retrieved history.".format(username), ip=request.remote_addr)
-        return response.build(History.RETRIEVED, h)
+        return resp
     else:
         log.security("Auth failed at history retrieving ({}).".format(username),
                      ip=request.remote_addr)
         connection.kill(conn)
-        return response.build(Auth.FAILED)
+        return response.build({"auth": False}, statuscode=401)
 
 
 @app.route('/check/userid', methods=['GET'])
@@ -185,10 +185,10 @@ def router_check_if_userid_exists():
     if not validate.is_unique(conn, UniqueMode.USER_ID, userid):
         connection.kill(conn)
         log.info("{} exists.".format(userid), ip=request.remote_addr)
-        return response.build(User.ID_EXISTS)
+        return response.build({"userid_exists": True}, statuscode=200)
     else:
         log.info("{} doesn't exist.".format(userid), ip=request.remote_addr)
-        return response.build(User.ID_DOESNT_EXIST)
+        return response.build({"userid_exists": False}, statuscode=401)
 
 
 @app.route('/friends', methods=['GET'])
@@ -199,10 +199,10 @@ def router_get_friends():
     username = sql.get_username(conn, userid).fetchone()[0]
 
     conn = connection.create(config.database)
-    fl = sql.get_friends(conn, userid).fetchall()
+    resp = handlers.get_friends(conn, userid)
     connection.kill(conn)
     log.info("{} retrieved friends.".format(username), ip=request.remote_addr)
-    return response.build(Friends.RETRIEVED, fl)
+    return resp
 
 
 @app.route('/friends/add', methods=['POST'])
@@ -214,10 +214,10 @@ def router_add_friend():
     username = sql.get_username(conn, userid).fetchone()[0]
 
     conn = connection.create(config.database)
-    r = handlers.add_friend(conn, userid, friendname)
+    resp = handlers.add_friend(conn, userid, friendname)
     connection.kill(conn)
     log.info("{0} added {1} as friend.".format(username, friendname), ip=request.remote_addr)
-    return response.build(r)
+    return resp
 
 
 @app.route('/friends/remove', methods=['DELETE'])
@@ -232,4 +232,4 @@ def router_remove_friend():
     handlers.remove_friend(conn, userid, friendname)
     connection.kill(conn)
     log.info("{0} removed {1} as friend.".format(username, friendname), ip=request.remote_addr)
-    return response.build(Friends.REMOVED)
+    return response.build({"friend_removed": True}, statuscode=200)

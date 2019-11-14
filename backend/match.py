@@ -4,6 +4,7 @@ import datetime
 import sql
 import generator
 import elo_handler
+import response as response
 from enums import Match, Mode
 
 
@@ -12,9 +13,9 @@ def start_1v1(conn, host, enemy, winner):
         matchid = generator.create_uuid(conn)
         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         sql.start_1v1(conn, matchid, host, enemy, winner, date)
-        return Match.STARTED
+        return response.build({"match_started": True}, statuscode=201)
     except:
-        return Match.NOT_STARTED
+        return response.build({"match_started": False}, statuscode=400)
 
 
 def start_2v2(conn, host, friend, enemy1, enemy2, winner):
@@ -22,9 +23,9 @@ def start_2v2(conn, host, friend, enemy1, enemy2, winner):
         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         matchid = generator.create_uuid(conn)
         sql.start_2v2(conn, matchid, host, friend, enemy1, enemy2, winner)
-        return Match.STARTED
+        return response.build({"match_started": True}, statuscode=201)
     except:
-        return Match.NOT_STARTED
+        return response.build({"match_started": False}, statuscode=400)
 
 
 def get_pending_matches(conn, userid):
@@ -36,7 +37,7 @@ def get_pending_matches(conn, userid):
         datetime = entry[3]
         hostname = entry[4]
         arr.append({"matchid": matchid, "hostname": hostname, "winner": winner, "datetime": datetime})
-    return arr
+    return response.build({"matches_received": True, "matches": arr}, statuscode=200)
 
 
 def confirm_match(conn, matchid):

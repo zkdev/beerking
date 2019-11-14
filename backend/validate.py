@@ -28,6 +28,7 @@ def is_unique(conn, mode, value):
 
 
 def is_correct_version(device_version):
+    print("device version:" + str(device_version), flush=True)
     if int(device_version) >= int(config.app_version):
         return True
     else:
