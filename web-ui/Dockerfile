@@ -4,5 +4,5 @@ WORKDIR /app
 ENV PYTHONPATH "${PYTHONPATH}:/app/"
 RUN apt-get -y upgrade && apt-get -y update
 RUN pip install -r requirements.txt
-EXPOSE 5000
+EXPOSE 6669
 CMD ["/bin/bash", "run.sh"]
