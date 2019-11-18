@@ -4,6 +4,7 @@
 
 # Connection Information
 **Frontend**:  shared.zeggiedieziege.de:80<br>
+**Frontend DEV**:  shared.zeggiedieziege.de:6669<br>
 **Backend**:  shared.zeggiedieziege.de:5000<br>
 **Backend DEV**: shared.zeggiedieziege.de:5003<br>
 
