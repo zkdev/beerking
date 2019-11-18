@@ -1,7 +1,9 @@
 import flask
 import json
+from flask_cors import CORS
 from flask import Flask, render_template, send_from_directory, Response
 
+CORS(app)
 app = Flask(__name__, template_folder="./beerking/www/", static_folder="./beerking/www/css")
 
 
