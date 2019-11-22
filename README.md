@@ -3,13 +3,15 @@
 ![Version](https://img.shields.io/badge/release-release-green.svg?style=flat-square)
 
 # Connection Information
-**Frontend**:  shared.zeggiedieziege.de:80<br>
-**Backend**:  shared.zeggiedieziege.de:5000<br>
-**Backend DEV**: shared.zeggiedieziege.de:5003<br>
+**Frontend**:  beerking-ui.zeekay.dev:13003<br>
+**Web-UI-DEV**: beerking-ui-dev.zeekay.dev:13004<br>
+**Backend**:  beerking-api.zeekay.dev:5000<br>
+**Backend DEV**: beerking-api-dev.zeekay.dev:5003<br>
 
 # Backend Documentation
 | router | method | header | param | body | description | response |
 | ------ | ------ | ------ | ------ | ------ | ------ | ------ | 
+| /status | GET | version || | checks server status | `{"status": "available"}`
 | /user/create | POST | version ||username, mail, passwd | creates a user | `user_created`<br>`username_unique`<br>`username_too_short`<br>`mail_exists`
 | /user/mail/update | PUT | version || username, mail, passwd | updates the users mail adress | `mail_updated`
 | /user/profile | GET | version | username, passwd | | retrieves the user's profile | `auth`<br>`userid`<br>`mail`<br>`server_message`
