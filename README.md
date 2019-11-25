@@ -4,10 +4,10 @@
 ![Version](https://img.shields.io/badge/release-release-green.svg?style=flat-square)
 
 ## Status
-![Backend API](https://img.shields.io/badge/Backend-API-offline-red.svg?style=flat-square)
-![Backend API DEV](https://img.shields.io/badge/Backend-API-DEV-offline-red.svg?style=flat-square)
-![Backend Web-UI](https://img.shields.io/badge/Backend-Web-UI-offline-red.svg?style=flat-square)
-![Backend Web-UI DEV](https://img.shields.io/badge/Backend-Web-UI-DEV-offline-red.svg?style=flat-square)
+Backend API: ![Backend API](https://img.shields.io/badge/status-offline-red.svg?style=flat-square)
+Backend API DEV: ![Backend API DEV](https://img.shields.io/badge/status-offline-red.svg?style=flat-square)
+Backend Web-UI: ![Backend Web-UI](https://img.shields.io/badge/status-offline-red.svg?style=flat-square)
+Backend Web-UI DEV: ![Backend Web-UI DEV](https://img.shields.io/badge/status-offline-red.svg?style=flat-square)
 
 # Connection Information
 **Frontend**:  beerking-ui.zeekay.dev:13003<br>
