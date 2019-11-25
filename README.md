@@ -1,6 +1,13 @@
 # BeerKing
+## Version
 ![Version](https://img.shields.io/badge/version-1.2.1-brightgreen.svg?style=flat-square)
 ![Version](https://img.shields.io/badge/release-release-green.svg?style=flat-square)
+
+## Status
+![Backend API](https://img.shields.io/badge/status-offline-red.svg?style=flat-square)
+![Backend API DEV](https://img.shields.io/badge/status-offline-red.svg?style=flat-square)
+![Backend Web-UI](https://img.shields.io/badge/status-offline-red.svg?style=flat-square)
+![Backend Web-UI DEV](https://img.shields.io/badge/status-offline-red.svg?style=flat-square)
 
 # Connection Information
 **Frontend**:  beerking-ui.zeekay.dev:13003<br>
