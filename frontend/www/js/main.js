@@ -192,7 +192,7 @@ function createLeaderboard() {
                     } else if (i == 2) {
                         row.className = "third";
                     }
-                    if ((i + 1) % 2 == 0) {
+                    if ((place + 1) % 2 == 0) {
                         row.className += " other";
                     }
                     if (players_leaderboard[i].username === window.localStorage.getItem("user")) {
