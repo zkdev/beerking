@@ -2,7 +2,7 @@ from elo import rate_1vs1 as elo_1v1
 
 
 def initial_elo():
-    return int(100)
+    return int(80)
 
 
 def rate_1v1(winner, loser):
