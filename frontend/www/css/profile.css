@@ -1,7 +1,7 @@
 #QRimage {
-    width: 50%;
-    height: 50%;
+    height: 22vh;
     margin: 5px;
+    margin-top: 2px;
 }
 
 #save_btn {

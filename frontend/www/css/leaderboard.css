@@ -6,7 +6,7 @@
 
 .leaderboard tbody {
     overflow-y: scroll;
-    height: 60vh;
+    height: 55vh;
     width: 88vw;
     display: block;
 }
@@ -23,7 +23,6 @@
 }
 
 th {
-    width: 33vw;
     border-bottom: solid black 2px;
     color: black;
     font-size: 18px;
@@ -32,7 +31,7 @@ th {
 .score {
     text-align: center;
     font-weight: bold;
-    width: 33%;
+    width: 28vw;
 }
 
 .name {
@@ -80,4 +79,13 @@ th {
 #popup{    
     text-align: center;
     width: 70vw;
+}
+
+.infoGames{
+    color: black;
+    width: 100%;
+    border: black solid 1px;
+    background-color: lightgray;
+    font-size: large;
+    border-radius: 5px;
 }

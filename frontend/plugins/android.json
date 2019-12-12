@@ -7,19 +7,22 @@
     "files": {}
   },
   "installed_plugins": {
+    "cordova-plugin-dialogs": {
+      "PACKAGE_NAME": "dev.zeekay.beerking"
+    },
     "cordova-plugin-qrcodejs": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
+      "PACKAGE_NAME": "dev.zeekay.beerking"
     },
     "cordova-plugin-qrscanner": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
-    "cordova-plugin-dialogs": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
+      "PACKAGE_NAME": "dev.zeekay.beerking"
     },
     "cordova-plugin-spinner": {
+      "PACKAGE_NAME": "dev.zeekay.beerking"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "dev.zeekay.beerking"
+    },
+    "nl.madebymark.share": {
       "PACKAGE_NAME": "dev.zeekay.beerking"
     }
   },

@@ -21,6 +21,9 @@
     },
     "cordova-plugin-spinner": {
       "PACKAGE_NAME": "dev.zeekay.beerking"
+    },
+    "nl.madebymark.share": {
+      "PACKAGE_NAME": "dev.zeekay.beerking"
     }
   },
   "dependent_plugins": {}

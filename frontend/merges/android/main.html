@@ -51,8 +51,6 @@
     <script type="text/javascript" src="./js/game.js"></script>
     <script type="text/javascript" src="./js/profile.js"></script>
     <script type="text/javascript" src="./js/friends.js"></script>
-    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-    <script type="text/javascript" src="./js/scanner.js"></script>
     <title>BeerKing</title>
 </head>
 
@@ -106,6 +104,16 @@
                     <div class="link">
                         <a href="https://play.google.com/store/apps/details?id=dev.zeekay.beerking"
                             style="text-decoration: underline">Play Store App</a>
+                        <button class="btn_style btn_share" type="button"
+                            onclick="share('Lade dir die BeerkingApp auf dein Handy herunter: https:\/\/play.google.com/store/apps/details?id=dev.zeekay.beerking')">Teilen
+                            ...</button>
+                    </div>
+                    <div class="link" style="margin-top: 2%">
+                        <a href="https://shared.zeggiedieziege.de:80/beerking" style="text-decoration: underline">Mobile
+                            Website z.B. für IOS</a>
+                        <button class="btn_style btn_share" type="button"
+                            onclick="share('Besuche Beerking im Web auf der mobilen Website: https:\/\/shared.zeggiedieziege.de:80/beerking')">Teilen
+                            ...</button>
                     </div>
                 </div>
                 <div id="team">
@@ -152,10 +160,9 @@
     </div>
 
     <div id="preview" class="invis">
-        <button class="switchBtn btn_style" onclick="switchCamera()">Kamera wechseln</button>
-        <button class="btn_style exitBtn" onclick="hideCameraViews();scanner.stop()">X</button>
+        <button class="btn_style exitBtn" onclick="hideCameraViews();window.QRScanner.destroy()">X</button>
     </div>
-    <video id="prev" class="invis" playsinline autoplay></video>
+    <video id="prev" class="invis" poster="noposter" playsinline autoplay></video>
 </body>
 
 </html>
