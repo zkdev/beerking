@@ -1,13 +1,10 @@
 var players;
-var scanner;
-var cams;
-var camIndex = 0;
 var team_size;
 
-function onScanFound(content){
+function onScanFound(err, content){
     var ids = [];
-    scanner.stop();
-    if (content === "") {
+    window.QRScanner.destroy();
+    if (err) {
         window.location = "./main.html";
         throw "Scan error";
     } else {
@@ -42,7 +39,7 @@ function onScanFound(content){
                     if (ids.length === team_size) {
                         displayTeam(ids, team_size);
                     } else {
-                        scanner.start(cams[camIndex]);
+                        window.QRScanner.scan(onScanFound);
                     }
                 } else {
                     window.location = "./main.html";
@@ -58,20 +55,8 @@ function startNewGame(event, teamSize) {
     $("#preview").attr("class", "body_bg_invisible");
     $("#prev").attr("class", "");
     team_size = teamSize * 2 - 1;
-    scanner = new Instascan.Scanner({ video: document.getElementById('prev'), mirror: false });
-    scanner.addListener('scan', onScanFound);
-    if (!cams) {
-        Instascan.Camera.getCameras().then(function (cameras) {
-            cams = cameras;
-            if (cameras.length > 0) {
-                scanner.start(cameras[camIndex]);
-            }
-        }).catch(function (e) {
-            hideCameraViews();
-        });
-    } else {
-        scanner.start(cams[camIndex]);
-    }
+    window.QRScanner.scan(onScanFound);
+    window.QRScanner.show();
 }
 
 function hideCameraViews() {
@@ -82,6 +67,11 @@ function hideCameraViews() {
 }
 
 function displayTeam(ids, team_size) {
+    try {
+        window.QRScanner.destroy();
+    } catch (e) {
+        console.log("QR Reader error: " + e);
+    }
     hideCameraViews();
     $("#start_game").css("visibility","hidden");
     if (ids.length === team_size && team_size === 3) {
@@ -176,22 +166,4 @@ function onWinnerSelected() {
         
     }
     $("#send_winner").attr("disabled", "false");
-}
-
-function switchCamera(){
-    if(cams.length !== undefined && camIndex < cams.length - 1){
-        camIndex += 1;
-    }else{
-        camIndex = 0;
-    }
-    scanner.stop().then(function(){
-        scanner = new Instascan.Scanner({ video: document.getElementById('prev'), mirror: false });
-        scanner.addListener('scan', onScanFound);
-        scanner.start(cams[camIndex]).catch(function(){
-                //go on to next camera
-                //TODO: in case of no camera working -> endless running loop
-                switchCamera();
-            });
-        }
-    );
 }

@@ -1,0 +1,30 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-dialogs": {
+      "PACKAGE_NAME": "dev.zeekay.beerking"
+    },
+    "cordova-plugin-qrcodejs": {
+      "PACKAGE_NAME": "dev.zeekay.beerking"
+    },
+    "cordova-plugin-qrscanner": {
+      "PACKAGE_NAME": "dev.zeekay.beerking"
+    },
+    "cordova-plugin-spinner": {
+      "PACKAGE_NAME": "dev.zeekay.beerking"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "dev.zeekay.beerking"
+    },
+    "nl.madebymark.share": {
+      "PACKAGE_NAME": "dev.zeekay.beerking"
+    }
+  },
+  "dependent_plugins": {}
+}

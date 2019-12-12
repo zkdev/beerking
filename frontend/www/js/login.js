@@ -23,10 +23,10 @@ function onLogin() {
                 window.location = './main.html';
             } else {
                 // wrong email / wrong username
-                if (!resp || resp.server_message === "" || resp.server_message === null || resp.server_message === undefined || resp.server_message.startsWith('<')) {
+                if (!resp || resp.status === "" || resp.status === null || resp.status === undefined || resp.status.startsWith('<')) {
                     navigator.notification.alert(i18n.login_alert_standard_message, null, i18n.login_alert_heading, i18n.login_alert_button);
                 } else {
-                    navigator.notification.alert(resp.server_message, i18n.login_alert_heading, i18n.login_alert_button);
+                    navigator.notification.alert(resp.status, i18n.login_alert_heading, i18n.login_alert_button);
                 }
                 $("#pswd").val("");
                 $("#user").val("");

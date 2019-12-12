@@ -17,8 +17,8 @@ function createAccount() {
     }
     if (hash(document.getElementById("pswd2").value) !== account_setting.passwd) {
         //Different passwords
-        $("#pswd2").attr("class", " error");
-        $("#pswd").attr("class", " error");
+        document.getElementById("pswd2").class += " error";
+        document.getElementById("pswd").class += " error";
         $("#pswd").val("");
         $("#pswd2").val("");
         navigator.notification.alert(i18n.create_password, null, i18n.create_wrong_input_header, i18n.create_button);

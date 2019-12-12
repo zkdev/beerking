@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var port = 5003;
+var port = 5000;
 var base_url = "https://shared.zeggiedieziege.de:" + port;
 var options = { dimBackground: true };
 var version = 130;
@@ -74,7 +74,7 @@ function onBackPressed() {
     //if scanner active -> close
     if($("#prev").attr("class") === "active")
             window.location = "./main.html";
-        }
+}
 
 function keyLogin(e) {
     if (e.keyCode  == 13) {

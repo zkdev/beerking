@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+
+<head>
+    <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="shortcut icon" type="image/x-icon" href="img/beeicon.png">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/main_page.css">
+    <link rel="stylesheet" type="text/css" href="css/leaderboard.css">
+    <link rel="stylesheet" type="text/css" href="css/game.css">
+    <link rel="stylesheet" type="text/css" href="css/profile.css">
+    <link rel="stylesheet" type="text/css" href="css/friends.css">
+    <script type="text/javascript" src="js/jquery-2.x.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile.custom.min.js"></script>
+    <script type="text/javascript" src="js/md5.min.js"></script>
+    <script type="text/javascript" src="./js/main.js"></script>
+    <script type="text/javascript" src="./js/game.js"></script>
+    <script type="text/javascript" src="./js/profile.js"></script>
+    <script type="text/javascript" src="./js/friends.js"></script>
+    <title>BeerKing</title>
+</head>
+
+<body onload="openTab(null, 'leaderboard');">
+    <div id="cont" class="body_bg">
+        <div id="confirmPopup">
+            <table id="confirms"></table>
+            <button id="popup" class="btn_style" onclick="confirmResults(event)">Bestätigen</button>
+        </div>
+        <div class="app mainapp">
+            <!-- Tab links -->
+            <div class="tab">
+                <button id="tab0" class="tablinks" onclick="openTab(event, 'leaderboard')"></button>
+                <button id="tab1" class="tablinks" onclick="openTab(event, 'game')"></button>
+                <button id="tab2" class="tablinks" onclick="openTab(event, 'profile')"></button>
+                <button id="tab3" class="tablinks" onclick="openTab(event, 'friends')"></button>
+            </div>
+
+            <!-- Tab content -->
+            <div id="friends" class="tabcontent">
+                <div>
+                    <input type="text" id="username" width="50%" placeholder="Füge einen Freund hinzu" />
+                    <button id="addfriend" class="btn_style" onclick="addFriend()">Hinzufügen</button>
+                </div>
+                <div id="friend_list">
+                    <div class="loader" id="loader_friend"></div>
+                </div>
+            </div>
+
+            <!-- Tab content -->
+            <div id="leaderboard" class="tabcontent">
+                <table class="leaderboard">
+                    <thead id="leaderboard_header">
+                    </thead>
+                    <tbody id="leaderboard_table">
+                    </tbody>
+                </table>
+                <div class="infoGames">Spieler werden erst ab einem Spiel im Leaderboard angezeigt</div>
+                <div class="loader" id="loader_leaderboard"></div>
+            </div>
+
+            <div id="game" class="tabcontent">
+                <div id="start_game">
+                    <button class="btn_style" type="button" onclick="startNewGame(event, 1)">1 vs. 1</button>
+                    <button style="margin-bottom: 10%" class="btn_style" type="button" onclick="startNewGame(event, 2)">
+                        2 vs. 2
+                    </button>
+                    <br>
+                        <a href="./anleitung.html" style="text-decoration: underline">Wie funktioniert das ?</a>
+                    <br />
+                    <div class="link">
+                        <a href="https://play.google.com/store/apps/details?id=dev.zeekay.beerking"
+                            style="text-decoration: underline">Play Store App</a>
+                        <button class="btn_style btn_share" type="button"
+                            onclick="share('Lade dir die BeerkingApp auf dein Handy herunter: https:\/\/play.google.com/store/apps/details?id=dev.zeekay.beerking')">Teilen
+                            ...</button>
+                    </div>
+                    <div class="link" style="margin-top: 2%">
+                        <a href="https://shared.zeggiedieziege.de:80/beerking" style="text-decoration: underline">Mobile
+                            Website z.B. für IOS</a>
+                        <button class="btn_style btn_share" type="button"
+                            onclick="share('Besuche Beerking im Web auf der mobilen Website: https:\/\/shared.zeggiedieziege.de:80/beerking')">Teilen
+                            ...</button>
+                    </div>
+                </div>
+                <div id="team">
+                </div>
+                <div id="active_game">
+                    <span style="color:black;font-size: larger">Gewinner: </span>
+                    <select style="font-size: 20px;width: 80vw;border-color: #B3121D;border-width: 2px;"
+                        id="select_winner" onchange="if (this.selectedIndex) onWinnerSelected();">
+                        <option disabled selected value> -- Wähle den Sieger -- </option>
+                        <option value="0">Mein Team</option>
+                        <option value="1">Gegner Team</option>
+                    </select>
+                    <p id="winner"></p>
+                    <button id="send_winner" style="width:80vw" class="btn_style" type="button" onclick="sendWinner()"
+                        disabled>Ergebnis abschicken</button>
+                </div>
+            </div>
+
+            <div id="profile" class="tabcontent">
+                <img id="QRimage" />
+                <p id="username_profile" class="info"></p>
+                <div id="email_entry"></div>
+                <button id="logout_btn" class="btn_style" type="button" onclick="logout()">Logout</button>
+                <a id="datenschutz" href="./datenschutz.html">Datenschutzerklärung >></a>
+                <div id="match_hist">
+                    <h4 class="hist_header">Vergangene Spiele</h4>
+                    <div id="history">
+                        <div class="loader" id="loader_hist"></div>
+                    </div>
+                </div>
+            </div>
+
+            <script type="text/javascript" src="cordova.js"></script>
+            <script type="text/javascript" src="js/index.js"></script>
+            <script type="text/javascript">
+                app.initialize('main');
+                $(function () {
+                    // Bind the swipeleftHandler callback function to the swipe event on div.box
+                    $("html").on("swipeleft", onLeftSwipe);
+                    $("html").on("swiperight", onRightSwipe);
+                });
+            </script>
+        </div>
+    </div>
+
+    <div id="preview" class="invis">
+        <button class="btn_style exitBtn" onclick="hideCameraViews();window.QRScanner.destroy()">X</button>
+    </div>
+    <video id="prev" class="invis" poster="noposter" playsinline autoplay></video>
+</body>
+
+</html>

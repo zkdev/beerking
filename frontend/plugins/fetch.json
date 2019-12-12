@@ -10,7 +10,7 @@
   "cordova-plugin-qrscanner": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-qrscanner@^3.0.1"
+      "id": "cordova-plugin-qrscanner"
     },
     "is_top_level": true,
     "variables": {}
