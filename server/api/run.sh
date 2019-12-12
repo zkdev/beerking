@@ -1,0 +1,1 @@
+gunicorn --log-level=DEBUG --timeout 999999 --certfile=/certs/shared.zeggiedieziege.de/fullchain.pem --keyfile=/certs/shared.zeggiedieziege.de/privkey.pem --bind 0.0.0.0:5000 main:app

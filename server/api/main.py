@@ -32,7 +32,10 @@ limiter = Limiter(
 @limiter.limit("60 per minute")
 def router_status():
     log.info("backend status checked", ip=request.remote_addr)
-    return response.build({"status": "available"}, statuscode=200)
+    return response.build({"status": "available",
+                           "backend_version": config.backend_version,
+                           "app_version": config.app_version,
+                           "language": config.language}, statuscode=200)
 
 
 @app.route('/users/login', methods=['GET'])

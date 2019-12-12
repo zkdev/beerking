@@ -19,6 +19,9 @@ class Middleware:
         # ignore options call
         if request.method == "OPTIONS":
             return self.app(environ, start_response)
+        # ignore status router
+        if request.path == "/status":
+            return self.app(environ, start_response)
 
         # create database connection
         conn = connection.create(config.database)

@@ -1,5 +1,5 @@
 backend_version = 130
-backend_mode = "DEV"
+backend_mode = "LIVE"
 app_version = 120
 language = "DE"
 database = "/database/beerking.db"
