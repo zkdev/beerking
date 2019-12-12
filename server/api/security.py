@@ -7,7 +7,7 @@ import generator
 path = '/home/devking/server/database/devking.db'
 
 
-def is_no_sql_injection(arr, ip):
+def is_sql_injection(arr, ip):
     identifier = ['DROP', 'TABLE', 'SELECT', 'INSERT', 'UPDATE', 'DELETE', ';', '%', '--', '\'']
     for value in arr:
         for element in identifier:
@@ -15,18 +15,18 @@ def is_no_sql_injection(arr, ip):
                 log.security('Possible SQL injection detected. Trigger: ' + str(element), ip=ip)
                 log.security('IP ban executed. IP: ' + str(arr[0]), ip=ip)
                 ban_ip(arr[0], 'Possible SQL injection detected, keyword: ' + str(element))
-                return False
-    return True
+                return True
+    return False
 
 
-def is_no_rdp_attempt(request, ip):
+def is_rdp_attempt(request, ip):
     if request.form.get('mstshash') is None:
-        return True
+        return False
     else:
         log.security('Possible RDP attempt detected. Trigger: ' + str(request.form.get('mstshash')), ip=ip)
         log.security('IP ban executed. IP: ' + str(request.remote_addr), ip=ip)
         ban_ip(request.remote_addr, 'Possible RDP attempt detected, keyword: ' + str(request.form.get('mstshash')))
-        return False
+        return True
 
 
 def ban_user(userid, period, reason, ip):

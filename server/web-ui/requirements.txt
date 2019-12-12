@@ -1,0 +1,3 @@
+flask
+gunicorn
+Flask-Cors==3.0.7

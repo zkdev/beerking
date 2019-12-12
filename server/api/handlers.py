@@ -2,10 +2,12 @@ from flask import request
 
 import json
 import datetime
+
 import validate
 import sql
 import elo_handler
 import match
+import response as response
 from enums import User, Match, Reason, Friends, UniqueMode
 
 
@@ -26,15 +28,15 @@ def create_user(conn, userid, username, mail, passwd):
 
     if m is User.WILL_CREATE and u is User.WILL_CREATE:
         sql.create_user(conn, userid, username, mail, passwd, elo_handler.initial_elo(), datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-        return User.CREATED
+        return response.build({"user_created": True}, statuscode=201)
     else:
         if m is not User.WILL_CREATE:
-            return Reason.MAIL_DOESNT_EXIST
+            return response.build({"user_created": False, "mail_exists": False}, statuscode=400)
         elif u is not User.WILL_CREATE:
             if validate.is_unique(conn, UniqueMode.USERNAME, username):
-                return Reason.USERNAME_TOO_SHORT
+                return response.build({"user_created": False, "username_too_short": True}, statuscode=400)
             else:
-                return Reason.USERNAME_NOT_UNIQUE
+                return response.build({"user_created": False, "username_unique": False}, statuscode=400)
 
 
 def auth(conn, username, passwd):
@@ -47,13 +49,13 @@ def auth(conn, username, passwd):
 
 
 def update_mail(conn, username, passwd, mail):
-    r = User.MAIL_UPDATE_FAILED
+    resp = response.build({"mail_updated": False}, statuscode=403)
     if auth(conn, username, passwd):
         userid = sql.get_userid(conn, username).fetchone()[0]
         if validate.mail_is_fine(mail):
             sql.update_user_mail(conn, userid, mail)
-            r = User.MAIL_UPDATED
-    return r
+            resp = response.build({"mail_updated": True}, statuscode=202)
+    return resp
 
 
 def confirm_match(conn):
@@ -62,7 +64,7 @@ def confirm_match(conn):
         if single_match.get('confirmed') is True:
             match.confirm_match(conn, matchid)
         sql.remove_pending_match(conn, matchid)
-    return Match.CONFIRMED
+    return response.build({"matches_confirmed": True}, statuscode=201)
 
 
 def leaderboard(conn, userid):
@@ -89,7 +91,17 @@ def leaderboard(conn, userid):
 def user_history(conn, username):
     userid = sql.get_userid(conn, username).fetchone()[0]
     h = sql.get_user_history(conn, userid).fetchall()
-    return h
+    arr = []
+    for entry in h:
+        host = entry[0]
+        friend = entry[1]
+        enemy1 = entry[2]
+        enemy2 = entry[3]
+        winner = entry[4]
+        date_data = entry[5]
+        arr.append({"host": host, "friend": friend, "enemy1": enemy1, "enemy2": enemy2, "winner": winner,
+                    "datetime": date_data})
+    return response.build({"matches": arr}, statuscode=200)
 
 
 def add_friend(conn, userid, friendname):
@@ -97,17 +109,25 @@ def add_friend(conn, userid, friendname):
         friendid = sql.get_userid(conn, friendname).fetchone()[0]
         if sql.is_friend(conn, userid, friendid).fetchone() is None:
             if str(userid) == str(friendid):
-                r = Reason.SAME_AS_USER
+                return response.build({"friend_added": False}, statuscode=400)
             else:
                 sql.add_friend(conn, userid, friendid)
-                r = Friends.ADDED
+                return response.build({"friend_added": True}, statuscode=201)
         else:
-            r = Reason.FRIENDS_ALREADY
+            return response.build({"friend_added": False}, statuscode=400)
     else:
-        r = Reason.FRIEND_DOESNT_EXIST
-    return r
+        return response.build({"friend_added": False}, statuscode=400)
 
 
 def remove_friend(conn, userid, friendname):
     friendid = sql.get_userid(conn, friendname).fetchone()[0]
     sql.remove_friend(conn, userid, friendid)
+
+
+def get_friends(conn, userid):
+    fl = sql.get_friends(conn, userid).fetchall()
+    arr = []
+    for entry in fl:
+        friendname, friendid = entry
+        arr.append({"friend": friendid, "friendname": friendname})
+    return response.build({"friends": arr}, statuscode=200)
