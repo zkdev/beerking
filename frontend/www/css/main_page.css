@@ -89,8 +89,6 @@ html {
   font-family: "Segoe UI";
   font-size: 20px;
   padding: 20px;
-  padding-left: 50px;
-  padding-right: 50px;
   margin: auto;
   border: 3px;
   border-color: black;
@@ -217,10 +215,6 @@ html {
 
 input:checked + .slider {
   background-color: rgb(62, 199, 74);
-}
-
-input:focus + .slider {
-  /* on tap */
 }
 
 input:checked + .slider:before {

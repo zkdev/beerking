@@ -133,7 +133,7 @@ a {
     background-repeat: no-repeat;
     background-position: 50% 40%;
     background-size: 65vw;
-    width: 100vw;
+    width: 97vw;
     height: 80vh;
 }
 
@@ -141,4 +141,18 @@ a {
     margin: 5%;
     font-size: large;
     display: inline-block;
+}
+
+.invis{
+    display: none;
+}
+
+#prev{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    overflow: hidden;
+    height: 100%;
+    width: 100%; 
 }

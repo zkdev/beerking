@@ -5,13 +5,14 @@ function createFriendsList() {
         table.removeChild(child);
         child = table.lastElementChild;
     }
-    var request = {};
-    request.userid = window.localStorage.getItem("uuid");
+    var request = {
+        userid: window.localStorage.getItem("uuid")
+    };
     $.ajax({
         type: "GET",
         url: base_url + "/friends",
         data: request,
-        complete: function(response) {
+        complete: function (response) {
             var friends = JSON.parse(response.responseText).friends;
             for (var i = 0; i < friends.length; i++) {
                 var fr = document.createElement("DIV");
@@ -24,32 +25,34 @@ function createFriendsList() {
 }
 
 function addFriend() {
-    var request = {};
-    request.userid = window.localStorage.getItem("uuid");
-    request.friendname = document.getElementById("username").value.trim();
-    document.getElementById("username").value = "";
-    SpinnerPlugin.activityStart("Neuer Freund ...", options);
+    var request = {
+        userid: window.localStorage.getItem("uuid"),
+        friendname: $("#username").val().trim()
+    }
+    SpinnerPlugin.activityStart(i18n.friend_add, options);
     $.ajax({
         type: "POST",
         url: base_url + "/friends/add",
         data: request,
-        complete: function() {
+        complete: function () {
             SpinnerPlugin.activityStop();
+            $("#username").val("");
             createFriendsList();
         }
     });
 }
 
 function deleteFriend(evt) {
-    var request = {};
-    request.userid = window.localStorage.getItem("uuid");
-    request.friendname = evt.name;
-    SpinnerPlugin.activityStart("Freund entfernen...", options);
+    var request = {
+        userid: window.localStorage.getItem("uuid"),
+        friendname: evt.name
+    }
+    SpinnerPlugin.activityStart(i18n.friend_remove, options);
     $.ajax({
         type: "DELETE",
         url: base_url + "/friends/remove",
         data: request,
-        complete: function() {
+        complete: function () {
             SpinnerPlugin.activityStop();
             createFriendsList();
         }

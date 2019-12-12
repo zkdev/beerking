@@ -1,36 +1,35 @@
 function createAccount() {
-    var account_setting = {};
-    account_setting.passwd = hash(document.getElementById("pswd").value);
+    var account_setting = {
+        passwd: hash($("#pswd").val()),
+        username: $("#user").val().trim(),
+        mail: $("#email").val()
+    };
     if (document.getElementById("pswd").value === "" || document.getElementById("user").value === "") {
-        //No user or password
-        navigator.notification.alert("Nutzer und Passwort muessen ausgefuellt werden", null, "Falsche Eingabe", "Ok");
-        document.getElementById("pswd").value = "";
-        document.getElementById("pswd2").value = "";
+        navigator.notification.alert(i18n.create_empty_fields, null, i18n.create_wrong_input_header, i18n.create_button);
+        $("#pswd").val("");
+        $("#pswd2").val("");
         return;
     }
-    if(document.getElementById("user").value.trim().includes(";") || document.getElementById("user").value.trim().includes("'") || document.getElementById("user").value.trim().includes("%") || document.getElementById("user").value.trim().includes("--")){
-        navigator.notification.alert("Der Nickname darf keines der folgenden Zeichen erhalten: ; ' -- %", null, "Nicht erlaubte Eingabe", "Ok")
-        document.getElementById("user").value = "";
+    if (document.getElementById("user").value.trim().includes(";") || document.getElementById("user").value.trim().includes("'") || document.getElementById("user").value.trim().includes("%") || document.getElementById("user").value.trim().includes("--")) {
+        navigator.notification.alert(i18n.create_not_allowed_message, null, i18n.create_not_allowed_header, i18n.create_button)
+        $("#user").val("");
         return;
     }
-
     if (hash(document.getElementById("pswd2").value) !== account_setting.passwd) {
         //Different passwords
-        document.getElementById("pswd2").className += " error";
-        document.getElementById("pswd").className += " error";
-        document.getElementById("pswd").value = "";
-        document.getElementById("pswd2").value = "";
-        navigator.notification.alert("Passwoerter mussen identisch sein!", null, "Falsche Eingabe", "Ok");
+        document.getElementById("pswd2").class += " error";
+        document.getElementById("pswd").class += " error";
+        $("#pswd").val("");
+        $("#pswd2").val("");
+        navigator.notification.alert(i18n.create_password, null, i18n.create_wrong_input_header, i18n.create_button);
         return;
     }
-    account_setting.username = document.getElementById("user").value.trim();
-    account_setting.mail = document.getElementById("email").value;
-    SpinnerPlugin.activityStart("Account erstellen...", options);
+    SpinnerPlugin.activityStart(i18n.create_account, options);
     $.ajax({
         type: "POST",
         url: base_url + "/user/create",
         data: account_setting,
-        complete: function(response) {
+        complete: function (response) {
             SpinnerPlugin.activityStop();
             var resp = JSON.parse(response.responseText);
             if (resp.user_created === true) {
@@ -38,21 +37,15 @@ function createAccount() {
                 window.localStorage.setItem("user", account_setting.username);
                 window.location = './index.html';
             } else {
-                if(resp.username_unique !== true){
-                    navigator.notification.alert("Deinen Nickname gibt es leider schon!", null, "Fehler", "Ok");
-                    window.location = "./creating.html";
-                    return;
+                if (resp.username_unique !== true) {
+                    navigator.notification.alert(i18n.create_name_already_exists, null, i18n.error, i18n.create_button);
+                } else if (resp.username_too_short === true) {
+                    navigator.notification.alert(i18n.create_user_too_short, null, i18n.error, i18n.create_button);
+                } else if (resp.mail_exists !== false) {
+                    navigator.notification.alert(i18n.create_wrong_email, null, i18n.error, i18n.create_button);
                 }
-                if(resp.username_too_short === true){
-                    navigator.notification.alert("Dein Nickname ist zu kurz (mindestens 3 Zeichen)", null, "Fehler", "Ok");
-                    window.location = "./creating.html";
-                    return;
-                }
-                if(resp.mail_exists !== false){
-                    navigator.notification.alert("Die Email existiert nicht, gib keine oder eine existierende Email an", null, "Fehler", "Ok");
-                    window.location = "./creating.html";
-                    return;
-                }
+                window.location = "./creating.html";
+                return;
             }
         },
         dataType: "text/json"
