@@ -3,8 +3,8 @@ import json
 from flask_cors import CORS
 from flask import Flask, render_template, send_from_directory, Response
 
-CORS(app)
 app = Flask(__name__, template_folder="./beerking/www/", static_folder="./beerking/www/css")
+CORS(app)
 
 
 @app.route('/status', methods=["GET"])
@@ -14,13 +14,13 @@ def router_status():
     return resp
 
 
-@app.route('/beerking', methods=['GET'])
+@app.route('/', methods=['GET'])
 def _base_redirect():
     """ Redirect help handler"""
-    return flask.redirect("/beerking/index.html")
+    return flask.redirect("/index.html")
 
 
-@app.route('/beerking/<file>', methods=['GET'])
+@app.route('/<file>', methods=['GET'])
 def base_html(file):
     """ Documentation handler"""
     if ".html" in file:
@@ -29,16 +29,16 @@ def base_html(file):
         return send_from_directory("beerking/www", file)
 
 
-@app.route('/beerking/<path>/<file>', methods=['GET'])
+@app.route('/<path>/<file>', methods=['GET'])
 def static_files(path, file):
     return send_from_directory("beerking/www/" + path, file)
 
 
-@app.route('/beerking/plugins/<plug>/<folder>/<file>', methods=['GET'])
+@app.route('/plugins/<plug>/<folder>/<file>', methods=['GET'])
 def plugins(plug, folder, file):
     return send_from_directory("beerking/www/plugins/" + plug + "/" + folder, file)
 
 
-@app.route('/beerking/plugins/<plug>/<folder>/<browser>/<file>', methods=['GET'])
+@app.route('/plugins/<plug>/<folder>/<browser>/<file>', methods=['GET'])
 def plugins_long(plug, folder, browser, file):
     return send_from_directory("beerking/www/plugins/" + plug + "/" + folder + "/" + browser, file)
