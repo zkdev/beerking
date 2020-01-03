@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { RegisterUserDto } from '../register-user-dto';
-import {User} from "../entity/User";
-import "reflect-metadata";
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './user.entity';
 
 @Injectable()
 export class UserService {
-  public register(data: RegisterUserDto): User {
-    const uuidv4 = require('uuid/v4');
-    const user = new User(uuidv4(), data);
+    constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 
-    //TODO add user to database
+    findAll(): Promise<User[]> {
+        return this.userRepository.find();
+    }
 
-
-    return user;
-  }
+    find(username: string): Promise<User[]> {
+        return this.userRepository.find({where: {"username": username}});
+    }
 }
