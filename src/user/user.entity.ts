@@ -1,5 +1,4 @@
-import {Entity, Column, PrimaryColumn} from "typeorm";
-import {IsEmail, Length} from 'class-validator';
+import {Entity, Column, PrimaryColumn, Unique, Index} from "typeorm";
 
 @Entity()
 export class User {
@@ -7,15 +6,13 @@ export class User {
     @PrimaryColumn()
     uuid: string;
 
-    @Length(2, 15)
     @Column()
+    @Index({unique: true})
     username: string;
 
-    @Length(127)
     @Column()
     passwd: string;
 
-    @IsEmail()
     @Column()
     mail: string;
 
