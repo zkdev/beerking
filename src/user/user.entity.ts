@@ -19,4 +19,6 @@ export class User {
     @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP"})
     time: string;
 
+    @Column("simple-array")
+    roles: string[];
 }
