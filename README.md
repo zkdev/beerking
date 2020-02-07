@@ -4,16 +4,16 @@
 ![Version](https://img.shields.io/badge/release-release-green.svg?style=flat-square)
 
 ## Status
-**Backend API:** ![Backend API](https://img.shields.io/badge/status-offline-red.svg?style=flat-square)<br>
+**Backend API:** ![Backend API](https://img.shields.io/badge/status-online-green.svg?style=flat-square)<br>
 **Backend API DEV:** ![Backend API DEV](https://img.shields.io/badge/status-offline-red.svg?style=flat-square)<br>
-**Backend Web-UI:** ![Backend Web-UI](https://img.shields.io/badge/status-offline-red.svg?style=flat-square)<br>
+**Backend Web-UI:** ![Backend Web-UI](https://img.shields.io/badge/status-online-green.svg?style=flat-square)<br>
 **Backend Web-UI DEV:** ![Backend Web-UI DEV](https://img.shields.io/badge/status-offline-red.svg?style=flat-square)<br>
 
 # Connection Information
-**Frontend**:  beerking-ui.zeekay.dev:13003<br>
-**Web-UI-DEV**: beerking-ui-dev.zeekay.dev:13004<br>
-**Backend**:  beerking-api.zeekay.dev:5000<br>
-**Backend DEV**: beerking-api-dev.zeekay.dev:5003<br>
+**Frontend**:  beerking.zeekay.dev<br>
+**Web-UI-DEV**: beerking-dev.zeekay.dev<br>
+**Backend**:  beerking-api.zeekay.dev<br>
+**Backend DEV**: beerking-api-dev.zeekay.dev<br>
 
 # Backend Documentation
 | router | method | header | param | body | description | response |
